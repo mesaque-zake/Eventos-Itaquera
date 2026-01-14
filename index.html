@@ -7,7 +7,7 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 
-  <meta <meta property="og:title" content="Ações Educativas - Itaquera">
+  <meta property="og:title" content="Ações Educativas - Itaquera">
   <meta property="og:description" content="Sistema de Gestão das Ações Educativa do Sesc Mesa Brasil - Itaquera.">
   <meta property="og:image" content="https://mesaque-zake.github.io/Eventos-Itaquera/social-share.png">
   <meta property="og:url" content="https://mesaque-zake.github.io/Eventos-Itaquera/">
@@ -104,7 +104,7 @@
     .brand-acoes {
       font-family: 'Dancing Script', cursive;
       /* AUMENTADO: De 5rem para 9rem */
-      font-size: clamp(6rem, 20vw, 10rem); 
+      font-size: clamp(6rem, 20vw, 10rem);
       margin: 0;
       line-height: 1.1;
       filter: drop-shadow(0px 10px 15px rgba(0, 0, 0, 0.3));
@@ -138,31 +138,29 @@
       width: 100px;
       margin-bottom: 12px;
       /* Deixa a logo discreta */
-      opacity: 0.6; 
+      opacity: 0.6;
       filter: grayscale(100%) brightness(200%);
     }
 
     .powered-by {
       font-size: 0.75rem;
       /* MAIS TRANSPARENTE como solicitado */
-      opacity: 0.4; 
-      letter-spacing: 1px;
-      color: #FFFFFF;
-      font-weight: 400;
+      opacity: 0400;
     }
 
     /* Classe de saída */
     #splash.hidden {
       opacity: 0;
       visibility: hidden;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
 
-  <div id="splash">
+  <div id="splash" aria-hidden="false">
     <div id="glass-overlay"></div>
-    
+
     <div class="logo-container">
       <div class="welcome-text">Bem-vindo a:</div>
       <h1 class="brand-acoes">Ações</h1>
@@ -177,19 +175,54 @@
     </div>
   </div>
 
-  <iframe src="https://script.google.com/macros/s/AKfycbzaHv2nMVXL8AK9GAvUeFhfzA2BcaCfip8V3L086mL05sJgyEpwuKW4Z18BRioHnJkE/exec/exec"></iframe>
+  <!-- Removido o /exec duplicado -->
+  <iframe id="app-frame" src="https://script.google.com/macros/s/AKfycbzaHv2nMVXL8AK9GAvUeFhfzA2BcaCfip8V3L086mL05sJgyEpwuKW4Z18BRioHnJkE/exec" tabindex="-1" title="Aplicativo Ações Educativas"></iframe>
 
   <script>
     // Controle da Splash: 3 segundos de exibição + 1.5s de fadeout suave
-    setTimeout(() => {
+    (function () {
       const splash = document.getElementById('splash');
-      splash.classList.add('hidden');
-    }, 3500);
+      const iframe = document.getElementById('app-frame');
 
-    // Service Worker
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js');
-    }
+      // Garantir que o iframe seja programaticamente focável
+      // tabindex="-1" permite foco via JS sem alterar ordem de tabulação
+      iframe.setAttribute('tabindex', '-1');
+
+      // Tempo até iniciar a saída da splash
+      const SHOW_TIME = 3500;
+
+      function hideSplash() {
+        // Marca como escondido para leitores de tela
+        splash.setAttribute('aria-hidden', 'true');
+        // inicia transição CSS
+        splash.classList.add('hidden');
+
+        // Move o foco para o iframe quando a transição terminar
+        const onTransitionEnd = (e) => {
+          if (e.target === splash && e.propertyName === 'opacity') {
+            // Foco programático no iframe
+            try {
+              iframe.focus();
+            } catch (err) {
+              // foco pode falhar em alguns contextos; log para depuração
+              console.warn('Não foi possível focar o iframe:', err);
+            }
+            splash.removeEventListener('transitionend', onTransitionEnd);
+          }
+        };
+        splash.addEventListener('transitionend', onTransitionEnd);
+      }
+
+      // Inicia timeout após carregamento do script
+      setTimeout(hideSplash, SHOW_TIME);
+
+      // Service Worker: registrar com tratamento de sucesso/erro
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js')
+          .then(reg => console.log('Service Worker registrado:', reg))
+          .catch(err => console.error('Erro ao registrar Service Worker:', err));
+      }
+    })();
   </script>
 </body>
 </html>
