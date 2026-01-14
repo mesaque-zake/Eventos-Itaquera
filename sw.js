@@ -1,9 +1,16 @@
+const CACHE_NAME = 'acoes-v1';
+const assets = ['index.html', 'manifest.json', 'favicon.png', 'icone-192.png', 'icone-512.png', 'MesaLogo.png'];
 
 self.addEventListener('install', (e) => {
-  console.log('Service Worker: Instalado');
+  e.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(assets);
+    })
+  );
 });
 
 self.addEventListener('fetch', (e) => {
-  // O iFrame precisa de rede, então apenas repassamos as requisições
-  e.respondWith(fetch(e.request));
+  e.respondWith(
+    fetch(e.request).catch(() => caches.match(e.request))
+  );
 });
