@@ -2,25 +2,25 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ações Educativas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Ações Educativas - Itaquera</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-
-  <meta property="og:title" content="Ações Educativas - Itaquera">
-  <meta property="og:description" content="Sistema de Gestão das Ações Educativa do Sesc Mesa Brasil - Itaquera.">
-  <meta property="og:image" content="https://mesaque-zake.github.io/Eventos-Itaquera/social-share.png">
-  <meta property="og:url" content="https://mesaque-zake.github.io/Eventos-Itaquera/">
-  <meta property="og:type" content="website">
-
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Ações Educativas">
-
+  
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <meta name="theme-color" content="#4775f5">
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Ações Ed">
+
+  <meta property="og:title" content="Ações Educativas - Itaquera">
+  <meta property="og:description" content="Sistema de Gestão de Ações Educativas. Acesse de forma rápida e organizada diretamente pelo seu dispositivo.">
+  <meta property="og:image" content="https://mesaque-zake.github.io/Eventos-Itaquera/social-share.png">
+  <meta property="og:url" content="https://mesaque-zake.github.io/Eventos-Itaquera/">
+  <meta property="og:type" content="website">
 
   <style>
     :root {
@@ -37,7 +37,7 @@
       background-color: #2b2bab;
     }
 
-    /* Iframe do GAS */
+    /* Iframe do seu Google Apps Script */
     iframe {
       width: 100%;
       height: 100%;
@@ -45,7 +45,7 @@
       display: block;
     }
 
-    /* Splash Screen Principal */
+    /* Tela de Splash com Efeito de Vidro */
     #splash {
       position: fixed;
       top: 0;
@@ -58,35 +58,34 @@
       justify-content: center;
       align-items: center;
       z-index: 9999;
-      /* Transição de saída da tela toda */
       transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 1.5s;
     }
 
-    /* Efeito de Vidro Fosco que "Limpa" */
+    /* Camada de Vidro Fosco que suaviza gradualmente */
     #glass-overlay {
       position: absolute;
       inset: 0;
       backdrop-filter: blur(40px);
       -webkit-backdrop-filter: blur(40px);
       background: rgba(255, 255, 255, 0.05);
-      animation: revealGlass 2.5s forwards;
+      animation: revealGlass 2.8s forwards;
       z-index: 1;
     }
 
     @keyframes revealGlass {
       0% { backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); }
-      100% { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+      100% { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
     }
 
-    /* Conteúdo da Splash */
+    /* Container do Logo */
     .logo-container {
       position: relative;
       z-index: 2;
       text-align: center;
       color: #FFFFFF;
       opacity: 0;
-      transform: translateY(20px);
-      animation: fadeInUp 1.5s ease-out 0.5s forwards;
+      transform: translateY(30px);
+      animation: fadeInUp 1.8s ease-out 0.6s forwards;
     }
 
     @keyframes fadeInUp {
@@ -97,38 +96,37 @@
       font-size: 1.1rem;
       font-weight: 400;
       letter-spacing: 2px;
-      margin-bottom: -10px;
+      margin-bottom: -5px;
       opacity: 0.8;
     }
 
+    /* Título "Ações" em destaque gigante */
     .brand-acoes {
       font-family: 'Dancing Script', cursive;
-      /* AUMENTADO: De 5rem para 9rem */
-      font-size: clamp(6rem, 20vw, 10rem);
+      font-size: clamp(6.5rem, 22vw, 11rem); 
       margin: 0;
-      line-height: 1.1;
-      filter: drop-shadow(0px 10px 15px rgba(0, 0, 0, 0.3));
+      line-height: 1;
+      filter: drop-shadow(0px 10px 20px rgba(0, 0, 0, 0.3));
     }
 
     .brand-educativas {
       font-family: 'Montserrat', sans-serif;
-      font-size: clamp(1rem, 5vw, 1.8rem);
-      letter-spacing: 10px;
-      margin-top: -10px;
+      font-size: clamp(1.1rem, 5.5vw, 1.9rem);
+      letter-spacing: 12px;
+      margin-top: -5px;
       text-transform: uppercase;
       font-weight: 700;
-      opacity: 0.9;
+      opacity: 0.95;
     }
 
-    /* Rodapé */
+    /* Rodapé Discreto */
     .footer-splash {
       position: absolute;
       bottom: 50px;
       z-index: 2;
       text-align: center;
       opacity: 0;
-      color: #FFFFFF;
-      animation: fadeIn 2s ease-in 1s forwards;
+      animation: fadeIn 2s ease-in 1.2s forwards;
     }
 
     @keyframes fadeIn {
@@ -136,34 +134,31 @@
     }
 
     .mesa-logo {
-      width: 100px;
+      width: 90px;
       margin-bottom: 12px;
-      /* Deixa a logo discreta */
-      opacity: 0.6;
+      opacity: 0.5; /* Logo discreta */
       filter: grayscale(100%) brightness(200%);
     }
 
     .powered-by {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
+      opacity: 0.35; /* Texto bem transparente */
+      letter-spacing: 1px;
       color: #FFFFFF;
-      /* MAIS TRANSPARENTE como solicitado */
-      opacity: 0400;
-      
     }
 
-    /* Classe de saída */
+    /* Esconder Splash */
     #splash.hidden {
       opacity: 0;
       visibility: hidden;
-      pointer-events: none;
     }
   </style>
 </head>
 <body>
 
-  <div id="splash" aria-hidden="false">
+  <div id="splash">
     <div id="glass-overlay"></div>
-
+    
     <div class="logo-container">
       <div class="welcome-text">Bem-vindo a:</div>
       <h1 class="brand-acoes">Ações</h1>
@@ -171,59 +166,26 @@
     </div>
 
     <div class="footer-splash">
-      <img src="MesaLogo.png" alt="Mesaque Logo" class="mesa-logo">
-    <div class="powered-by">
-      Powered with <span style="color: #FFFFFF;">&#10084;</span> by <strong>Mesaque</strong></div>
+      <img src="MesaLogo.png" alt="Logo" class="mesa-logo">
+      <div class="powered-by">
+        Powered with &#10084; by <strong>Mesaque</strong>
+      </div>
     </div>
+  </div>
 
-  <!-- Removido o /exec duplicado -->
-  <iframe id="app-frame" src="https://script.google.com/macros/s/AKfycbzaHv2nMVXL8AK9GAvUeFhfzA2BcaCfip8V3L086mL05sJgyEpwuKW4Z18BRioHnJkE/exec" tabindex="-1" title="Aplicativo Ações Educativas"></iframe>
+  <iframe src="https://script.google.com/macros/s/AKfycbxQQZYd5pxDJvBzGXf3paZAnKv5lKythUrld2qyFHT8ImDngGSIid8sbuqaZ_iFXY-1/exec"></iframe>
 
   <script>
-    // Controle da Splash: 3 segundos de exibição + 1.5s de fadeout suave
-    (function () {
+    // Tempo total de exibição da Splash Screen
+    setTimeout(() => {
       const splash = document.getElementById('splash');
-      const iframe = document.getElementById('app-frame');
+      splash.classList.add('hidden');
+    }, 3800);
 
-      // Garantir que o iframe seja programaticamente focável
-      // tabindex="-1" permite foco via JS sem alterar ordem de tabulação
-      iframe.setAttribute('tabindex', '-1');
-
-      // Tempo até iniciar a saída da splash
-      const SHOW_TIME = 3500;
-
-      function hideSplash() {
-        // Marca como escondido para leitores de tela
-        splash.setAttribute('aria-hidden', 'true');
-        // inicia transição CSS
-        splash.classList.add('hidden');
-
-        // Move o foco para o iframe quando a transição terminar
-        const onTransitionEnd = (e) => {
-          if (e.target === splash && e.propertyName === 'opacity') {
-            // Foco programático no iframe
-            try {
-              iframe.focus();
-            } catch (err) {
-              // foco pode falhar em alguns contextos; log para depuração
-              console.warn('Não foi possível focar o iframe:', err);
-            }
-            splash.removeEventListener('transitionend', onTransitionEnd);
-          }
-        };
-        splash.addEventListener('transitionend', onTransitionEnd);
-      }
-
-      // Inicia timeout após carregamento do script
-      setTimeout(hideSplash, SHOW_TIME);
-
-      // Service Worker: registrar com tratamento de sucesso/erro
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js')
-          .then(reg => console.log('Service Worker registrado:', reg))
-          .catch(err => console.error('Erro ao registrar Service Worker:', err));
-      }
-    })();
+    // Registro do Service Worker para PWA
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
   </script>
 </body>
 </html>
