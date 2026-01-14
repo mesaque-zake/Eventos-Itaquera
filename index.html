@@ -1,1 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meu App GAS</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+    iframe { width: 100%; height: 100%; border: none; }
+  </style>
+</head>
+<body>
 
+  <iframe src="https://script.google.com/macros/s/AKfycbxQQZYd5pxDJvBzGXf3paZAnKv5lKythUrld2qyFHT8ImDngGSIid8sbuqaZ_iFXY-1/exec"></iframe>
+
+  <script>
+    // Registra o Service Worker para permitir a instalação como PWA
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(() => console.log("Service Worker registrado!"));
+    }
+  </script>
+</body>
+</html>
