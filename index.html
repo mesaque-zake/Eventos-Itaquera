@@ -5,17 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ações Educativas</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <meta name="theme-color" content="#4775f5">
-
-  <meta property="og:title" content="Ações Educativas">
-  <meta property="og:description" content="Controle de presença das Ações Educativas do Sesc Mesa Brasil - Unidade de Itaquera">
-  <meta property="og:image" content="social-share.png">
-  <meta property="og:type" content="website">
 
   <style>
     :root {
@@ -29,7 +24,7 @@
       width: 100%;
       overflow: hidden;
       font-family: 'Montserrat', sans-serif;
-      background: var(--gradiente-vibrante);
+      background-color: #2b2bab;
     }
 
     /* Iframe do GAS */
@@ -40,7 +35,7 @@
       display: block;
     }
 
-    /* Splash Screen */
+    /* Splash Screen Principal */
     #splash {
       position: fixed;
       top: 0;
@@ -53,68 +48,111 @@
       justify-content: center;
       align-items: center;
       z-index: 9999;
-      transition: opacity 0.8s ease, visibility 0.8s;
-      /* Efeito de Vidro */
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
+      /* Transição de saída da tela toda */
+      transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1), visibility 1.5s;
     }
 
-    #splash.hidden {
-      opacity: 0;
-      visibility: hidden;
+    /* Efeito de Vidro Fosco que "Limpa" */
+    #glass-overlay {
+      position: absolute;
+      inset: 0;
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+      background: rgba(255, 255, 255, 0.05);
+      animation: revealGlass 2.5s forwards;
+      z-index: 1;
     }
 
+    @keyframes revealGlass {
+      0% { backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); }
+      100% { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+    }
+
+    /* Conteúdo da Splash */
     .logo-container {
+      position: relative;
+      z-index: 2;
       text-align: center;
       color: #FFFFFF;
-      text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1.5s ease-out 0.5s forwards;
+    }
+
+    @keyframes fadeInUp {
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .welcome-text {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: 400;
-      margin-bottom: 10px;
-      opacity: 0.9;
+      letter-spacing: 2px;
+      margin-bottom: -10px;
+      opacity: 0.8;
     }
 
     .brand-acoes {
-      font-family: 'Dancing Script', crossorigin;
-      font-size: 5rem;
+      font-family: 'Dancing Script', cursive;
+      /* AUMENTADO: De 5rem para 9rem */
+      font-size: clamp(6rem, 20vw, 10rem); 
       margin: 0;
-      line-height: 1;
+      line-height: 1.1;
+      filter: drop-shadow(0px 10px 15px rgba(0, 0, 0, 0.3));
     }
 
     .brand-educativas {
       font-family: 'Montserrat', sans-serif;
-      font-size: 1.5rem;
-      letter-spacing: 6px;
-      margin: 0;
+      font-size: clamp(1rem, 5vw, 1.8rem);
+      letter-spacing: 10px;
+      margin-top: -10px;
       text-transform: uppercase;
+      font-weight: 700;
+      opacity: 0.9;
     }
 
-    /* Rodapé da Splash */
+    /* Rodapé */
     .footer-splash {
       position: absolute;
-      bottom: 40px;
+      bottom: 50px;
+      z-index: 2;
       text-align: center;
-      color: #FFFFFF;
+      opacity: 0;
+      animation: fadeIn 2s ease-in 1s forwards;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
     }
 
     .mesa-logo {
-      width: 120px; /* Ajuste conforme o tamanho da sua imagem */
-      margin-bottom: 10px;
-      filter: drop-shadow(0px 2px 5px rgba(0,0,0,0.2));
+      width: 100px;
+      margin-bottom: 12px;
+      /* Deixa a logo discreta */
+      opacity: 0.6; 
+      filter: grayscale(100%) brightness(200%);
     }
 
     .powered-by {
-      font-size: 0.8rem;
-      opacity: 0.8;
+      font-size: 0.75rem;
+      /* MAIS TRANSPARENTE como solicitado */
+      opacity: 0.4; 
+      letter-spacing: 1px;
+      color: #FFFFFF;
+      font-weight: 400;
+    }
+
+    /* Classe de saída */
+    #splash.hidden {
+      opacity: 0;
+      visibility: hidden;
     }
   </style>
 </head>
 <body>
 
   <div id="splash">
+    <div id="glass-overlay"></div>
+    
     <div class="logo-container">
       <div class="welcome-text">Bem-vindo a:</div>
       <h1 class="brand-acoes">Ações</h1>
@@ -124,24 +162,23 @@
     <div class="footer-splash">
       <img src="MesaLogo.png" alt="Mesaque Logo" class="mesa-logo">
       <div class="powered-by">
-        Powered with <span style="color: #FFFFFF;">&#10084;</span> by <strong>Mesaque</strong>
+        Powered with &#10084; by <strong>Mesaque</strong>
       </div>
     </div>
   </div>
 
-  <iframe src="https://script.google.com/macros/s/AKfycbxQQZYd5pxDJvBzGXf3paZAnKv5lKythUrld2qyFHT8ImDngGSIid8sbuqaZ_iFXY-1/exec"></iframe>
+  <iframe src="https://script.google.com/macros/s/AKfycbzaHv2nMVXL8AK9GAvUeFhfzA2BcaCfip8V3L086mL05sJgyEpwuKW4Z18BRioHnJkE/exec/exec"></iframe>
 
   <script>
-    // Timer de 3 segundos para esconder a splash screen
+    // Controle da Splash: 3 segundos de exibição + 1.5s de fadeout suave
     setTimeout(() => {
       const splash = document.getElementById('splash');
       splash.classList.add('hidden');
-    }, 3000);
+    }, 3500);
 
-    // Registro do Service Worker
+    // Service Worker
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js')
-        .then(() => console.log("PWA Ativo!"));
+      navigator.serviceWorker.register('sw.js');
     }
   </script>
 </body>
