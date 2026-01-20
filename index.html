@@ -71,30 +71,64 @@
       overflow: hidden; /* Importante para as bolhas não vazarem */
     }
 
-    /* Bolhas de Fundo (Aurora Effect) */
+    /* --- EFEITO NEON RÁPIDO --- */
+    
+    /* Configuração base das bolhas */
     .blob {
       position: absolute;
       border-radius: 50%;
-      filter: blur(80px);
+      filter: blur(50px); /* Blur menor deixa o neon mais "focado" e forte */
       z-index: 0;
-      animation: float 10s infinite alternate;
-      opacity: 0.6;
-    }
-    .blob-1 {
-      width: 300px; height: 300px;
-      background: var(--primary-color);
-      top: -50px; left: -50px;
-    }
-    .blob-2 {
-      width: 400px; height: 400px;
-      background: var(--accent-glow);
-      bottom: -100px; right: -100px;
-      animation-delay: -5s;
+      opacity: 0.8; /* Mais visível */
+      mix-blend-mode: screen; /* Faz as cores brilharem quando se cruzam */
     }
 
-    @keyframes float {
+    /* Bolha 1: Magenta Neon */
+    .blob-1 {
+      width: 350px; 
+      height: 350px;
+      background: #FF0099;
+      top: -100px; 
+      left: -100px;
+      animation: neonRun1 4s infinite alternate ease-in-out;
+    }
+
+    /* Bolha 2: Ciano Neon */
+    .blob-2 {
+      width: 400px; 
+      height: 400px;
+      background: #00F0FF;
+      bottom: -100px; 
+      right: -100px;
+      animation: neonRun2 3.5s infinite alternate ease-in-out;
+    }
+
+    /* Bolha 3: Roxo Elétrico (Adicionei uma terceira para mais caos) */
+    .blob-3 {
+      width: 300px; 
+      height: 300px;
+      background: #7B2FBE;
+      top: 50%; 
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: neonRun3 5s infinite alternate-reverse ease-in-out;
+    }
+
+    /* Animações Rápidas */
+    @keyframes neonRun1 {
       0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(20px, 40px) scale(1.1); }
+      100% { transform: translate(80vw, 40vh) scale(1.2); }
+    }
+
+    @keyframes neonRun2 {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(-60vw, -30vh) scale(0.8); }
+    }
+
+    @keyframes neonRun3 {
+      0% { transform: translate(-50%, -50%) scale(0.5); }
+      50% { transform: translate(20vw, 20vh) scale(1.5); }
+      100% { transform: translate(-20vw, -40vh) scale(0.5); }
     }
 
     /* Camada de Vidro */
@@ -226,7 +260,7 @@
   <div id="splash">
     <div class="blob blob-1"></div>
     <div class="blob blob-2"></div>
-    <div id="glass-overlay"></div>
+    <div class="blob blob-3"></div> <div id="glass-overlay"></div>
     
     <div class="logo-container">
       <div class="welcome-text animate-up delay-1">Bem-vindo a</div>
