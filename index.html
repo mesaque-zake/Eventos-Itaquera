@@ -2,7 +2,8 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Ações Educativas - Itaquera</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -68,7 +69,12 @@
       align-items: center;
       z-index: 9999;
       transition: opacity 0.8s ease-out, visibility 0.8s;
-      overflow: hidden; /* Importante para as bolhas não vazarem */
+      overflow: hidden;
+      
+      /* --- MUDANÇA AQUI --- */
+      /* Isso empurra o conteúdo para baixo apenas o necessário para não ficar atrás do relógio */
+      padding-top: env(safe-area-inset-top); 
+      box-sizing: border-box; /* Garante que o padding não aumente o tamanho total da tela */
     }
 
     /* --- EFEITO NEON RÁPIDO --- */
