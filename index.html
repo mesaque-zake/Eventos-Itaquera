@@ -8,9 +8,9 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
    
-  <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="./favicon.png">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png">
   <meta name="theme-color" content="#2b2bab">
 
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -71,56 +71,46 @@
       transition: opacity 0.8s ease-out, visibility 0.8s;
       overflow: hidden;
       
-      /* --- MUDANÇA AQUI --- */
-      /* Isso empurra o conteúdo para baixo apenas o necessário para não ficar atrás do relógio */
+      /* Ajuste seguro para iPhone */
       padding-top: env(safe-area-inset-top); 
-      box-sizing: border-box; /* Garante que o padding não aumente o tamanho total da tela */
+      box-sizing: border-box;
     }
 
     /* --- EFEITO NEON RÁPIDO --- */
-    
-    /* Configuração base das bolhas */
     .blob {
       position: absolute;
       border-radius: 50%;
-      filter: blur(50px); /* Blur menor deixa o neon mais "focado" e forte */
+      filter: blur(50px);
       z-index: 0;
-      opacity: 0.8; /* Mais visível */
-      mix-blend-mode: screen; /* Faz as cores brilharem quando se cruzam */
+      opacity: 0.8;
+      mix-blend-mode: screen;
     }
 
     /* Bolha 1: Magenta Neon */
     .blob-1 {
-      width: 350px; 
-      height: 350px;
+      width: 350px; height: 350px;
       background: #FF0099;
-      top: -100px; 
-      left: -100px;
+      top: -100px; left: -100px;
       animation: neonRun1 4s infinite alternate ease-in-out;
     }
 
     /* Bolha 2: Ciano Neon */
     .blob-2 {
-      width: 400px; 
-      height: 400px;
+      width: 400px; height: 400px;
       background: #00F0FF;
-      bottom: -100px; 
-      right: -100px;
+      bottom: -100px; right: -100px;
       animation: neonRun2 3.5s infinite alternate ease-in-out;
     }
 
-    /* Bolha 3: Roxo Elétrico (Adicionei uma terceira para mais caos) */
+    /* Bolha 3: Roxo Elétrico */
     .blob-3 {
-      width: 300px; 
-      height: 300px;
+      width: 300px; height: 300px;
       background: #7B2FBE;
-      top: 50%; 
-      left: 50%;
+      top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       animation: neonRun3 5s infinite alternate-reverse ease-in-out;
     }
 
-    /* Animações Rápidas */
     @keyframes neonRun1 {
       0% { transform: translate(0, 0) scale(1); }
       100% { transform: translate(80vw, 40vh) scale(1.2); }
@@ -145,7 +135,6 @@
       -webkit-backdrop-filter: blur(20px);
       background: rgba(255, 255, 255, 0.03);
       z-index: 1;
-      /* Textura sutil para modernidade */
       background-image: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px);
       background-size: 30px 30px;
     }
@@ -158,7 +147,6 @@
       color: #FFFFFF;
     }
 
-    /* Animações de entrada escalonadas */
     .animate-up {
       opacity: 0;
       transform: translateY(20px);
@@ -188,7 +176,6 @@
       font-size: clamp(6rem, 20vw, 10rem); 
       margin: -10px 0;
       line-height: 1.1;
-      /* Gradiente sutil no texto */
       background: linear-gradient(to bottom, #ffffff, #e0e0e0);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -206,7 +193,7 @@
       text-shadow: 0 2px 10px rgba(0,0,0,0.2);
     }
 
-    /* Loader moderno (3 pontinhos) */
+    /* Loader moderno */
     .loader {
       display: flex;
       justify-content: center;
@@ -214,11 +201,8 @@
       gap: 8px;
     }
     .dot {
-      width: 8px;
-      height: 8px;
-      background: white;
-      border-radius: 50%;
-      opacity: 0.4;
+      width: 8px; height: 8px;
+      background: white; border-radius: 50%; opacity: 0.4;
       animation: bounce 1.4s infinite ease-in-out both;
     }
     .dot:nth-child(1) { animation-delay: -0.32s; }
@@ -241,7 +225,7 @@
       width: 80px;
       margin-bottom: 10px;
       opacity: 0.6;
-      filter: brightness(0) invert(1); /* Garante que fique branca */
+      filter: brightness(0) invert(1);
       transition: opacity 0.3s;
     }
 
@@ -253,11 +237,10 @@
       font-weight: 300;
     }
 
-    /* Esconder Splash */
     #splash.hidden {
       opacity: 0;
       visibility: hidden;
-      pointer-events: none; /* Garante que o clique vá pro iframe */
+      pointer-events: none;
     }
   </style>
 </head>
@@ -266,7 +249,8 @@
   <div id="splash">
     <div class="blob blob-1"></div>
     <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div> <div id="glass-overlay"></div>
+    <div class="blob blob-3"></div> 
+    <div id="glass-overlay"></div>
     
     <div class="logo-container">
       <div class="welcome-text animate-up delay-1">Bem-vindo a</div>
@@ -283,7 +267,7 @@
     <div class="footer-splash animate-up delay-4">
       <img src="MesaLogo.png" alt="Logo" class="mesa-logo">
       <div class="powered-by">
-        Powered with <span style="color: #FFFFFF;">&#10084;</span> by <strong>Mesaque</strong></div>
+        Powered with <span style="color: #FFFFFF;">&#10084;</span> by <strong>Mesaque</strong>
       </div>
     </div>
   </div>
@@ -292,28 +276,24 @@
      id="app-frame" 
      src="https://script.google.com/macros/s/AKfycbzqAx30I5hYJJAHDmVph29FV_9RmtgpxxOOPcl5P9dFpJNPcpO7UY_t81BKWP-Ygg/exec" 
      style="border:none; width: 100%; height: 100%;"
-     allow="geolocation https://script.google.com https://*.googleusercontent.com; microphone; camera"
-     sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation allow-modals"
-    ></iframe>
+     allow="geolocation; microphone; camera; clipboard-write"
+     sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation allow-modals allow-downloads allow-presentation"
+  ></iframe>
   
   <script>
-    // Referências
     const splash = document.getElementById('splash');
     const iframe = document.getElementById('app-frame');
 
-    // Tempo total de exibição da Splash Screen (Mantive seus 3.8s)
+    // Tempo total de exibição da Splash Screen (5 segundos)
     setTimeout(() => {
-      // 1. Some o Splash
       splash.classList.add('hidden');
-      
-      // 2. Aparece o Iframe suavemente
       iframe.classList.add('loaded');
     }, 5000);
 
-    // Registro do Service Worker para PWA
+    // Registro do Service Worker
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
+        navigator.serviceWorker.register('./sw.js')
           .then(reg => console.log('SW registrado!', reg.scope))
           .catch(err => console.log('SW falhou:', err));
       });
