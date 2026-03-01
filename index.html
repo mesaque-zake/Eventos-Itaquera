@@ -6,7 +6,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Ações Educativas - Itaquera</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
    
   <link rel="icon" type="image/png" href="./favicon.png">
   <link rel="manifest" href="./manifest.json">
@@ -50,7 +50,6 @@
       transition: opacity 1s ease-in;
     }
     
-    /* Classe para mostrar o iframe suavemente */
     iframe.loaded {
       opacity: 1;
     }
@@ -70,8 +69,6 @@
       z-index: 9999;
       transition: opacity 0.8s ease-out, visibility 0.8s;
       overflow: hidden;
-      
-      /* Ajuste seguro para iPhone */
       padding-top: env(safe-area-inset-top); 
       box-sizing: border-box;
     }
@@ -86,7 +83,6 @@
       mix-blend-mode: screen;
     }
 
-    /* Bolha 1: Magenta Neon */
     .blob-1 {
       width: 350px; height: 350px;
       background: #FF0099;
@@ -94,7 +90,6 @@
       animation: neonRun1 4s infinite alternate ease-in-out;
     }
 
-    /* Bolha 2: Ciano Neon */
     .blob-2 {
       width: 400px; height: 400px;
       background: #00F0FF;
@@ -102,7 +97,6 @@
       animation: neonRun2 3.5s infinite alternate ease-in-out;
     }
 
-    /* Bolha 3: Roxo Elétrico */
     .blob-3 {
       width: 300px; height: 300px;
       background: #7B2FBE;
@@ -145,6 +139,8 @@
       z-index: 10;
       text-align: center;
       color: #FFFFFF;
+      width: 85%;
+      max-width: 400px;
     }
 
     .animate-up {
@@ -193,27 +189,110 @@
       text-shadow: 0 2px 10px rgba(0,0,0,0.2);
     }
 
-    /* Loader moderno */
-    .loader {
+    /* --- SELEÇÃO DE UNIDADE (GLASSMORPHISM) --- */
+    .unit-selector-container {
+      margin-top: 35px;
       display: flex;
-      justify-content: center;
-      margin-top: 40px;
-      gap: 8px;
-    }
-    .dot {
-      width: 8px; height: 8px;
-      background: white; border-radius: 50%; opacity: 0.4;
-      animation: bounce 1.4s infinite ease-in-out both;
-    }
-    .dot:nth-child(1) { animation-delay: -0.32s; }
-    .dot:nth-child(2) { animation-delay: -0.16s; }
-    
-    @keyframes bounce {
-      0%, 80%, 100% { transform: scale(0); }
-      40% { transform: scale(1); }
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 24px;
+      padding: 22px 25px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     }
 
-    /* Rodapé */
+    .selector-title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin: 0 0 5px 0;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 600;
+    }
+
+    /* Atualizado para flex-wrap visando escalabilidade */
+    .unit-options {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      flex-wrap: wrap; 
+      justify-content: center;
+    }
+
+    .unit-card {
+      flex: 1 1 auto;
+      min-width: 80px;
+      padding: 12px 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: 500;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .unit-card:active {
+      transform: scale(0.95);
+    }
+
+    .unit-card.selected {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.5);
+      color: #ffffff;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      font-weight: 600;
+    }
+
+    .glass-btn {
+      margin-top: 8px;
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 14px;
+      color: #fff;
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Montserrat', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .glass-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .glass-btn:not(:disabled):active {
+      transform: scale(0.96);
+    }
+
+    .glass-btn.shake {
+      animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+      background: rgba(255, 60, 60, 0.2);
+      border-color: rgba(255, 60, 60, 0.4);
+      color: #fff;
+    }
+
+    @keyframes shake {
+      10%, 90% { transform: translate3d(-2px, 0, 0); }
+      20%, 80% { transform: translate3d(3px, 0, 0); }
+      30%, 50%, 70% { transform: translate3d(-5px, 0, 0); }
+      40%, 60% { transform: translate3d(5px, 0, 0); }
+    }
+
+    /* Rodapé intacto */
     .footer-splash {
       position: absolute;
       bottom: 40px;
@@ -257,10 +336,15 @@
       <h1 class="brand-acoes animate-up delay-2">Ações</h1>
       <h2 class="brand-educativas animate-up delay-3">Educativas</h2>
       
-      <div class="loader animate-up delay-4">
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
+      <div class="unit-selector-container animate-up delay-4">
+        <p class="selector-title">Selecione sua unidade</p>
+        
+        <div class="unit-options">
+          <div class="unit-card" data-unit="itaquera">Itaquera</div>
+          <div class="unit-card" data-unit="carmo">Carmo</div>
+          </div>
+        
+        <button id="confirm-btn" class="glass-btn" disabled>Confirmar</button>
       </div>
     </div>
 
@@ -283,14 +367,76 @@
   <script>
     const splash = document.getElementById('splash');
     const iframe = document.getElementById('app-frame');
+    const unitCards = document.querySelectorAll('.unit-card');
+    const confirmBtn = document.getElementById('confirm-btn');
+    let selectedUnit = null;
 
-    // Tempo total de exibição da Splash Screen (5 segundos)
-    setTimeout(() => {
+    // 1. O DICIONÁRIO DE ROTAS - O coração escalável do sistema
+    const unitLinks = {
+      itaquera: "https://script.google.com/macros/s/AKfycbwl5S-py6ByjALyWeyBYB4B_WJmpZjZgpCHQAkx-BglzC35Z62REhkV4sYWGu7gWQRI/exec",
+      carmo: "", // Deixe vazio enquanto estiver em construção
+      interlagos: "https://script.google.com/macros/s/SEU_LINK_AQUI/exec" // Pronto para o futuro
+    };
+
+    // Gerencia a seleção visual dos cards
+    unitCards.forEach(card => {
+      card.addEventListener('click', () => {
+        unitCards.forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        selectedUnit = card.getAttribute('data-unit');
+        confirmBtn.disabled = false;
+      });
+    });
+
+    // Função auxiliar para liberar a tela e exibir o sistema
+    const revealSystem = () => {
       splash.classList.add('hidden');
       iframe.classList.add('loaded');
-    }, 5000);
+      confirmBtn.innerText = "Confirmar";
+      confirmBtn.disabled = false;
+    };
 
-    // Registro do Service Worker
+    // Máquina de estados ao confirmar
+    confirmBtn.addEventListener('click', () => {
+      if (!selectedUnit) return;
+
+      const linkDaUnidade = unitLinks[selectedUnit];
+
+      // Estado 1: Em Construção (Sem link)
+      if (!linkDaUnidade || linkDaUnidade === "") {
+        const originalText = confirmBtn.innerText;
+        confirmBtn.innerText = "Em construção 🚧";
+        confirmBtn.classList.add('shake');
+        confirmBtn.disabled = true;
+
+        setTimeout(() => {
+          confirmBtn.innerText = originalText;
+          confirmBtn.classList.remove('shake');
+          confirmBtn.disabled = false;
+        }, 2500);
+
+      } else {
+        // Estado 2: Link válido
+        if (iframe.src !== linkDaUnidade) {
+          // Muda o link, mostra feedback visual de loading
+          confirmBtn.innerText = "Carregando sistema...";
+          confirmBtn.disabled = true;
+          iframe.src = linkDaUnidade;
+          
+          // Espera o iFrame carregar totalmente para revelar
+          iframe.onload = revealSystem;
+
+          // Trava de Segurança Sênior: Se o GAS demorar mais de 8s, revela mesmo assim
+          setTimeout(revealSystem, 8000);
+
+        } else {
+          // Estado 3: Já é a unidade pré-carregada (Itaquera), revela instantaneamente
+          revealSystem();
+        }
+      }
+    });
+
+    // Registro do Service Worker (Padrão PWA mantido)
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js')
