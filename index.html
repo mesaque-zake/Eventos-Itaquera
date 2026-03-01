@@ -169,8 +169,8 @@
 
     .brand-acoes {
       font-family: 'Dancing Script', cursive;
-      font-size: clamp(6rem, 20vw, 10rem); 
-      margin: -10px 0;
+      font-size: clamp(5rem, 18vw, 9rem); 
+      margin: -5px 0;
       line-height: 1.1;
       background: linear-gradient(to bottom, #ffffff, #e0e0e0);
       -webkit-background-clip: text;
@@ -180,8 +180,8 @@
 
     .brand-educativas {
       font-family: 'Montserrat', sans-serif;
-      font-size: clamp(1rem, 5vw, 1.5rem);
-      letter-spacing: 14px;
+      font-size: clamp(0.9rem, 4.5vw, 1.3rem);
+      letter-spacing: 12px;
       margin-top: -10px;
       text-transform: uppercase;
       font-weight: 700;
@@ -189,35 +189,34 @@
       text-shadow: 0 2px 10px rgba(0,0,0,0.2);
     }
 
-    /* --- SELEÇÃO DE UNIDADE (GLASSMORPHISM) --- */
+    /* --- SELEÇÃO DE UNIDADE (GLASSMORPHISM) COMPACTO --- */
     .unit-selector-container {
-      margin-top: 35px;
+      margin-top: 25px; /* Reduzido para dar mais respiro à tela */
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 15px;
+      gap: 12px; /* Reduzido */
       background: rgba(255, 255, 255, 0.06);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 24px;
-      padding: 22px 25px;
+      border-radius: 20px;
+      padding: 18px 20px; /* Reduzido */
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     }
 
     .selector-title {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       text-transform: uppercase;
       letter-spacing: 2px;
-      margin: 0 0 5px 0;
+      margin: 0 0 2px 0;
       color: rgba(255, 255, 255, 0.9);
       font-weight: 600;
     }
 
-    /* Atualizado para flex-wrap visando escalabilidade */
     .unit-options {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       width: 100%;
       flex-wrap: wrap; 
       justify-content: center;
@@ -226,13 +225,13 @@
     .unit-card {
       flex: 1 1 auto;
       min-width: 80px;
-      padding: 12px 10px;
+      padding: 10px 8px; /* Reduzido */
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 14px;
+      border-radius: 12px;
       color: rgba(255, 255, 255, 0.8);
       font-weight: 500;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       cursor: pointer;
       transition: all 0.3s ease;
       text-align: center;
@@ -253,15 +252,15 @@
     }
 
     .glass-btn {
-      margin-top: 8px;
+      margin-top: 4px;
       width: 100%;
-      padding: 14px;
+      padding: 12px; /* Reduzido */
       background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
       border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 14px;
+      border-radius: 12px;
       color: #fff;
       font-weight: 600;
-      font-size: 1rem;
+      font-size: 0.95rem;
       letter-spacing: 1px;
       cursor: pointer;
       transition: all 0.3s ease;
@@ -298,11 +297,12 @@
       bottom: 40px;
       z-index: 10;
       text-align: center;
+      width: 100%;
     }
 
     .mesa-logo {
       width: 80px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       opacity: 0.6;
       filter: brightness(0) invert(1);
       transition: opacity 0.3s;
@@ -320,6 +320,13 @@
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
+    }
+
+    /* Regra de Proteção para Telas Baixas (Notebooks e Modo Paisagem) */
+    @media (max-height: 700px) {
+      .brand-acoes { font-size: clamp(4rem, 15vw, 6rem); }
+      .unit-selector-container { margin-top: 15px; }
+      .footer-splash { bottom: 15px; }
     }
   </style>
 </head>
@@ -342,7 +349,7 @@
         <div class="unit-options">
           <div class="unit-card" data-unit="itaquera">Itaquera</div>
           <div class="unit-card" data-unit="carmo">Carmo</div>
-          </div>
+        </div>
         
         <button id="confirm-btn" class="glass-btn" disabled>Confirmar</button>
       </div>
@@ -371,14 +378,13 @@
     const confirmBtn = document.getElementById('confirm-btn');
     let selectedUnit = null;
 
-    // 1. O DICIONÁRIO DE ROTAS - O coração escalável do sistema
+    // Dicionário de Rotas
     const unitLinks = {
-      itaquera: "https://script.google.com/macros/s/AKfycbwl5S-py6ByjALyWeyBYB4B_WJmpZjZgpCHQAkx-BglzC35Z62REhkV4sYWGu7gWQRI/exec",
-      carmo: "", // Deixe vazio enquanto estiver em construção
-      interlagos: "https://script.google.com/macros/s/SEU_LINK_AQUI/exec" // Pronto para o futuro
+      itaquera: "https://script.google.com/macros/s/AKfycbzQE3gKaTZ54BNPLJ7sz2GmTneUW6Bc94N2772O4CojduJUPMoaz09kry1b6yAgSyjp/exec",
+      carmo: "", // Em construção
+      interlagos: "https://script.google.com/macros/s/SEU_LINK_AQUI/exec"
     };
 
-    // Gerencia a seleção visual dos cards
     unitCards.forEach(card => {
       card.addEventListener('click', () => {
         unitCards.forEach(c => c.classList.remove('selected'));
@@ -388,7 +394,6 @@
       });
     });
 
-    // Função auxiliar para liberar a tela e exibir o sistema
     const revealSystem = () => {
       splash.classList.add('hidden');
       iframe.classList.add('loaded');
@@ -396,13 +401,11 @@
       confirmBtn.disabled = false;
     };
 
-    // Máquina de estados ao confirmar
     confirmBtn.addEventListener('click', () => {
       if (!selectedUnit) return;
 
       const linkDaUnidade = unitLinks[selectedUnit];
 
-      // Estado 1: Em Construção (Sem link)
       if (!linkDaUnidade || linkDaUnidade === "") {
         const originalText = confirmBtn.innerText;
         confirmBtn.innerText = "Em construção 🚧";
@@ -416,27 +419,20 @@
         }, 2500);
 
       } else {
-        // Estado 2: Link válido
         if (iframe.src !== linkDaUnidade) {
-          // Muda o link, mostra feedback visual de loading
           confirmBtn.innerText = "Carregando sistema...";
           confirmBtn.disabled = true;
           iframe.src = linkDaUnidade;
           
-          // Espera o iFrame carregar totalmente para revelar
           iframe.onload = revealSystem;
-
-          // Trava de Segurança Sênior: Se o GAS demorar mais de 8s, revela mesmo assim
-          setTimeout(revealSystem, 8000);
+          setTimeout(revealSystem, 8000); // Fallback de 8s
 
         } else {
-          // Estado 3: Já é a unidade pré-carregada (Itaquera), revela instantaneamente
           revealSystem();
         }
       }
     });
 
-    // Registro do Service Worker (Padrão PWA mantido)
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js')
