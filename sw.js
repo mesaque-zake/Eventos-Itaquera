@@ -1,4 +1,4 @@
-const CACHE_NAME = 'acoes-v10';
+const CACHE_NAME = 'acoes-v11';
 const assets = ['index.html', 'manifest.json', 'favicon.png', 'icone-192.png', 'icone-512.png', 'MesaLogo.png'];
 
 self.addEventListener('install', (e) => {
