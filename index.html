@@ -191,17 +191,17 @@
 
     /* --- SELEÇÃO DE UNIDADE (GLASSMORPHISM) COMPACTO --- */
     .unit-selector-container {
-      margin-top: 25px; /* Reduzido para dar mais respiro à tela */
+      margin-top: 25px; 
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px; /* Reduzido */
+      gap: 12px; 
       background: rgba(255, 255, 255, 0.06);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 20px;
-      padding: 18px 20px; /* Reduzido */
+      padding: 18px 20px; 
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     }
 
@@ -225,7 +225,7 @@
     .unit-card {
       flex: 1 1 auto;
       min-width: 80px;
-      padding: 10px 8px; /* Reduzido */
+      padding: 10px 8px; 
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 12px;
@@ -254,7 +254,7 @@
     .glass-btn {
       margin-top: 4px;
       width: 100%;
-      padding: 12px; /* Reduzido */
+      padding: 12px; 
       background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
       border: 1px solid rgba(255, 255, 255, 0.3);
       border-radius: 12px;
@@ -322,7 +322,7 @@
       pointer-events: none;
     }
 
-    /* Regra de Proteção para Telas Baixas (Notebooks e Modo Paisagem) */
+    /* Regra de Proteção para Telas Baixas */
     @media (max-height: 700px) {
       .brand-acoes { font-size: clamp(4rem, 15vw, 6rem); }
       .unit-selector-container { margin-top: 15px; }
@@ -365,7 +365,6 @@
 
   <iframe 
      id="app-frame" 
-     src="https://script.google.com/macros/s/AKfycbwWmkTFQ4xvbjDpiW_HGqnK69H2faNvjwAj4CbX4RZBfxdjUwVaXE6TmH12BL_VkKWE/exec" 
      style="border:none; width: 100%; height: 100%;"
      allow="geolocation; microphone; camera; clipboard-write"
      sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation allow-modals allow-downloads allow-presentation"
@@ -377,12 +376,16 @@
     const unitCards = document.querySelectorAll('.unit-card');
     const confirmBtn = document.getElementById('confirm-btn');
     let selectedUnit = null;
+    let isAppOpen = false;
 
     // Dicionário de Rotas
     const unitLinks = {
       itaquera: "https://script.google.com/macros/s/AKfycbwWmkTFQ4xvbjDpiW_HGqnK69H2faNvjwAj4CbX4RZBfxdjUwVaXE6TmH12BL_VkKWE/exec",
       carmo: "https://script.google.com/macros/s/AKfycbyiRtXfM_TVGZzWS8qnFwALKpmm0_gEYjtXXyygcywQ5F0WXpRk2WcVIOU27Sd7MUu3/exec"
     };
+
+    // 1. Configura a tela de Splash como o "Ponto Zero" no histórico do navegador
+    history.replaceState({ screen: 'splash' }, '', window.location.pathname);
 
     unitCards.forEach(card => {
       card.addEventListener('click', () => {
@@ -393,11 +396,18 @@
       });
     });
 
-    const revealSystem = () => {
-      splash.classList.add('hidden');
-      iframe.classList.add('loaded');
-      confirmBtn.innerText = "Confirmar";
-      confirmBtn.disabled = false;
+    // 2. Função de revelação agora cria um histórico (Push State)
+    const revealSystem = (unitId) => {
+      if (!isAppOpen) {
+        isAppOpen = true;
+        // Diz ao celular/navegador que entramos em uma nova "página"
+        history.pushState({ screen: 'app' }, '', `#${unitId}`);
+        
+        splash.classList.add('hidden');
+        iframe.classList.add('loaded');
+        confirmBtn.innerText = "Confirmar";
+        confirmBtn.disabled = false;
+      }
     };
 
     confirmBtn.addEventListener('click', () => {
@@ -418,17 +428,27 @@
         }, 2500);
 
       } else {
-        if (iframe.src !== linkDaUnidade) {
-          confirmBtn.innerText = "Carregando sistema...";
-          confirmBtn.disabled = true;
-          iframe.src = linkDaUnidade;
-          
-          iframe.onload = revealSystem;
-          setTimeout(revealSystem, 8000); // Fallback de 8s
+        confirmBtn.innerText = "Carregando sistema...";
+        confirmBtn.disabled = true;
+        iframe.src = linkDaUnidade; // O sistema começa a carregar apenas agora
+        
+        iframe.onload = () => revealSystem(selectedUnit);
+        setTimeout(() => revealSystem(selectedUnit), 8000); 
+      }
+    });
 
-        } else {
-          revealSystem();
-        }
+    // 3. O Segredo: Interceptando o botão "Voltar" do celular/navegador
+    window.addEventListener('popstate', (event) => {
+      // Se o usuário voltar e o estado for o 'splash' (Ponto Zero)
+      if (event.state && event.state.screen === 'splash') {
+        isAppOpen = false;
+        
+        // Esconde o iframe e mostra a tela de vidro
+        splash.classList.remove('hidden');
+        iframe.classList.remove('loaded');
+        
+        // Esvazia o iframe para não consumir memória nem áudio em background
+        iframe.src = 'about:blank'; 
       }
     });
 
