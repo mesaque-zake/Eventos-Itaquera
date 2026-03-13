@@ -1,12 +1,15 @@
 {
+  "id": "/acoes-educativas-itaquera/",
   "name": "Ações Educativas - Itaquera",
   "short_name": "Ações Educativas",
-  "description": "Sistema de Gestão das Ações Educativas",
-  "start_url": "./index.html",
+  "description": "Sistema de Gestão das Ações Educativas do Sesc Mesa Brasil.",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "start_url": "./",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#2b2bab",
   "theme_color": "#2b2bab",
-  "orientation": "portrait",
   "icons": [
     {
       "src": "icone-192.png",
@@ -18,7 +21,13 @@
       "src": "icone-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "maskable any"
+      "purpose": "any"
+    },
+    {
+      "src": "icone-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
