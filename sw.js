@@ -1,5 +1,4 @@
-// Sempre que fizer uma alteração no Index.html, mude esta versão (ex: v16, v17...)
-const CACHE_NAME = 'acoes-v16'; 
+const CACHE_NAME = 'acoes-v17'; 
 
 // Adicionado o './' (raiz) e o apple-touch-icon.png que faltava
 const assets = [
