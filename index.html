@@ -157,8 +157,26 @@
       animation-delay: 2.0s;
     }
     .welcome-text { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 0px; opacity: 0.7; font-weight: 300; }
-    .brand-acoes { font-family: 'Dancing Script', cursive; font-size: clamp(5rem, 18vw, 9rem); margin: -5px 0; line-height: 1.1; background: linear-gradient(to bottom, #ffffff, #e0e0e0); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0px 10px 15px rgba(0, 0, 0, 0.2)); }
-    .brand-educativas { font-family: 'Montserrat', sans-serif; font-size: clamp(0.9rem, 4.5vw, 1.3rem); letter-spacing: 12px; margin-top: -10px; text-transform: uppercase; font-weight: 700; color: rgba(255, 255, 255, 0.9); text-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+    .brand-acoes { 
+      font-family: 'Dancing Script', cursive; 
+      font-size: clamp(6.5rem, 22vw, 11rem); /* Aumentado consideravelmente */
+      margin: -10px 0; /* Ajuste negativo sutil para não empurrar a palavra de baixo */
+      line-height: 1.1; 
+      background: linear-gradient(to bottom, #ffffff, #e0e0e0); 
+      -webkit-background-clip: text; 
+      -webkit-text-fill-color: transparent; 
+      filter: drop-shadow(0px 10px 15px rgba(0, 0, 0, 0.2)); 
+    }
+    .brand-educativas { 
+      font-family: 'Montserrat', sans-serif; 
+      font-size: clamp(1.2rem, 5.5vw, 1.8rem); /* Aumentado proporcionalmente */
+      letter-spacing: clamp(8px, 2vw, 14px); /* O espaçamento entre letras agora também é fluido */
+      margin-top: -5px; 
+      text-transform: uppercase; 
+      font-weight: 700; 
+      color: rgba(255, 255, 255, 0.9); 
+      text-shadow: 0 2px 10px rgba(0,0,0,0.2); 
+    }
 
     /* 3. Cartões (Aparecem no 2.5s) */
     .unit-selector-container {
@@ -300,8 +318,8 @@
 
   <iframe 
      id="app-frame" 
-     allow="geolocation; microphone; camera; clipboard-write"
-     sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation allow-modals allow-downloads"
+     allow="geolocation; microphone; camera; clipboard-write; autoplay; fullscreen"
+     sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation allow-modals allow-downloads allow-storage-access-by-user-activation"
   ></iframe>
   
   <script>
