@@ -18,7 +18,7 @@
 
   <style>
     :root {
-      --deep-blue: #2b2bab;
+      --deep-blue: #762bab;
     }
 
     body, html {
@@ -102,7 +102,7 @@
 
     .blob-1 { width: 350px; height: 350px; background: #FF0099; top: -100px; left: -100px; animation: neonRun1 4s infinite alternate ease-in-out; }
     .blob-2 { width: 400px; height: 400px; background: #00F0FF; bottom: -100px; right: -100px; animation: neonRun2 3.5s infinite alternate ease-in-out; }
-    .blob-3 { width: 300px; height: 300px; background: #7B2FBE; top: 50%; left: 50%; transform: translate(-50%, -50%); animation: neonRun3 5s infinite alternate-reverse ease-in-out; }
+    .blob-3 { width: 300px; height: 300px; background: #b969ff; top: 50%; left: 50%; transform: translate(-50%, -50%); animation: neonRun3 5s infinite alternate-reverse ease-in-out; }
 
     @keyframes neonRun1 { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(80vw, 40vh) scale(1.2); } }
     @keyframes neonRun2 { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(-60vw, -30vh) scale(0.8); } }
@@ -146,7 +146,7 @@
       text-align: center;
       width: 85%;
       max-width: 400px;
-      margin-top: -50px; /* Compensa o espaço para ficar no centro ótico */
+      margin-top: -50px;
     }
 
     /* 2. Frase Bem Vindo (Aparece no 2.0s) */
@@ -159,8 +159,8 @@
     .welcome-text { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 0px; opacity: 0.7; font-weight: 300; }
     .brand-acoes { 
       font-family: 'Dancing Script', cursive; 
-      font-size: clamp(6.5rem, 22vw, 11rem); /* Aumentado consideravelmente */
-      margin: -10px 0; /* Ajuste negativo sutil para não empurrar a palavra de baixo */
+      font-size: clamp(6.5rem, 22vw, 11rem); 
+      margin: -10px 0; 
       line-height: 1.1; 
       background: linear-gradient(to bottom, #ffffff, #e0e0e0); 
       -webkit-background-clip: text; 
@@ -169,8 +169,8 @@
     }
     .brand-educativas { 
       font-family: 'Montserrat', sans-serif; 
-      font-size: clamp(1.2rem, 5.5vw, 1.8rem); /* Aumentado proporcionalmente */
-      letter-spacing: clamp(8px, 2vw, 14px); /* O espaçamento entre letras agora também é fluido */
+      font-size: clamp(1.2rem, 5.5vw, 1.8rem); 
+      letter-spacing: clamp(8px, 2vw, 14px); 
       margin-top: -5px; 
       text-transform: uppercase; 
       font-weight: 700; 
@@ -178,93 +178,67 @@
       text-shadow: 0 2px 10px rgba(0,0,0,0.2); 
     }
 
-    /* 3. Cartões (Aparecem no 2.5s) */
-    .unit-selector-container {
-      margin-top: 25px; 
-      display: flex; flex-direction: column; align-items: center; gap: 12px; 
-      background: rgba(255, 255, 255, 0.06); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px; padding: 18px 20px; 
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-      
+    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+
+    /* 3. Botão Iniciar (Aparece no 2.5s) */
+    .start-container {
+      margin-top: 40px;
       opacity: 0;
       transform: translateY(20px);
       animation: fadeInUp 0.6s ease forwards;
       animation-delay: 2.5s;
     }
-    
-    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
 
-    .selector-title { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 2px 0; color: rgba(255, 255, 255, 0.9); font-weight: 600; }
-    .unit-options { display: flex; gap: 8px; width: 100%; justify-content: center; }
-    .unit-card { flex: 1 1 auto; min-width: 80px; padding: 10px 8px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; color: rgba(255, 255, 255, 0.8); font-weight: 500; font-size: 0.9rem; cursor: pointer; transition: all 0.3s ease; text-align: center; user-select: none; -webkit-tap-highlight-color: transparent; }
-    .unit-card:active { transform: scale(0.95); }
-    .unit-card.selected { background: rgba(255, 255, 255, 0.2); border-color: rgba(255, 255, 255, 0.5); color: #ffffff; box-shadow: 0 0 20px rgba(255, 255, 255, 0.1); font-weight: 600; }
-
-    /* --- ESTADO DE TROCA (SWAP TEXT) --- */
-    #swap-status {
-      display: none;
-      font-size: 1.2rem;
-      font-weight: 600;
-      letter-spacing: 2px;
+    #btn-start {
+      background: #ffffff;
+      color: var(--deep-blue);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
       text-transform: uppercase;
-      animation: pulseText 1.5s infinite;
-    }
-    @keyframes pulseText { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
-
-    /* --- BOTÃO FLUTUANTE (SWAP) E MODAL --- */
-    #btn-swap-unit {
-      position: fixed;
-      bottom: 30px;
-      right: 20px;
-      width: 55px;
-      height: 55px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      color: #fff;
-      font-size: 1.8rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9500;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      letter-spacing: 2px;
+      padding: 16px 45px;
+      border: none;
+      border-radius: 30px;
       cursor: pointer;
-      opacity: 0;
-      visibility: hidden;
-      transform: scale(0.8);
-      transition: all 0.4s ease;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
       -webkit-tap-highlight-color: transparent;
+      outline: none;
     }
-    #btn-swap-unit.visible { opacity: 1; visibility: visible; transform: scale(1); }
-    #btn-swap-unit:active { transform: scale(0.9) rotate(180deg); transition: 0.2s; }
 
-    #confirm-modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      backdrop-filter: blur(5px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 10000;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
+    #btn-start:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
     }
-    #confirm-modal.active { opacity: 1; visibility: visible; }
-    .modal-content { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); padding: 25px; border-radius: 20px; text-align: center; width: 80%; max-width: 300px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); transform: translateY(20px); transition: transform 0.3s ease; }
-    #confirm-modal.active .modal-content { transform: translateY(0); }
-    .modal-content p { margin: 0 0 20px 0; font-weight: 500; font-size: 1.1rem; line-height: 1.4; }
-    .modal-actions { display: flex; gap: 10px; }
-    .btn-modal { flex: 1; padding: 12px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-family: 'Montserrat', sans-serif; }
-    .btn-cancel { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
-    .btn-confirm { background: #fff; color: var(--deep-blue); }
+
+    #btn-start:active {
+      transform: translateY(1px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Estado: Carregando */
+    #btn-start:disabled {
+      background: rgba(255, 255, 255, 0.7);
+      color: rgba(43, 43, 171, 0.7);
+      cursor: wait;
+      transform: none;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Estado: Erro (Timeout) */
+    #btn-start.error-state {
+      background: #ff4d4d;
+      color: #ffffff;
+      box-shadow: 0 8px 25px rgba(255, 77, 77, 0.4);
+      font-size: 0.9rem;
+      padding: 16px 25px;
+    }
 
     @media (max-height: 700px) {
       .brand-acoes { font-size: clamp(4rem, 15vw, 6rem); }
       @keyframes moveLogo { to { bottom: 15px; transform: translate(-50%, 0) scale(1); } }
+      .start-container { margin-top: 25px; }
     }
   </style>
 </head>
@@ -286,33 +260,15 @@
           <h2 class="brand-educativas">Educativas</h2>
         </div>
         
-        <div class="unit-selector-container">
-          <p class="selector-title">Selecione sua unidade</p>
-          <div class="unit-options">
-            <div class="unit-card" data-unit="itaquera">Itaquera</div>
-            <div class="unit-card" data-unit="carmo">Carmo</div>
-          </div>
+        <div class="start-container">
+          <button id="btn-start">Iniciar</button>
         </div>
       </div>
-
-      <div id="swap-status">Trocando unidade...</div>
     </div>
 
     <div class="footer-splash">
       <img src="MesaLogo.png" alt="Logo" class="mesa-logo">
       <div class="powered-by">Powered with <span style="color: #FFFFFF;">&#10084;</span> by <strong>Mesaque</strong></div>
-    </div>
-  </div>
-
-  <div id="btn-swap-unit" title="Trocar Unidade">&#8644;</div>
-  
-  <div id="confirm-modal">
-    <div class="modal-content">
-      <p id="modal-text">Deseja ir para a unidade X?</p>
-      <div class="modal-actions">
-        <button class="btn-modal btn-cancel" id="modal-cancel">Cancelar</button>
-        <button class="btn-modal btn-confirm" id="modal-yes">Sim</button>
-      </div>
     </div>
   </div>
 
@@ -325,91 +281,84 @@
   <script>
     const splash = document.getElementById('splash');
     const iframe = document.getElementById('app-frame');
-    const unitCards = document.querySelectorAll('.unit-card');
-    const introUI = document.getElementById('intro-ui');
-    const swapStatus = document.getElementById('swap-status');
+    const btnStart = document.getElementById('btn-start');
     const offlineToast = document.getElementById('offline-toast');
-    const btnSwapUnit = document.getElementById('btn-swap-unit');
-    const confirmModal = document.getElementById('confirm-modal');
-    const modalText = document.getElementById('modal-text');
     
-    let currentUnit = null;
-    let targetUnit = null;
-    let watchdogTimer = null;
+    // URL única (Itaquera)
+    const gasUrl = "https://script.google.com/macros/s/AKfycbzHFtQwI0BRTpIpIt9u2MyPhgZURVPFYYmBKV4RtAQ5ZF_3SUabGKimZ4flAyZZgx4y/exec";
 
-    const unitData = {
-      itaquera: { name: "Itaquera", url: "https://script.google.com/macros/s/AKfycbzHFtQwI0BRTpIpIt9u2MyPhgZURVPFYYmBKV4RtAQ5ZF_3SUabGKimZ4flAyZZgx4y/exec" },
-      carmo: { name: "Carmo", url: "https://script.google.com/macros/s/AKfycbxCBz2anErksxVBsTjroAB2ZbyJ5jbCY0ISbdfyIXuRnY5sPFgyRWuE4_aZlYoEHhD3/exec" }
-    };
+    // Variáveis de Estado
+    let isGasLoaded = false;
+    let hasUserClicked = false;
+    let isErrorState = false;
 
     // Monitor de Rede
     window.addEventListener('offline', () => offlineToast.classList.add('show'));
     window.addEventListener('online', () => offlineToast.classList.remove('show'));
 
-    // Seleção Inicial
-    unitCards.forEach(card => {
-      card.addEventListener('click', () => {
-        if (!navigator.onLine) { alert("Sem conexão com a internet."); return; }
-        
-        currentUnit = card.getAttribute('data-unit');
-        loadSystem(currentUnit);
-      });
-    });
+    // 1. O PULO DO GATO: Pré-carregar o iframe no exato momento que o script roda
+    iframe.src = gasUrl;
 
-    // Função Principal de Carregamento (O Watchdog Timer entra aqui)
-    const loadSystem = (unitId) => {
-      const url = unitData[unitId].url;
+    // 2. O Cão de Guarda (Fail-safe corrigido)
+    const watchdogTimer = setTimeout(() => {
+      if (!isGasLoaded) {
+        isErrorState = true;
+        btnStart.innerText = "Falha ao carregar. Tentar novamente?";
+        btnStart.classList.add('error-state');
+        btnStart.disabled = false; // Habilita para o usuário poder recarregar
+      }
+    }, 15000);
+
+    // 3. O Sinal de Vida do Iframe (Quando o Google finalmente responde)
+    iframe.onload = () => {
+      if (iframe.src === 'about:blank') return;
       
-      // 1. Ativa a Cortina de Fumaça (Splash com Neon)
-      introUI.style.display = 'none'; // Esconde menus
-      swapStatus.innerText = `Carregando ${unitData[unitId].name}...`;
-      swapStatus.style.display = 'block'; // Mostra texto de carregamento
-      
-      splash.classList.remove('hidden');
-      iframe.classList.remove('loaded');
-      btnSwapUnit.classList.remove('visible');
+      isGasLoaded = true;
+      clearTimeout(watchdogTimer); // Desarma o cão de guarda
 
-      // 2. Limpa o iframe para forçar reset de memória antes de injetar o novo link
-      iframe.src = 'about:blank';
-      
-      // 3. O Cão de Guarda (Fail-safe). Se o GAS não responder em 15s, a página recarrega inteira.
-      clearTimeout(watchdogTimer);
-      watchdogTimer = setTimeout(() => {
-        console.error("FALHA CRÍTICA: O Google Apps Script não carregou a tempo.");
-        window.location.reload(true);
-      }, 15000);
-
-      // 4. Injeta a nova URL no iframe
-      setTimeout(() => {
-        iframe.src = url;
-      }, 100);
-
-      // 5. O Sinal de Vida do Iframe
-      iframe.onload = () => {
-        if (iframe.src === 'about:blank') return; // Ignora o onload do reset de memória
-        
-        clearTimeout(watchdogTimer); // O Google respondeu, desativa o cão de guarda.
-        
-        splash.classList.add('hidden');
-        iframe.classList.add('loaded');
-        btnSwapUnit.classList.add('visible');
-      };
+      // Se o usuário já tinha clicado e estava esperando, libera o app agora
+      if (hasUserClicked) {
+        revealApp();
+      } else {
+        // Se ele ainda não clicou, e o botão estava em estado de espera (raro, mas possível)
+        if (btnStart.disabled) {
+          btnStart.innerText = "Iniciar";
+          btnStart.disabled = false;
+        }
+      }
     };
 
-    // --- LÓGICA DO BOTÃO SWAP (&#8644;) ---
-    btnSwapUnit.addEventListener('click', () => {
-      targetUnit = (currentUnit === 'itaquera') ? 'carmo' : 'itaquera';
-      modalText.innerText = `Deseja ir para a unidade ${unitData[targetUnit].name}?`;
-      confirmModal.classList.add('active');
+    // 4. A Lógica de Clique do Botão "Iniciar"
+    btnStart.addEventListener('click', () => {
+      if (!navigator.onLine) { 
+        alert("Sem conexão com a internet."); 
+        return; 
+      }
+
+      // Se deu erro no timeout, o clique serve para recarregar a página e tentar de novo
+      if (isErrorState) {
+        window.location.reload();
+        return;
+      }
+
+      hasUserClicked = true;
+
+      // Verifica as linhas do tempo
+      if (isGasLoaded) {
+        // Cenário A: O Google já carregou escondido. Revela instantaneamente.
+        revealApp();
+      } else {
+        // Cenário B: O usuário foi muito rápido, o Google ainda está carregando.
+        btnStart.innerText = "Aguarde, conectando...";
+        btnStart.disabled = true; // Impede múltiplos cliques enquanto espera
+      }
     });
 
-    document.getElementById('modal-cancel').addEventListener('click', () => confirmModal.classList.remove('active'));
-    
-    document.getElementById('modal-yes').addEventListener('click', () => {
-      confirmModal.classList.remove('active');
-      currentUnit = targetUnit; // Atualiza a unidade atual
-      loadSystem(currentUnit); // Dispara a troca caindo na função blindada
-    });
+    // Função para fazer a transição visual
+    function revealApp() {
+      splash.classList.add('hidden');
+      iframe.classList.add('loaded');
+    }
 
     // --- REGISTRO DO SERVICE WORKER ---
     if ('serviceWorker' in navigator) {
