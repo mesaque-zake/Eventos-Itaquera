@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Ações Educativas - Itaquera</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght=700&family=Montserrat:wght=300;400;500;600;700&display=swap" rel="stylesheet">
   
   <link rel="icon" type="image/png" href="./favicon.png">
   <link rel="manifest" href="./manifest.json">
@@ -21,9 +21,9 @@
       --deep-blue: #762bab;
       --glass-light: rgba(255, 255, 255, 0.12);
       
-      /* CORES DOS HOLOFOTES REFORÇADAS */
-      --spotlight-cyan: rgba(0, 255, 255, 0.8);  /* Ciano Neon Intenso */
-      --spotlight-purple: rgba(191, 0, 255, 0.8); /* Roxo/Magenta Neon Intenso */
+      /* CORES DOS HOLOFOTES TOTALMENTE SATURADAS (Modo Lanterna) */
+      --spotlight-cyan: #00ffff;  /* Ciano Neon Puro */
+      --spotlight-purple: #bf00ff; /* Roxo Neon Puro */
     }
 
     body, html {
@@ -33,7 +33,7 @@
       width: 100%;
       overflow: hidden;
       font-family: 'Montserrat', sans-serif;
-      background-color: #0d0415; /* Fundo ainda mais escuro para o neon brilhar */
+      background-color: #08020e; /* Fundo quase preto para contraste máximo */
       color: #ffffff;
     }
 
@@ -72,7 +72,7 @@
     }
     iframe.loaded { opacity: 1; visibility: visible; }
 
-    /* --- SPLASH E HOLOFOTES CONCENTRADOS --- */
+    /* --- SPLASH E HOLOFOTES ESTILO LANTERNA CONCENTRADA --- */
     #splash {
       position: fixed;
       inset: 0;
@@ -87,55 +87,59 @@
     }
     #splash.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
+    /* Estilização básica do feixe */
     .spotlight {
       position: absolute;
-      width: 100vw; 
-      height: 120vh;
+      bottom: -10vh; /* Começa um pouco abaixo da tela */
+      width: 12vw; /* Feixe fino como lanterna */
+      height: 180vh; /* Longo para atravessar a tela inteira */
       pointer-events: none;
-      filter: blur(35px); /* Desfoque menor para feixe mais concentrado */
-      opacity: 0.9;
-      mix-blend-mode: screen; /* Faz as cores brilharem mais */
+      filter: blur(20px); /* Blur reduzido para manter forma de feixe */
+      opacity: 1; /* Opacidade total */
+      mix-blend-mode: color-dodge; /* Efeito Neon intenso sobre o fundo */
+      transform-origin: bottom center; /* Rotaciona a partir da base inferior */
     }
 
     .spot-1 {
-      left: -10%; bottom: -10%;
-      background: radial-gradient(circle at 0% 100%, var(--spotlight-cyan) 0%, transparent 45%);
-      transform-origin: bottom left;
-      animation: spot1Motion 8s infinite alternate ease-in-out;
+      left: 5%;
+      /* Gradiente linear que forma o feixe da lanterna */
+      background: linear-gradient(to top, transparent 0%, var(--spotlight-cyan) 20%, rgba(0,255,255,0.1) 80%, transparent 100%);
+      animation: spot1Sweep 12s infinite alternate ease-in-out;
     }
 
     .spot-2 {
-      right: -10%; bottom: -10%;
-      background: radial-gradient(circle at 100% 100%, var(--spotlight-purple) 0%, transparent 45%);
-      transform-origin: bottom right;
-      animation: spot2Motion 7s infinite alternate-reverse ease-in-out;
+      right: 5%;
+      /* Gradiente linear que forma o feixe da lanterna */
+      background: linear-gradient(to top, transparent 0%, var(--spotlight-purple) 20%, rgba(191,0,255,0.1) 80%, transparent 100%);
+      animation: spot2Sweep 10s infinite alternate-reverse ease-in-out;
     }
 
-    @keyframes spot1Motion {
-      0% { transform: rotate(-5deg) scale(1); }
-      100% { transform: rotate(35deg) scale(1.2); }
+    /* Animação de varredura cruzando a tela */
+    @keyframes spot1Sweep {
+      0% { transform: rotate(-15deg); }
+      100% { transform: rotate(60deg); } /* Atravessa até o outro lado */
     }
 
-    @keyframes spot2Motion {
-      0% { transform: rotate(5deg) scale(1); }
-      100% { transform: rotate(-35deg) scale(1.2); }
+    @keyframes spot2Sweep {
+      0% { transform: rotate(15deg); }
+      100% { transform: rotate(-60deg); } /* Atravessa até o outro lado */
     }
 
     #glass-overlay {
       position: absolute;
       inset: 0;
-      backdrop-filter: blur(8px); /* Menos blur para as luzes aparecerem mais */
-      -webkit-backdrop-filter: blur(8px);
-      background: rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(6px); /* Blur menor para não dissipar o feixe */
+      -webkit-backdrop-filter: blur(6px);
+      background: rgba(0, 0, 0, 0.3); /* Vidro ligeiramente mais escuro */
       z-index: 3;
     }
 
-    /* --- COREOGRAFIA SEM SOBREPOSIÇÃO --- */
+    /* --- COREOGRAFIA MANTIDA (Sem sobreposição) --- */
     
     .mesa-container {
       position: absolute;
       left: 50%;
-      top: 44%; /* AJUSTADO: Não encosta no powered */
+      top: 44%; /* MANTIDO */
       transform: translate(-50%, -50%);
       z-index: 10;
       text-align: center;
@@ -146,7 +150,7 @@
     .powered-container {
       position: absolute;
       left: 50%;
-      top: 56%; /* AJUSTADO: Não encosta no logo */
+      top: 56%; /* MANTIDO */
       transform: translate(-50%, -50%);
       z-index: 10;
       text-align: center;
@@ -154,11 +158,10 @@
       animation-delay: 1.5s;
     }
 
-    /* Animações sincronizadas e suaves */
     @keyframes logoUp { to { top: 60px; transform: translate(-50%, 0); } }
     @keyframes poweredDown { 
       to { 
-        top: calc(100% - 60px); /* Garante descida total e suave */
+        top: calc(100% - 60px); 
         transform: translate(-50%, 0); 
       } 
     }
@@ -166,7 +169,7 @@
     .mesa-logo { width: 105px; filter: brightness(0) invert(1); opacity: 0.95; }
     .powered-by { font-size: 0.65rem; opacity: 0.7; letter-spacing: 1px; font-weight: 300; margin-top: 5px; }
 
-    /* --- CONTEÚDO CENTRAL --- */
+    /* --- CONTEÚDO CENTRAL MANTIDO --- */
     .center-content {
       position: relative;
       z-index: 10;
@@ -200,7 +203,7 @@
       color: rgba(255, 255, 255, 0.95); 
     }
 
-    /* --- BOTÃO GLASSMORPHISM --- */
+    /* --- BOTÃO GLASSMORPHISM MANTIDO --- */
     .start-container { margin-top: 45px; }
 
     #btn-start {
