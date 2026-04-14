@@ -20,10 +20,8 @@
     :root {
       --deep-blue: #762bab;
       --glass-light: rgba(255, 255, 255, 0.12);
-      
-      /* NOVAS CORES DOS HOLOFOTES */
-      --spotlight-blue: rgba(0, 210, 255, 0.45); /* Mais intensidade */
-      --spotlight-pink: rgba(255, 20, 147, 0.4);   /* Mais intensidade */
+      /* HOLOFOTES BRANCOS E FORTES */
+      --spotlight-white: rgba(255, 255, 255, 0.6); 
     }
 
     body, html {
@@ -33,7 +31,7 @@
       width: 100%;
       overflow: hidden;
       font-family: 'Montserrat', sans-serif;
-      background-color: #1a0a2a; /* Fundo mais escuro para destacar as luzes */
+      background-color: #120520; /* Fundo levemente mais escuro para o branco saltar */
       color: #ffffff;
     }
 
@@ -87,112 +85,104 @@
     }
     #splash.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
-    /* AJUSTE: Holofotes fixos e mais fortes */
+    /* HOLOFOTES BRANCOS - BEM MAIS FORTES */
     .spotlight {
       position: absolute;
-      width: 130vw; /* Feixes grandes */
-      height: 150vh;
+      width: 160vw;
+      height: 160vh;
       pointer-events: none;
-      filter: blur(40px); /* Nítido atrás do glass */
-      opacity: 0.8; /* Mais luz */
-      mix-blend-mode: soft-light;
+      filter: blur(35px);
+      opacity: 0.9;
+      mix-blend-mode: screen; /* Brilha mais no fundo escuro */
     }
 
     .spot-1 {
-      /* Base: Canto Inferior Esquerdo (Azul) */
       left: 0; bottom: 0;
-      background: radial-gradient(circle at 0% 100%, var(--spotlight-blue) 0%, transparent 60%);
+      background: radial-gradient(circle at 0% 100%, var(--spotlight-white) 0%, transparent 65%);
       transform-origin: 0% 100%;
-      animation: spot1Motion 15s infinite alternate ease-in-out;
+      animation: spot1Motion 18s infinite alternate ease-in-out;
     }
 
     .spot-2 {
-      /* Base: Canto Inferior Direito (Rosa/Maior/Mais luz) */
       right: 0; bottom: 0;
-      background: radial-gradient(circle at 100% 100%, var(--spotlight-pink) 0%, transparent 60%);
+      background: radial-gradient(circle at 100% 100%, var(--spotlight-white) 0%, transparent 70%);
       transform-origin: 100% 100%;
-      width: 150vw; /* Maior que o outro */
-      opacity: 1;  /* Mais luz */
-      animation: spot2Motion 12s infinite alternate ease-in-out;
+      width: 180vw;
+      animation: spot2Motion 14s infinite alternate-reverse ease-in-out;
     }
 
     @keyframes spot1Motion {
-      0% { transform: rotate(0deg); opacity: 0.7; }
-      100% { transform: rotate(25deg); opacity: 0.9; } /* Varrer o centro */
+      0% { transform: rotate(0deg); opacity: 0.6; }
+      100% { transform: rotate(20deg); opacity: 1; }
     }
 
     @keyframes spot2Motion {
-      0% { transform: rotate(0deg); opacity: 0.6; }
-      100% { transform: rotate(-25deg); opacity: 0.8; } /* Varrer o centro */
+      0% { transform: rotate(0deg); opacity: 0.5; }
+      100% { transform: rotate(-20deg); opacity: 0.9; }
     }
 
     #glass-overlay {
       position: absolute;
       inset: 0;
-      backdrop-filter: blur(12px); /* Desfoque controlado */
+      backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      background: rgba(0, 0, 0, 0.15); /* Vidro jateado levemente escuro */
+      background: rgba(0, 0, 0, 0.1);
       z-index: 3;
     }
 
-    /* --- COREOGRAFIA INICIAL CORRIGIDA --- */
+    /* --- COREOGRAFIA INICIAL CORRIGIDA (44% e 56%) --- */
     
-    /* MESA CONTAINER (Logo) */
     .mesa-container {
       position: absolute;
       left: 50%;
-      top: 50%; /* Começa no centro absoluto */
-      transform: translate(-50%, -50%); /* Sem scale inicial menor */
+      top: 44%; /* Posicionado acima do centro */
+      transform: translate(-50%, -50%);
       z-index: 10;
       text-align: center;
-      animation: logoUp 1.3s cubic-bezier(0.65, 0, 0.35, 1) forwards; /* Movimento suave */
+      animation: logoUp 1.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
       animation-delay: 1.5s;
     }
 
-    /* AJUSTE: Powered descendo suavemente e terminando no local correto */
     .powered-container {
       position: absolute;
       left: 50%;
-      bottom: 50%; /* Começa na metade inferior, logo abaixo do centro */
-      transform: translate(-50%, 50%); /* Ajuste para centralizar em relação ao bottom */
+      top: 56%; /* Posicionado abaixo do centro */
+      transform: translate(-50%, -50%);
       z-index: 10;
       text-align: center;
-      animation: poweredDown 1.3s cubic-bezier(0.65, 0, 0.35, 1) forwards; /* Movimento suave */
+      animation: poweredDown 1.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
       animation-delay: 1.5s;
     }
 
-    /* Animações suaves usando cubic-bezier (como o iOS usa) */
     @keyframes logoUp { to { top: 60px; transform: translate(-50%, 0); } }
-    @keyframes poweredDown { to { bottom: 30px; transform: translate(-50%, 0); } }
+    @keyframes poweredDown { to { top: auto; bottom: 30px; transform: translate(-50%, 0); } }
 
-    /* CORREÇÃO: Ícone do logo um pouco maior */
-    .mesa-logo { width: 105px; filter: brightness(0) invert(1); opacity: 0.9; } /* Aumentei de 85px para 105px */
+    .mesa-logo { width: 105px; filter: brightness(0) invert(1); opacity: 0.95; } 
     .powered-by { font-size: 0.65rem; opacity: 0.6; letter-spacing: 1px; font-weight: 300; margin-top: 5px; }
 
-    /* --- CONTEÚDO CENTRAL (REVELADO DEPOIS) --- */
+    /* --- CONTEÚDO CENTRAL --- */
     .center-content {
       position: relative;
       z-index: 10;
       text-align: center;
       opacity: 0;
-      animation: fadeInContent 1s ease forwards;
-      animation-delay: 2.2s;
+      animation: fadeInContent 1.2s ease forwards;
+      animation-delay: 2.3s;
     }
 
     @keyframes fadeInContent { to { opacity: 1; } }
 
-    /* MANTIDO: Tamanhos de fonte inalterados */
     .welcome-text { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 4px; opacity: 0.7; font-weight: 300; }
     
     .brand-acoes { 
-      font-family: 'Dancing Script', cursive; /* MANTIDO: A marca do negócio */
+      font-family: 'Dancing Script', cursive; 
       font-size: clamp(6.5rem, 22vw, 11rem); 
       margin: -10px 0; 
       line-height: 1.1; 
-      background: linear-gradient(to bottom, #ffffff, #f0f0f0); 
+      background: linear-gradient(to bottom, #ffffff, #f5f5f5); 
       -webkit-background-clip: text; 
       -webkit-text-fill-color: transparent; 
-      filter: drop-shadow(0px 10px 20px rgba(0, 0, 0, 0.3)); 
+      filter: drop-shadow(0px 10px 20px rgba(0, 0, 0, 0.4)); 
     }
 
     .brand-educativas { 
@@ -204,15 +194,14 @@
       color: rgba(255, 255, 255, 0.95); 
     }
 
-    /* --- BOTÃO INICIAR (GLASSMORPHISM REFLEXIVO) --- */
+    /* --- BOTÃO INICIAR --- */
     .start-container { margin-top: 45px; }
 
-    /* MANTIDO: Tamanho de fonte e padding original */
     #btn-start {
       position: relative;
       background: var(--glass-light);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
       color: #ffffff;
       font-family: 'Montserrat', sans-serif;
       font-size: 1.1rem;
@@ -220,15 +209,14 @@
       text-transform: uppercase;
       letter-spacing: 2px;
       padding: 18px 50px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.25);
       border-radius: 40px;
       cursor: pointer;
       overflow: hidden;
       transition: all 0.4s ease;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
     }
 
-    /* Efeito de Reflexo Jateado */
     #btn-start::after {
       content: '';
       position: absolute;
@@ -236,26 +224,23 @@
       left: -100%;
       width: 50%;
       height: 200%;
-      background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
       transform: rotate(30deg);
-      transition: none;
-      animation: shine 4s infinite;
+      animation: shine 5s infinite;
     }
 
     @keyframes shine {
       0% { left: -100%; }
-      20% { left: 150%; }
+      15% { left: 150%; }
       100% { left: 150%; }
     }
 
-    #btn-start:active { transform: scale(0.96); background: rgba(255,255,255,0.2); }
+    #btn-start:active { transform: scale(0.96); }
     #btn-start:disabled { opacity: 0.6; cursor: wait; }
 
-    /* Responsividade em telas curtas */
     @media (max-height: 700px) {
       .brand-acoes { font-size: clamp(4rem, 15vw, 6rem); }
-      /* Correção Mobile: Ícone menor no cabeçalho mas ainda visível */
-      @keyframes logoUp { to { top: 30px; transform: translate(-50%, 0) scale(0.8); } }
+      @keyframes logoUp { to { top: 30px; transform: translate(-50%, 0) scale(0.75); } }
     }
   </style>
 </head>
