@@ -5,30 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Ações Educativas - Itaquera</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-   
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  
   <link rel="icon" type="image/png" href="./favicon.png">
   <link rel="manifest" href="./manifest.json">
   <link rel="apple-touch-icon" href="./apple-touch-icon.png">
   
-  <meta name="theme-color" content="#2b2bab">
+  <meta name="theme-color" content="#762bab">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Ações Ed">
 
   <style>
     :root {
-      --deep-blue: #762bab;
+      --deep-purple: #762bab;
+      --glass-white: rgba(255, 255, 255, 0.12);
+      --glass-border: rgba(255, 255, 255, 0.25);
     }
 
     body, html {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      width: 100%;
+      margin: 0; padding: 0;
+      height: 100%; width: 100%;
       overflow: hidden;
       font-family: 'Montserrat', sans-serif;
-      background-color: var(--deep-blue);
+      background-color: #1a0a2a; /* Fundo mais profundo para destacar os holofotes */
       color: #ffffff;
     }
 
@@ -38,207 +38,211 @@
       top: -100px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(255, 60, 60, 0.15);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      background: rgba(255, 60, 60, 0.2);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
       border: 1px solid rgba(255, 60, 60, 0.4);
       padding: 12px 24px;
       border-radius: 30px;
       z-index: 10000;
-      display: flex;
-      align-items: center;
-      gap: 10px;
       font-weight: 600;
-      font-size: 0.9rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      font-size: 0.85rem;
       transition: top 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
     #offline-toast.show { top: env(safe-area-inset-top, 20px); }
 
-    /* --- IFRAME BLINDADO --- */
+    /* --- IFRAME --- */
     iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      display: block;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.6s ease-in, visibility 0.6s;
-      background-color: var(--deep-blue);
+      width: 100%; height: 100%;
+      border: none; display: block;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.8s ease;
+      background-color: var(--deep-purple);
     }
-    iframe.loaded {
-      opacity: 1;
-      visibility: visible;
-    }
+    iframe.loaded { opacity: 1; visibility: visible; }
 
-    /* --- SPLASH E NEON --- */
+    /* --- SPLASH E CENÁRIO --- */
     #splash {
       position: fixed;
       inset: 0;
-      background: var(--deep-blue);
+      background: radial-gradient(circle at center, #3a1557 0%, #1a0a2a 100%);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       z-index: 9000;
-      transition: opacity 0.6s ease-out, visibility 0.6s;
-      overflow: hidden;
+      transition: opacity 0.7s ease-out;
     }
-    #splash.hidden {
-      opacity: 0;
-      visibility: hidden;
+    #splash.hidden { opacity: 0; pointer-events: none; }
+
+    /* --- HOLOFOTES (SPOTLIGHTS) --- */
+    .spotlight {
+      position: absolute;
+      width: 60vw;
+      height: 60vw;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(118, 43, 171, 0.4) 0%, rgba(118, 43, 171, 0) 70%);
+      filter: blur(60px);
+      z-index: 1;
       pointer-events: none;
     }
-
-    .blob {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(50px);
-      z-index: 0;
-      opacity: 0.8;
-      mix-blend-mode: screen;
-      will-change: transform;
+    .spot-1 {
+      top: -10%; left: -10%;
+      animation: spotMove1 12s infinite alternate ease-in-out;
+    }
+    .spot-2 {
+      bottom: -10%; right: -10%;
+      animation: spotMove2 15s infinite alternate ease-in-out;
     }
 
-    .blob-1 { width: 350px; height: 350px; background: #FF0099; top: -100px; left: -100px; animation: neonRun1 4s infinite alternate ease-in-out; }
-    .blob-2 { width: 400px; height: 400px; background: #00F0FF; bottom: -100px; right: -100px; animation: neonRun2 3.5s infinite alternate ease-in-out; }
-    .blob-3 { width: 300px; height: 300px; background: #b969ff; top: 50%; left: 50%; transform: translate(-50%, -50%); animation: neonRun3 5s infinite alternate-reverse ease-in-out; }
-
-    @keyframes neonRun1 { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(80vw, 40vh) scale(1.2); } }
-    @keyframes neonRun2 { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(-60vw, -30vh) scale(0.8); } }
-    @keyframes neonRun3 { 0% { transform: translate(-50%, -50%) scale(0.5); } 50% { transform: translate(20vw, 20vh) scale(1.5); } 100% { transform: translate(-20vw, -40vh) scale(0.5); } }
-
-    #glass-overlay {
-      position: absolute;
-      inset: 0;
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      background: rgba(255, 255, 255, 0.03);
-      z-index: 1;
-      background-image: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px);
-      background-size: 30px 30px;
+    @keyframes spotMove1 {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(50vw, 30vh) scale(1.3); }
+    }
+    @keyframes spotMove2 {
+      0% { transform: translate(0, 0) scale(1.2); }
+      100% { transform: translate(-40vw, -40vh) scale(1); }
     }
 
-    /* --- COREOGRAFIA DA TIMELINE (CSS) --- */
-    
-    /* 1. Logo (Inicia no centro, move no 1.0s) */
-    .footer-splash {
+    /* --- LOGO E POWERED (A DIVISÃO) --- */
+    .brand-container {
       position: absolute;
       left: 50%;
-      bottom: 50%;
-      transform: translate(-50%, 50%) scale(1.6);
-      z-index: 10;
-      text-align: center;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 20;
       width: 100%;
-      animation: moveLogo 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-      animation-delay: 1.0s;
     }
-    @keyframes moveLogo {
-      to { bottom: 30px; transform: translate(-50%, 0) scale(1); }
-    }
-    .mesa-logo { width: 80px; margin-bottom: 8px; opacity: 0.9; filter: brightness(0) invert(1); }
-    .powered-by { font-size: 0.65rem; opacity: 0.6; letter-spacing: 1px; font-weight: 300; }
 
-    /* Container Central */
-    .center-content {
-      position: relative;
-      z-index: 10;
+    .header-logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1.4);
+      animation: splitToTop 1s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+      animation-delay: 1.5s;
+      z-index: 25;
+    }
+
+    .footer-powered {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: splitToBottom 1s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+      animation-delay: 1.5s;
       text-align: center;
-      width: 85%;
-      max-width: 400px;
-      margin-top: -50px;
+      opacity: 1;
+      width: 100%;
     }
 
-    /* 2. Frase Bem Vindo (Aparece no 2.0s) */
-    .hero-titles {
+    @keyframes splitToTop {
+      to { top: env(safe-area-inset-top, 40px); transform: translate(-50%, 0) scale(1); }
+    }
+    @keyframes splitToBottom {
+      to { top: auto; bottom: env(safe-area-inset-bottom, 30px); transform: translate(-50%, 0); }
+    }
+
+    .mesa-logo { width: 90px; filter: brightness(0) invert(1); opacity: 0.9; }
+    .powered-by { font-size: 0.65rem; letter-spacing: 2px; opacity: 0.5; margin-top: 8px; font-weight: 300; text-transform: uppercase; }
+
+    /* --- CONTEÚDO CENTRAL (REVELADO APÓS A DIVISÃO) --- */
+    .center-content {
+      text-align: center;
+      z-index: 10;
       opacity: 0;
       transform: translateY(20px);
-      animation: fadeInUp 0.6s ease forwards;
-      animation-delay: 2.0s;
+      animation: revealCenter 0.8s ease-out forwards;
+      animation-delay: 2.2s;
     }
-    .welcome-text { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 0px; opacity: 0.7; font-weight: 300; }
+
+    @keyframes revealCenter {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .welcome-text { 
+      font-size: 0.8rem; 
+      text-transform: uppercase; 
+      letter-spacing: 5px; 
+      margin-bottom: -15px; 
+      font-weight: 300; 
+      color: rgba(255,255,255,0.6);
+    }
+
     .brand-acoes { 
       font-family: 'Dancing Script', cursive; 
-      font-size: clamp(6.5rem, 22vw, 11rem); 
-      margin: -10px 0; 
-      line-height: 1.1; 
-      background: linear-gradient(to bottom, #ffffff, #e0e0e0); 
-      -webkit-background-clip: text; 
-      -webkit-text-fill-color: transparent; 
-      filter: drop-shadow(0px 10px 15px rgba(0, 0, 0, 0.2)); 
+      font-size: clamp(6rem, 20vw, 10rem); 
+      margin: 0;
+      background: linear-gradient(to bottom, #ffffff, #d1d1d1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
     }
+
     .brand-educativas { 
-      font-family: 'Montserrat', sans-serif; 
-      font-size: clamp(1.2rem, 5.5vw, 1.8rem); 
-      letter-spacing: clamp(8px, 2vw, 14px); 
-      margin-top: -5px; 
+      font-size: clamp(1rem, 5vw, 1.5rem); 
+      letter-spacing: 12px; 
       text-transform: uppercase; 
       font-weight: 700; 
-      color: rgba(255, 255, 255, 0.9); 
-      text-shadow: 0 2px 10px rgba(0,0,0,0.2); 
+      margin-top: -20px;
+      color: rgba(255,255,255,0.9);
     }
 
-    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
-
-    /* 3. Botão Iniciar (Aparece no 2.5s) */
+    /* --- BOTÃO GLASSMORPHISM --- */
     .start-container {
-      margin-top: 40px;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeInUp 0.6s ease forwards;
-      animation-delay: 2.5s;
+      margin-top: 50px;
     }
 
     #btn-start {
-      background: #ffffff;
-      color: var(--deep-blue);
-      font-family: 'Montserrat', sans-serif;
-      font-size: 1.1rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      padding: 16px 45px;
-      border: none;
-      border-radius: 30px;
-      cursor: pointer;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-      -webkit-tap-highlight-color: transparent;
-      outline: none;
-    }
-
-    #btn-start:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
-    }
-
-    #btn-start:active {
-      transform: translateY(1px);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Estado: Carregando */
-    #btn-start:disabled {
-      background: rgba(255, 255, 255, 0.7);
-      color: rgba(43, 43, 171, 0.7);
-      cursor: wait;
-      transform: none;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Estado: Erro (Timeout) */
-    #btn-start.error-state {
-      background: #ff4d4d;
+      position: relative;
+      overflow: hidden;
+      background: var(--glass-white);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
       color: #ffffff;
-      box-shadow: 0 8px 25px rgba(255, 77, 77, 0.4);
-      font-size: 0.9rem;
-      padding: 16px 25px;
+      padding: 18px 50px;
+      border-radius: 40px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+      -webkit-tap-highlight-color: transparent;
     }
+
+    /* Efeito de brilho passando pelo botão */
+    #btn-start::after {
+      content: '';
+      position: absolute;
+      top: -50%; left: -60%;
+      width: 50%; height: 200%;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
+      transform: rotate(25deg);
+      animation: glassShine 4s infinite;
+    }
+
+    @keyframes glassShine {
+      0% { left: -60%; }
+      20% { left: 120%; }
+      100% { left: 120%; }
+    }
+
+    #btn-start:active { transform: scale(0.96); background: rgba(255,255,255,0.2); }
+    #btn-start:disabled { opacity: 0.6; cursor: wait; }
+    
+    #btn-start.error-state { background: rgba(255, 77, 77, 0.3); border-color: #ff4d4d; }
 
     @media (max-height: 700px) {
-      .brand-acoes { font-size: clamp(4rem, 15vw, 6rem); }
-      @keyframes moveLogo { to { bottom: 15px; transform: translate(-50%, 0) scale(1); } }
-      .start-container { margin-top: 25px; }
+      .brand-acoes { font-size: 5rem; }
+      .brand-educativas { font-size: 0.9rem; letter-spacing: 8px; }
+      .start-container { margin-top: 30px; }
     }
   </style>
 </head>
@@ -247,28 +251,25 @@
   <div id="offline-toast"><span>&#9888;</span> Sem conexão de internet</div>
 
   <div id="splash">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div> 
-    <div id="glass-overlay"></div>
-    
-    <div class="center-content">
-      <div id="intro-ui">
-        <div class="hero-titles">
-          <div class="welcome-text">Bem-vindo a</div>
-          <h1 class="brand-acoes">Ações</h1>
-          <h2 class="brand-educativas">Educativas</h2>
-        </div>
-        
-        <div class="start-container">
-          <button id="btn-start">Iniciar</button>
-        </div>
-      </div>
+    <div class="spotlight spot-1"></div>
+    <div class="spotlight spot-2"></div>
+
+    <div class="header-logo">
+      <img src="MesaLogo.png" alt="Logo" class="mesa-logo">
     </div>
 
-    <div class="footer-splash">
-      <img src="MesaLogo.png" alt="Logo" class="mesa-logo">
+    <div class="footer-powered">
       <div class="powered-by">Powered with <span style="color: #FFFFFF;">&#10084;</span> by <strong>Mesaque</strong></div>
+    </div>
+
+    <div class="center-content">
+      <div class="welcome-text">Bem-vindo a</div>
+      <h1 class="brand-acoes">Ações</h1>
+      <h2 class="brand-educativas">Educativas</h2>
+      
+      <div class="start-container">
+        <button id="btn-start">Iniciar</button>
+      </div>
     </div>
   </div>
 
@@ -277,90 +278,64 @@
      allow="geolocation; microphone; camera; clipboard-write; autoplay; fullscreen"
      sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation allow-modals allow-downloads allow-storage-access-by-user-activation"
   ></iframe>
-  
+
   <script>
     const splash = document.getElementById('splash');
     const iframe = document.getElementById('app-frame');
     const btnStart = document.getElementById('btn-start');
     const offlineToast = document.getElementById('offline-toast');
     
-    // URL GAS
+    // URL GAS (Original mantida)
     const gasUrl = "https://script.google.com/macros/s/AKfycbywcCRHCJ3QU0GJpglv6j4dsK8LmuYIwcNiesK_1lcoXPS8--YKpLhRsQgb92irTdk/exec";
 
-    // Variáveis de Estado
     let isGasLoaded = false;
     let hasUserClicked = false;
     let isErrorState = false;
 
-    // Monitor de Rede
     window.addEventListener('offline', () => offlineToast.classList.add('show'));
     window.addEventListener('online', () => offlineToast.classList.remove('show'));
 
-    // 1. O PULO DO GATO: Pré-carregar o iframe no exato momento que o script roda
+    // Pré-carregamento silencioso
     iframe.src = gasUrl;
 
-    // 2. O Cão de Guarda (Fail-safe corrigido)
     const watchdogTimer = setTimeout(() => {
       if (!isGasLoaded) {
         isErrorState = true;
-        btnStart.innerText = "Falha ao carregar. Tentar novamente?";
+        btnStart.innerText = "Reconectar?";
         btnStart.classList.add('error-state');
-        btnStart.disabled = false; // Habilita para o usuário poder recarregar
+        btnStart.disabled = false;
       }
     }, 15000);
 
-    // 3. O Sinal de Vida do Iframe (Quando o Google finalmente responde)
     iframe.onload = () => {
       if (iframe.src === 'about:blank') return;
-      
       isGasLoaded = true;
-      clearTimeout(watchdogTimer); // Desarma o cão de guarda
-
-      // Se o usuário já tinha clicado e estava esperando, libera o app agora
-      if (hasUserClicked) {
-        revealApp();
-      } else {
-        // Se ele ainda não clicou, e o botão estava em estado de espera (raro, mas possível)
-        if (btnStart.disabled) {
-          btnStart.innerText = "Iniciar";
-          btnStart.disabled = false;
-        }
+      clearTimeout(watchdogTimer);
+      if (hasUserClicked) revealApp();
+      else if (btnStart.disabled) {
+        btnStart.innerText = "Iniciar";
+        btnStart.disabled = false;
       }
     };
 
-    // 4. A Lógica de Clique do Botão "Iniciar"
     btnStart.addEventListener('click', () => {
-      if (!navigator.onLine) { 
-        alert("Sem conexão com a internet."); 
-        return; 
-      }
-
-      // Se deu erro no timeout, o clique serve para recarregar a página e tentar de novo
-      if (isErrorState) {
-        window.location.reload();
-        return;
-      }
+      if (!navigator.onLine) { alert("Sem conexão com a internet."); return; }
+      if (isErrorState) { window.location.reload(); return; }
 
       hasUserClicked = true;
-
-      // Verifica as linhas do tempo
       if (isGasLoaded) {
-        // Cenário A: O Google já carregou escondido. Revela instantaneamente.
         revealApp();
       } else {
-        // Cenário B: O usuário foi muito rápido, o Google ainda está carregando.
-        btnStart.innerText = "Aguarde, conectando...";
-        btnStart.disabled = true; // Impede múltiplos cliques enquanto espera
+        btnStart.innerText = "Conectando...";
+        btnStart.disabled = true;
       }
     });
 
-    // Função para fazer a transição visual
     function revealApp() {
       splash.classList.add('hidden');
       iframe.classList.add('loaded');
     }
 
-    // --- REGISTRO DO SERVICE WORKER ---
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js').catch(() => {});
