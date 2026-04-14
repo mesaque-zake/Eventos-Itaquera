@@ -1,6 +1,4 @@
-const CACHE_NAME = 'v1'; 
-
-// Adicionado o './' (raiz) e o apple-touch-icon.png que faltava
+const CACHE_NAME = 'v2'; 
 const assets = [
   './',
   'index.html',
