@@ -20,7 +20,10 @@
     :root {
       --deep-blue: #762bab;
       --glass-light: rgba(255, 255, 255, 0.12);
-      --spotlight-color: rgba(255, 255, 255, 0.4);
+      
+      /* NOVAS CORES DOS HOLOFOTES */
+      --spotlight-blue: rgba(0, 210, 255, 0.45); /* Mais intensidade */
+      --spotlight-pink: rgba(255, 20, 147, 0.4);   /* Mais intensidade */
     }
 
     body, html {
@@ -30,7 +33,7 @@
       width: 100%;
       overflow: hidden;
       font-family: 'Montserrat', sans-serif;
-      background-color: #1a0a2a; /* Fundo levemente mais escuro para o contraste das luzes */
+      background-color: #1a0a2a; /* Fundo mais escuro para destacar as luzes */
       color: #ffffff;
     }
 
@@ -84,79 +87,86 @@
     }
     #splash.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
-    /* OS HOLOFOTES (Nítidos e Lentos) */
+    /* AJUSTE: Holofotes fixos e mais fortes */
     .spotlight {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 150vw;
-      height: 60vh;
-      background: radial-gradient(ellipse at center, var(--spotlight-color) 0%, transparent 70%);
-      z-index: 2;
+      width: 130vw; /* Feixes grandes */
+      height: 150vh;
       pointer-events: none;
-      opacity: 0.6;
-      filter: blur(30px); /* Nítido o suficiente para ser feixe, mas suave para o fundo */
+      filter: blur(40px); /* Nítido atrás do glass */
+      opacity: 0.8; /* Mais luz */
+      mix-blend-mode: soft-light;
     }
 
     .spot-1 {
-      transform: translate(-50%, -50%) rotate(-45deg);
-      animation: spotRun1 12s infinite alternate ease-in-out;
+      /* Base: Canto Inferior Esquerdo (Azul) */
+      left: 0; bottom: 0;
+      background: radial-gradient(circle at 0% 100%, var(--spotlight-blue) 0%, transparent 60%);
+      transform-origin: 0% 100%;
+      animation: spot1Motion 15s infinite alternate ease-in-out;
     }
 
     .spot-2 {
-      transform: translate(-50%, -50%) rotate(45deg);
-      animation: spotRun2 10s infinite alternate-reverse ease-in-out;
+      /* Base: Canto Inferior Direito (Rosa/Maior/Mais luz) */
+      right: 0; bottom: 0;
+      background: radial-gradient(circle at 100% 100%, var(--spotlight-pink) 0%, transparent 60%);
+      transform-origin: 100% 100%;
+      width: 150vw; /* Maior que o outro */
+      opacity: 1;  /* Mais luz */
+      animation: spot2Motion 12s infinite alternate ease-in-out;
     }
 
-    @keyframes spotRun1 {
-      0% { transform: translate(-80%, -60%) rotate(-30deg); }
-      100% { transform: translate(-20%, -40%) rotate(-60deg); }
+    @keyframes spot1Motion {
+      0% { transform: rotate(0deg); opacity: 0.7; }
+      100% { transform: rotate(25deg); opacity: 0.9; } /* Varrer o centro */
     }
 
-    @keyframes spotRun2 {
-      0% { transform: translate(-20%, -60%) rotate(30deg); }
-      100% { transform: translate(-80%, -40%) rotate(60deg); }
+    @keyframes spot2Motion {
+      0% { transform: rotate(0deg); opacity: 0.6; }
+      100% { transform: rotate(-25deg); opacity: 0.8; } /* Varrer o centro */
     }
 
     #glass-overlay {
       position: absolute;
       inset: 0;
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      background: rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(12px); /* Desfoque controlado */
+      -webkit-backdrop-filter: blur(12px);
+      background: rgba(0, 0, 0, 0.15); /* Vidro jateado levemente escuro */
       z-index: 3;
     }
 
-    /* --- COREOGRAFIA INICIAL --- */
+    /* --- COREOGRAFIA INICIAL CORRIGIDA --- */
     
-    /* Logo: Começa no centro-alto e sobe */
+    /* MESA CONTAINER (Logo) */
     .mesa-container {
       position: absolute;
       left: 50%;
-      top: 45%;
-      transform: translate(-50%, -50%);
+      top: 50%; /* Começa no centro absoluto */
+      transform: translate(-50%, -50%); /* Sem scale inicial menor */
       z-index: 10;
       text-align: center;
-      animation: logoUp 1.2s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+      animation: logoUp 1.3s cubic-bezier(0.65, 0, 0.35, 1) forwards; /* Movimento suave */
       animation-delay: 1.5s;
     }
 
-    /* Powered: Começa no centro-baixo e desce */
+    /* AJUSTE: Powered descendo suavemente e terminando no local correto */
     .powered-container {
       position: absolute;
       left: 50%;
-      top: 55%;
-      transform: translate(-50%, -50%);
+      bottom: 50%; /* Começa na metade inferior, logo abaixo do centro */
+      transform: translate(-50%, 50%); /* Ajuste para centralizar em relação ao bottom */
       z-index: 10;
       text-align: center;
-      animation: poweredDown 1.2s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+      animation: poweredDown 1.3s cubic-bezier(0.65, 0, 0.35, 1) forwards; /* Movimento suave */
       animation-delay: 1.5s;
     }
 
-    @keyframes logoUp { to { top: 60px; transform: translate(-50%, 0) scale(0.9); } }
-    @keyframes poweredDown { to { top: auto; bottom: 30px; transform: translate(-50%, 0); } }
+    /* Animações suaves usando cubic-bezier (como o iOS usa) */
+    @keyframes logoUp { to { top: 60px; transform: translate(-50%, 0); } }
+    @keyframes poweredDown { to { bottom: 30px; transform: translate(-50%, 0); } }
 
-    .mesa-logo { width: 85px; filter: brightness(0) invert(1); opacity: 0.9; }
+    /* CORREÇÃO: Ícone do logo um pouco maior */
+    .mesa-logo { width: 105px; filter: brightness(0) invert(1); opacity: 0.9; } /* Aumentei de 85px para 105px */
     .powered-by { font-size: 0.65rem; opacity: 0.6; letter-spacing: 1px; font-weight: 300; margin-top: 5px; }
 
     /* --- CONTEÚDO CENTRAL (REVELADO DEPOIS) --- */
@@ -171,10 +181,11 @@
 
     @keyframes fadeInContent { to { opacity: 1; } }
 
+    /* MANTIDO: Tamanhos de fonte inalterados */
     .welcome-text { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 4px; opacity: 0.7; font-weight: 300; }
     
     .brand-acoes { 
-      font-family: 'Dancing Script', cursive; 
+      font-family: 'Dancing Script', cursive; /* MANTIDO: A marca do negócio */
       font-size: clamp(6.5rem, 22vw, 11rem); 
       margin: -10px 0; 
       line-height: 1.1; 
@@ -196,6 +207,7 @@
     /* --- BOTÃO INICIAR (GLASSMORPHISM REFLEXIVO) --- */
     .start-container { margin-top: 45px; }
 
+    /* MANTIDO: Tamanho de fonte e padding original */
     #btn-start {
       position: relative;
       background: var(--glass-light);
@@ -216,7 +228,7 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     }
 
-    /* Efeito de Reflexo Passante */
+    /* Efeito de Reflexo Jateado */
     #btn-start::after {
       content: '';
       position: absolute;
@@ -239,9 +251,11 @@
     #btn-start:active { transform: scale(0.96); background: rgba(255,255,255,0.2); }
     #btn-start:disabled { opacity: 0.6; cursor: wait; }
 
+    /* Responsividade em telas curtas */
     @media (max-height: 700px) {
       .brand-acoes { font-size: clamp(4rem, 15vw, 6rem); }
-      @keyframes logoUp { to { top: 30px; transform: translate(-50%, 0) scale(0.7); } }
+      /* Correção Mobile: Ícone menor no cabeçalho mas ainda visível */
+      @keyframes logoUp { to { top: 30px; transform: translate(-50%, 0) scale(0.8); } }
     }
   </style>
 </head>
