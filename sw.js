@@ -1,4 +1,4 @@
-const CACHE_NAME = 'acoes-v23'; 
+const CACHE_NAME = 'acoes-v24'; 
 
 // Adicionado o './' (raiz) e o apple-touch-icon.png que faltava
 const assets = [
