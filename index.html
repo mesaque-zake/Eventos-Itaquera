@@ -11,7 +11,7 @@
   <link rel="manifest" href="./manifest.json">
   <link rel="apple-touch-icon" href="./apple-touch-icon.png">
   
-  <meta name="theme-color" content="#762bab">
+  <meta name="theme-color" content="#08020d">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Ações Ed">
@@ -20,10 +20,8 @@
     :root {
       --deep-blue: #762bab;
       --glass-light: rgba(255, 255, 255, 0.12);
-      
-      /* CORES DOS HOLOFOTES VIBRANTES */
-      --spotlight-cyan: #00ffff;  /* Ciano Neon Puro */
-      --spotlight-purple: #bf00ff; /* Roxo Neon Puro */
+      --spotlight-cyan: #00ffff;
+      --spotlight-purple: #bf00ff;
     }
 
     body, html {
@@ -33,11 +31,11 @@
       width: 100%;
       overflow: hidden;
       font-family: 'Montserrat', sans-serif;
-      background-color: #08020d; /* Fundo quase preto para máximo contraste neon */
+      background-color: #08020d;
       color: #ffffff;
     }
 
-    /* --- OFFLINE TOAST (Inalterado) --- */
+    /* --- OFFLINE TOAST --- */
     #offline-toast {
       position: fixed;
       top: -100px;
@@ -59,7 +57,7 @@
     }
     #offline-toast.show { top: env(safe-area-inset-top, 20px); }
 
-    /* --- IFRAME (Inalterado) --- */
+    /* --- IFRAME --- */
     iframe {
       width: 100%;
       height: 100%;
@@ -68,15 +66,15 @@
       opacity: 0;
       visibility: hidden;
       transition: opacity 0.8s ease-in;
-      background-color: var(--deep-blue);
+      background-color: #08020d;
     }
     iframe.loaded { opacity: 1; visibility: visible; }
 
-    /* --- SPLASH E HOLOFOTES ESTILO LANTERNA --- */
+    /* --- SPLASH E HOLOFOTES --- */
     #splash {
       position: fixed;
       inset: 0;
-      background: var(--deep-blue);
+      background: #08020d; /* CORRIGIDO: Fundo escuro para o neon aparecer */
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -87,7 +85,6 @@
     }
     #splash.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
-    /* --- CORREÇÃO: HOLOFOTES QUE ATRAVESSAM A TELA --- */
     .spotlight {
       position: absolute;
       width: 160vw; 
@@ -95,24 +92,21 @@
       pointer-events: none;
       mix-blend-mode: screen;
       opacity: 0;
+      z-index: 1; /* Garante que está acima do fundo */
       animation: fadeInSpots 1s ease forwards;
       animation-delay: 2s;
     }
 
-    /* Holofote 1 - Ciano (Baixo/Esquerda) */
     .spot-1 {
       left: -10%; bottom: -10%;
-      /* Gradiente mais suave: Cor no 2deg, transparente só no 30deg */
       background: conic-gradient(from 5deg at 10% 90%, transparent 0deg, var(--spotlight-cyan) 2deg, transparent 30deg);
       filter: blur(20px);
       transform-origin: 10% 90%;
-      /* Máscara faz a luz sumir conforme se distancia da origem */
       -webkit-mask-image: radial-gradient(circle at 10% 90%, black 20%, transparent 80%);
       mask-image: radial-gradient(circle at 10% 90%, black 20%, transparent 80%);
       animation: spot1Lantern 10s infinite alternate ease-in-out;
     }
 
-    /* Holofote 2 - Roxo (Baixo/Direita) */
     .spot-2 {
       right: -10%; bottom: -10%;
       background: conic-gradient(from -5deg at 90% 90%, transparent 0deg, var(--spotlight-purple) 2deg, transparent 30deg);
@@ -123,7 +117,6 @@
       animation: spot2Lantern 9s infinite alternate-reverse ease-in-out;
     }
 
-    /* Holofote 3 - Roxo (Topo/Esquerda) */
     .spot-3 {
       left: -10%; top: -10%;
       background: conic-gradient(from 175deg at 10% 10%, transparent 0deg, var(--spotlight-purple) 2deg, transparent 40deg);
@@ -134,7 +127,6 @@
       animation: spot3Lantern 18s infinite alternate ease-in-out;
     }
 
-    /* Holofote 4 - Ciano (Topo/Direita) */
     .spot-4 {
       right: -10%; top: -10%;
       background: conic-gradient(from 185deg at 90% 10%, transparent 0deg, var(--spotlight-cyan) 2deg, transparent 40deg);
@@ -144,40 +136,23 @@
       mask-image: radial-gradient(circle at 90% 10%, black 10%, transparent 70%);
       animation: spot4Lantern 22s infinite alternate-reverse ease-in-out;
     }
+
     @keyframes fadeInSpots { to { opacity: 0.8; } }
-
-    /* Movimento de lanterna varrendo o palco */
-    @keyframes spot1Lantern {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(40deg); } /* Varre para o centro-alto */
-    }
-
-    @keyframes spot2Lantern {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(-40deg); } /* Varre para o centro-alto */
-    }
-
-    @keyframes spot3Lantern {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(-35deg); }
-    }
-
-    @keyframes spot4Lantern {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(35deg); }
-    }
+    @keyframes spot1Lantern { 0% { transform: rotate(0deg); } 100% { transform: rotate(40deg); } }
+    @keyframes spot2Lantern { 0% { transform: rotate(0deg); } 100% { transform: rotate(-40deg); } }
+    @keyframes spot3Lantern { 0% { transform: rotate(0deg); } 100% { transform: rotate(-35deg); } }
+    @keyframes spot4Lantern { 0% { transform: rotate(0deg); } 100% { transform: rotate(35deg); } }
 
     #glass-overlay {
       position: absolute;
       inset: 0;
-      backdrop-filter: blur(4px); /* Blur mínimo para não esconder os feixes nítidos */
+      backdrop-filter: blur(4px);
       -webkit-backdrop-filter: blur(4px);
-      background: rgba(0, 0, 0, 0.3); /* Vidro jateado mas transparente */
-      z-index: 3;
+      background: rgba(0, 0, 0, 0.3);
+      z-index: 2; /* Acima dos holofotes */
     }
 
-    /* --- COREOGRAFIA SEM SOBREPOSIÇÃO (Inalterado) --- */
-    
+    /* --- COREOGRAFIA --- */
     .mesa-container {
       position: absolute;
       left: 50%;
@@ -201,17 +176,12 @@
     }
 
     @keyframes logoUp { to { top: 60px; transform: translate(-50%, 0); } }
-    @keyframes poweredDown { 
-      to { 
-        top: calc(100% - 60px); 
-        transform: translate(-50%, 0); 
-      } 
-    }
+    @keyframes poweredDown { to { top: calc(100% - 60px); transform: translate(-50%, 0); } }
 
     .mesa-logo { width: 105px; filter: brightness(0) invert(1); opacity: 0.95; }
     .powered-by { font-size: 0.65rem; opacity: 0.7; letter-spacing: 1px; font-weight: 300; margin-top: 5px; }
 
-    /* --- CONTEÚDO CENTRAL (Inalterado) --- */
+    /* --- CONTEÚDO CENTRAL --- */
     .center-content {
       position: relative;
       z-index: 10;
@@ -224,7 +194,6 @@
     @keyframes fadeInContent { to { opacity: 1; } }
 
     .welcome-text { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 4px; opacity: 0.7; font-weight: 300; }
-    
     .brand-acoes { 
       font-family: 'Dancing Script', cursive;
       font-size: clamp(6.5rem, 22vw, 11rem); 
@@ -235,7 +204,6 @@
       -webkit-text-fill-color: transparent; 
       filter: drop-shadow(0px 10px 20px rgba(0, 0, 0, 0.4)); 
     }
-
     .brand-educativas { 
       font-family: 'Montserrat', sans-serif; 
       font-size: clamp(1.2rem, 5.5vw, 1.8rem); 
@@ -245,9 +213,8 @@
       color: rgba(255, 255, 255, 0.95); 
     }
 
-    /* --- BOTÃO GLASSMORPHISM (Inalterado) --- */
+    /* --- BOTÃO --- */
     .start-container { margin-top: 45px; }
-
     #btn-start {
       position: relative;
       background: var(--glass-light);
@@ -267,27 +234,15 @@
       transition: all 0.4s ease;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
-
     #btn-start::after {
       content: '';
       position: absolute;
-      top: -50%;
-      left: -100%;
-      width: 50%;
-      height: 200%;
+      top: -50%; left: -100%; width: 50%; height: 200%;
       background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
       transform: rotate(30deg);
       animation: shine 4s infinite;
     }
-
-    @keyframes shine {
-      0% { left: -100%; }
-      20% { left: 150%; }
-      100% { left: 150%; }
-    }
-
-    #btn-start:active { transform: scale(0.96); }
-    #btn-start:disabled { opacity: 0.6; cursor: wait; }
+    @keyframes shine { 0% { left: -100%; } 20% { left: 150%; } 100% { left: 150%; } }
 
     @media (max-height: 700px) {
       .brand-acoes { font-size: clamp(4rem, 15vw, 6rem); }
@@ -301,7 +256,6 @@
   <div id="offline-toast"><span>&#9888;</span> Sem conexão</div>
 
   <div id="splash">
-    <div id="splash">
     <div class="spotlight spot-1"></div>
     <div class="spotlight spot-2"></div>
     <div class="spotlight spot-3"></div>
@@ -335,7 +289,6 @@
   ></iframe>
   
   <script>
-    /* Lógica JS (Inalterada) */
     const splash = document.getElementById('splash');
     const iframe = document.getElementById('app-frame');
     const btnStart = document.getElementById('btn-start');
