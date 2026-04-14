@@ -1,3 +1,4 @@
+@@ -1,359 +1,391 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -6,12 +7,12 @@
   <title>Ações Educativas - Itaquera</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
+
   <link rel="icon" type="image/png" href="./favicon.png">
   <link rel="manifest" href="./manifest.json">
   <link rel="apple-touch-icon" href="./apple-touch-icon.png">
-  
-  <meta name="theme-color" content="#08020d">
+
+  <meta name="theme-color" content="#762bab">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Ações Ed">
@@ -20,8 +21,10 @@
     :root {
       --deep-blue: #762bab;
       --glass-light: rgba(255, 255, 255, 0.12);
-      --spotlight-cyan: #00ffff;
-      --spotlight-purple: #bf00ff;
+
+      /* CORES DOS HOLOFOTES VIBRANTES */
+      --spotlight-cyan: #00ffff;  /* Ciano Neon Puro */
+      --spotlight-purple: #bf00ff; /* Roxo Neon Puro */
     }
 
     body, html {
@@ -31,11 +34,11 @@
       width: 100%;
       overflow: hidden;
       font-family: 'Montserrat', sans-serif;
-      background-color: #08020d;
+      background-color: #08020d; /* Fundo quase preto para máximo contraste neon */
       color: #ffffff;
     }
 
-    /* --- OFFLINE TOAST --- */
+    /* --- OFFLINE TOAST (Inalterado) --- */
     #offline-toast {
       position: fixed;
       top: -100px;
@@ -57,7 +60,7 @@
     }
     #offline-toast.show { top: env(safe-area-inset-top, 20px); }
 
-    /* --- IFRAME --- */
+    /* --- IFRAME (Inalterado) --- */
     iframe {
       width: 100%;
       height: 100%;
@@ -66,15 +69,15 @@
       opacity: 0;
       visibility: hidden;
       transition: opacity 0.8s ease-in;
-      background-color: #08020d;
+      background-color: var(--deep-blue);
     }
     iframe.loaded { opacity: 1; visibility: visible; }
 
-    /* --- SPLASH E HOLOFOTES --- */
+    /* --- SPLASH E HOLOFOTES ESTILO LANTERNA --- */
     #splash {
       position: fixed;
       inset: 0;
-      background: #08020d; /* CORRIGIDO: Fundo escuro para o neon aparecer */
+      background: var(--deep-blue);
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -87,72 +90,88 @@
 
     .spotlight {
       position: absolute;
-      width: 160vw; 
-      height: 160vh;
+      width: 150vw; /* Aumentado para garantir que cruze a tela toda */
+      height: 150vh;
       pointer-events: none;
-      mix-blend-mode: screen;
-      opacity: 0;
-      z-index: 1; /* Garante que está acima do fundo */
+      mix-blend-mode: screen; /* Brilho máximo das cores */
+      opacity: 0; /* Começa invisível e aparece no fade content */
       animation: fadeInSpots 1s ease forwards;
-      animation-delay: 2s;
+      animation-delay: 2s; /* Aparece junto com o conteúdo central */
     }
 
+    /* AJUSTE: Efeito de feixe de lanterna (conic-gradient) */
     .spot-1 {
-      left: -10%; bottom: -10%;
-      background: conic-gradient(from 5deg at 10% 90%, transparent 0deg, var(--spotlight-cyan) 2deg, transparent 30deg);
-      filter: blur(20px);
-      transform-origin: 10% 90%;
-      -webkit-mask-image: radial-gradient(circle at 10% 90%, black 20%, transparent 80%);
-      mask-image: radial-gradient(circle at 10% 90%, black 20%, transparent 80%);
-      animation: spot1Lantern 10s infinite alternate ease-in-out;
+      left: -20%; bottom: -20%;
+      /* Cria um cone de luz fino que abre e perde força no final */
+      background: conic-gradient(from 10deg at 15% 85%, transparent 0deg, var(--spotlight-cyan) 3deg, transparent 15deg);
+      filter: blur(15px); /* Desfoque menor para feixe mais nítido */
+      transform-origin: 15% 85%;
+      animation: spot1Lantern 10s infinite alternate ease-in-out, fadeInSpots 1s ease forwards;
+      animation-delay: 0s, 2s;
     }
 
     .spot-2 {
-      right: -10%; bottom: -10%;
-      background: conic-gradient(from -5deg at 90% 90%, transparent 0deg, var(--spotlight-purple) 2deg, transparent 30deg);
-      filter: blur(20px);
-      transform-origin: 90% 90%;
-      -webkit-mask-image: radial-gradient(circle at 90% 90%, black 20%, transparent 80%);
-      mask-image: radial-gradient(circle at 90% 90%, black 20%, transparent 80%);
-      animation: spot2Lantern 9s infinite alternate-reverse ease-in-out;
+      right: -20%; bottom: -20%;
+      /* Cone de luz roxo com ângulo ligeiramente diferente */
+      background: conic-gradient(from -10deg at 85% 85%, transparent 0deg, var(--spotlight-purple) 3deg, transparent 15deg);
+      filter: blur(15px); /* Desfoque menor para feixe mais nítido */
+      transform-origin: 85% 85%;
+      animation: spot2Lantern 9s infinite alternate-reverse ease-in-out, fadeInSpots 1s ease forwards;
+      animation-delay: 0s, 2s;
     }
 
     .spot-3 {
-      left: -10%; top: -10%;
-      background: conic-gradient(from 175deg at 10% 10%, transparent 0deg, var(--spotlight-purple) 2deg, transparent 40deg);
-      filter: blur(40px);
-      transform-origin: 10% 10%;
-      -webkit-mask-image: radial-gradient(circle at 10% 10%, black 10%, transparent 70%);
-      mask-image: radial-gradient(circle at 10% 10%, black 10%, transparent 70%);
-      animation: spot3Lantern 18s infinite alternate ease-in-out;
+      left: -20%; top: -20%;
+      background: conic-gradient(from 160deg at 15% 15%, transparent 0deg, var(--spotlight-purple) 5deg, transparent 40deg);
+      filter: blur(45px); /* Luz mais espalhada */
+      transform-origin: 15% 15%;
+      animation: spot3Lantern 18s infinite alternate ease-in-out, fadeInSpots 1s ease forwards;
+      animation-delay: 0.5s, 2s;
     }
 
     .spot-4 {
-      right: -10%; top: -10%;
-      background: conic-gradient(from 185deg at 90% 10%, transparent 0deg, var(--spotlight-cyan) 2deg, transparent 40deg);
-      filter: blur(40px);
-      transform-origin: 90% 10%;
-      -webkit-mask-image: radial-gradient(circle at 90% 10%, black 10%, transparent 70%);
-      mask-image: radial-gradient(circle at 90% 10%, black 10%, transparent 70%);
-      animation: spot4Lantern 22s infinite alternate-reverse ease-in-out;
+      right: -20%; top: -20%;
+      background: conic-gradient(from 180deg at 85% 15%, transparent 0deg, var(--spotlight-cyan) 5deg, transparent 40deg);
+      filter: blur(45px); /* Luz mais espalhada */
+      transform-origin: 85% 15%;
+      animation: spot4Lantern 22s infinite alternate-reverse ease-in-out, fadeInSpots 1s ease forwards;
+      animation-delay: 0.5s, 2s;
     }
 
     @keyframes fadeInSpots { to { opacity: 0.8; } }
-    @keyframes spot1Lantern { 0% { transform: rotate(0deg); } 100% { transform: rotate(40deg); } }
-    @keyframes spot2Lantern { 0% { transform: rotate(0deg); } 100% { transform: rotate(-40deg); } }
-    @keyframes spot3Lantern { 0% { transform: rotate(0deg); } 100% { transform: rotate(-35deg); } }
-    @keyframes spot4Lantern { 0% { transform: rotate(0deg); } 100% { transform: rotate(35deg); } }
+
+    /* Movimento de lanterna varrendo o palco */
+    @keyframes spot1Lantern {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(40deg); } /* Varre para o centro-alto */
+    }
+
+    @keyframes spot2Lantern {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(-40deg); } /* Varre para o centro-alto */
+    }
+
+    @keyframes spot3Lantern {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(-35deg); }
+    }
+
+    @keyframes spot4Lantern {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(35deg); }
+    }
 
     #glass-overlay {
       position: absolute;
       inset: 0;
-      backdrop-filter: blur(4px);
+      backdrop-filter: blur(4px); /* Blur mínimo para não esconder os feixes nítidos */
       -webkit-backdrop-filter: blur(4px);
-      background: rgba(0, 0, 0, 0.3);
-      z-index: 2; /* Acima dos holofotes */
+      background: rgba(0, 0, 0, 0.3); /* Vidro jateado mas transparente */
+      z-index: 3;
     }
 
-    /* --- COREOGRAFIA --- */
+    /* --- COREOGRAFIA SEM SOBREPOSIÇÃO (Inalterado) --- */
+
     .mesa-container {
       position: absolute;
       left: 50%;
@@ -176,12 +195,17 @@
     }
 
     @keyframes logoUp { to { top: 60px; transform: translate(-50%, 0); } }
-    @keyframes poweredDown { to { top: calc(100% - 60px); transform: translate(-50%, 0); } }
+    @keyframes poweredDown { 
+      to { 
+        top: calc(100% - 60px); 
+        transform: translate(-50%, 0); 
+      } 
+    }
 
     .mesa-logo { width: 105px; filter: brightness(0) invert(1); opacity: 0.95; }
     .powered-by { font-size: 0.65rem; opacity: 0.7; letter-spacing: 1px; font-weight: 300; margin-top: 5px; }
 
-    /* --- CONTEÚDO CENTRAL --- */
+    /* --- CONTEÚDO CENTRAL (Inalterado) --- */
     .center-content {
       position: relative;
       z-index: 10;
@@ -194,6 +218,7 @@
     @keyframes fadeInContent { to { opacity: 1; } }
 
     .welcome-text { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 4px; opacity: 0.7; font-weight: 300; }
+
     .brand-acoes { 
       font-family: 'Dancing Script', cursive;
       font-size: clamp(6.5rem, 22vw, 11rem); 
@@ -204,6 +229,7 @@
       -webkit-text-fill-color: transparent; 
       filter: drop-shadow(0px 10px 20px rgba(0, 0, 0, 0.4)); 
     }
+
     .brand-educativas { 
       font-family: 'Montserrat', sans-serif; 
       font-size: clamp(1.2rem, 5.5vw, 1.8rem); 
@@ -213,8 +239,9 @@
       color: rgba(255, 255, 255, 0.95); 
     }
 
-    /* --- BOTÃO --- */
+    /* --- BOTÃO GLASSMORPHISM (Inalterado) --- */
     .start-container { margin-top: 45px; }
+
     #btn-start {
       position: relative;
       background: var(--glass-light);
@@ -234,15 +261,27 @@
       transition: all 0.4s ease;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
+
     #btn-start::after {
       content: '';
       position: absolute;
-      top: -50%; left: -100%; width: 50%; height: 200%;
+      top: -50%;
+      left: -100%;
+      width: 50%;
+      height: 200%;
       background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
       transform: rotate(30deg);
       animation: shine 4s infinite;
     }
-    @keyframes shine { 0% { left: -100%; } 20% { left: 150%; } 100% { left: 150%; } }
+
+    @keyframes shine {
+      0% { left: -100%; }
+      20% { left: 150%; }
+      100% { left: 150%; }
+    }
+
+    #btn-start:active { transform: scale(0.96); }
+    #btn-start:disabled { opacity: 0.6; cursor: wait; }
 
     @media (max-height: 700px) {
       .brand-acoes { font-size: clamp(4rem, 15vw, 6rem); }
@@ -256,13 +295,14 @@
   <div id="offline-toast"><span>&#9888;</span> Sem conexão</div>
 
   <div id="splash">
+    <div id="splash">
     <div class="spotlight spot-1"></div>
     <div class="spotlight spot-2"></div>
     <div class="spotlight spot-3"></div>
     <div class="spotlight spot-4"></div> 
       
     <div id="glass-overlay"></div>
-    
+
     <div class="mesa-container">
       <img src="MesaLogo.png" alt="Logo" class="mesa-logo">
     </div>
@@ -275,7 +315,7 @@
       <div class="welcome-text">Bem-vindo a</div>
       <h1 class="brand-acoes">Ações</h1>
       <h2 class="brand-educativas">Educativas</h2>
-      
+
       <div class="start-container">
         <button id="btn-start">Iniciar</button>
       </div>
@@ -287,13 +327,14 @@
      allow="geolocation; microphone; camera; clipboard-write; autoplay; fullscreen"
      sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation allow-modals allow-downloads allow-storage-access-by-user-activation"
   ></iframe>
-  
+
   <script>
+    /* Lógica JS (Inalterada) */
     const splash = document.getElementById('splash');
     const iframe = document.getElementById('app-frame');
     const btnStart = document.getElementById('btn-start');
     const offlineToast = document.getElementById('offline-toast');
-    
+
     const gasUrl = "https://script.google.com/macros/s/AKfycbywcCRHCJ3QU0GJpglv6j4dsK8LmuYIwcNiesK_1lcoXPS8--YKpLhRsQgb92irTdk/exec";
 
     let isGasLoaded = false;
