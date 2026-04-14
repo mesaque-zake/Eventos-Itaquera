@@ -87,56 +87,63 @@
     }
     #splash.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
+    /* --- CORREÇÃO: HOLOFOTES QUE ATRAVESSAM A TELA --- */
     .spotlight {
       position: absolute;
-      width: 150vw; /* Aumentado para garantir que cruze a tela toda */
-      height: 150vh;
+      width: 160vw; 
+      height: 160vh;
       pointer-events: none;
-      mix-blend-mode: screen; /* Brilho máximo das cores */
-      opacity: 0; /* Começa invisível e aparece no fade content */
+      mix-blend-mode: screen;
+      opacity: 0;
       animation: fadeInSpots 1s ease forwards;
-      animation-delay: 2s; /* Aparece junto com o conteúdo central */
+      animation-delay: 2s;
     }
 
-    /* AJUSTE: Efeito de feixe de lanterna (conic-gradient) */
+    /* Holofote 1 - Ciano (Baixo/Esquerda) */
     .spot-1 {
-      left: -20%; bottom: -20%;
-      /* Cria um cone de luz fino que abre e perde força no final */
-      background: conic-gradient(from 10deg at 15% 85%, transparent 0deg, var(--spotlight-cyan) 3deg, transparent 15deg);
-      filter: blur(15px); /* Desfoque menor para feixe mais nítido */
-      transform-origin: 15% 85%;
-      animation: spot1Lantern 10s infinite alternate ease-in-out, fadeInSpots 1s ease forwards;
-      animation-delay: 0s, 2s;
+      left: -10%; bottom: -10%;
+      /* Gradiente mais suave: Cor no 2deg, transparente só no 30deg */
+      background: conic-gradient(from 5deg at 10% 90%, transparent 0deg, var(--spotlight-cyan) 2deg, transparent 30deg);
+      filter: blur(20px);
+      transform-origin: 10% 90%;
+      /* Máscara faz a luz sumir conforme se distancia da origem */
+      -webkit-mask-image: radial-gradient(circle at 10% 90%, black 20%, transparent 80%);
+      mask-image: radial-gradient(circle at 10% 90%, black 20%, transparent 80%);
+      animation: spot1Lantern 10s infinite alternate ease-in-out;
     }
 
+    /* Holofote 2 - Roxo (Baixo/Direita) */
     .spot-2 {
-      right: -20%; bottom: -20%;
-      /* Cone de luz roxo com ângulo ligeiramente diferente */
-      background: conic-gradient(from -10deg at 85% 85%, transparent 0deg, var(--spotlight-purple) 3deg, transparent 15deg);
-      filter: blur(15px); /* Desfoque menor para feixe mais nítido */
-      transform-origin: 85% 85%;
-      animation: spot2Lantern 9s infinite alternate-reverse ease-in-out, fadeInSpots 1s ease forwards;
-      animation-delay: 0s, 2s;
+      right: -10%; bottom: -10%;
+      background: conic-gradient(from -5deg at 90% 90%, transparent 0deg, var(--spotlight-purple) 2deg, transparent 30deg);
+      filter: blur(20px);
+      transform-origin: 90% 90%;
+      -webkit-mask-image: radial-gradient(circle at 90% 90%, black 20%, transparent 80%);
+      mask-image: radial-gradient(circle at 90% 90%, black 20%, transparent 80%);
+      animation: spot2Lantern 9s infinite alternate-reverse ease-in-out;
     }
 
+    /* Holofote 3 - Roxo (Topo/Esquerda) */
     .spot-3 {
-      left: -20%; top: -20%;
-      background: conic-gradient(from 160deg at 15% 15%, transparent 0deg, var(--spotlight-purple) 5deg, transparent 40deg);
-      filter: blur(45px); /* Luz mais espalhada */
-      transform-origin: 15% 15%;
-      animation: spot3Lantern 18s infinite alternate ease-in-out, fadeInSpots 1s ease forwards;
-      animation-delay: 0.5s, 2s;
+      left: -10%; top: -10%;
+      background: conic-gradient(from 175deg at 10% 10%, transparent 0deg, var(--spotlight-purple) 2deg, transparent 40deg);
+      filter: blur(40px);
+      transform-origin: 10% 10%;
+      -webkit-mask-image: radial-gradient(circle at 10% 10%, black 10%, transparent 70%);
+      mask-image: radial-gradient(circle at 10% 10%, black 10%, transparent 70%);
+      animation: spot3Lantern 18s infinite alternate ease-in-out;
     }
 
+    /* Holofote 4 - Ciano (Topo/Direita) */
     .spot-4 {
-      right: -20%; top: -20%;
-      background: conic-gradient(from 180deg at 85% 15%, transparent 0deg, var(--spotlight-cyan) 5deg, transparent 40deg);
-      filter: blur(45px); /* Luz mais espalhada */
-      transform-origin: 85% 15%;
-      animation: spot4Lantern 22s infinite alternate-reverse ease-in-out, fadeInSpots 1s ease forwards;
-      animation-delay: 0.5s, 2s;
+      right: -10%; top: -10%;
+      background: conic-gradient(from 185deg at 90% 10%, transparent 0deg, var(--spotlight-cyan) 2deg, transparent 40deg);
+      filter: blur(40px);
+      transform-origin: 90% 10%;
+      -webkit-mask-image: radial-gradient(circle at 90% 10%, black 10%, transparent 70%);
+      mask-image: radial-gradient(circle at 90% 10%, black 10%, transparent 70%);
+      animation: spot4Lantern 22s infinite alternate-reverse ease-in-out;
     }
-
     @keyframes fadeInSpots { to { opacity: 0.8; } }
 
     /* Movimento de lanterna varrendo o palco */
