@@ -119,6 +119,24 @@
       animation-delay: 0s, 2s;
     }
 
+    .spot-3 {
+      left: -20%; top: -20%;
+      background: conic-gradient(from 160deg at 15% 15%, transparent 0deg, var(--spotlight-purple) 5deg, transparent 40deg);
+      filter: blur(45px); /* Luz mais espalhada */
+      transform-origin: 15% 15%;
+      animation: spot3Lantern 18s infinite alternate ease-in-out, fadeInSpots 1s ease forwards;
+      animation-delay: 0.5s, 2s;
+    }
+
+    .spot-4 {
+      right: -20%; top: -20%;
+      background: conic-gradient(from 180deg at 85% 15%, transparent 0deg, var(--spotlight-cyan) 5deg, transparent 40deg);
+      filter: blur(45px); /* Luz mais espalhada */
+      transform-origin: 85% 15%;
+      animation: spot4Lantern 22s infinite alternate-reverse ease-in-out, fadeInSpots 1s ease forwards;
+      animation-delay: 0.5s, 2s;
+    }
+
     @keyframes fadeInSpots { to { opacity: 0.8; } }
 
     /* Movimento de lanterna varrendo o palco */
@@ -130,6 +148,16 @@
     @keyframes spot2Lantern {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(-40deg); } /* Varre para o centro-alto */
+    }
+
+    @keyframes spot3Lantern {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(-35deg); }
+    }
+
+    @keyframes spot4Lantern {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(35deg); }
     }
 
     #glass-overlay {
@@ -266,8 +294,12 @@
   <div id="offline-toast"><span>&#9888;</span> Sem conexão</div>
 
   <div id="splash">
+    <div id="splash">
     <div class="spotlight spot-1"></div>
     <div class="spotlight spot-2"></div>
+    <div class="spotlight spot-3"></div>
+    <div class="spotlight spot-4"></div> 
+      
     <div id="glass-overlay"></div>
     
     <div class="mesa-container">
