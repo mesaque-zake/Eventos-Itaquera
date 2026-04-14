@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Ações Educativas - Itaquera</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght=700&family=Montserrat:wght=300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
   <link rel="icon" type="image/png" href="./favicon.png">
   <link rel="manifest" href="./manifest.json">
@@ -21,7 +21,7 @@
       --deep-blue: #762bab;
       --glass-light: rgba(255, 255, 255, 0.12);
       
-      /* CORES DOS HOLOFOTES TOTALMENTE SATURADAS (Modo Lanterna) */
+      /* CORES DOS HOLOFOTES VIBRANTES */
       --spotlight-cyan: #00ffff;  /* Ciano Neon Puro */
       --spotlight-purple: #bf00ff; /* Roxo Neon Puro */
     }
@@ -33,11 +33,11 @@
       width: 100%;
       overflow: hidden;
       font-family: 'Montserrat', sans-serif;
-      background-color: #08020e; /* Fundo quase preto para contraste máximo */
+      background-color: #08020d; /* Fundo quase preto para máximo contraste neon */
       color: #ffffff;
     }
 
-    /* --- OFFLINE TOAST --- */
+    /* --- OFFLINE TOAST (Inalterado) --- */
     #offline-toast {
       position: fixed;
       top: -100px;
@@ -59,7 +59,7 @@
     }
     #offline-toast.show { top: env(safe-area-inset-top, 20px); }
 
-    /* --- IFRAME --- */
+    /* --- IFRAME (Inalterado) --- */
     iframe {
       width: 100%;
       height: 100%;
@@ -72,7 +72,7 @@
     }
     iframe.loaded { opacity: 1; visibility: visible; }
 
-    /* --- SPLASH E HOLOFOTES ESTILO LANTERNA CONCENTRADA --- */
+    /* --- SPLASH E HOLOFOTES ESTILO LANTERNA --- */
     #splash {
       position: fixed;
       inset: 0;
@@ -87,59 +87,66 @@
     }
     #splash.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
-    /* Estilização básica do feixe */
     .spotlight {
       position: absolute;
-      bottom: -10vh; /* Começa um pouco abaixo da tela */
-      width: 12vw; /* Feixe fino como lanterna */
-      height: 180vh; /* Longo para atravessar a tela inteira */
+      width: 150vw; /* Aumentado para garantir que cruze a tela toda */
+      height: 150vh;
       pointer-events: none;
-      filter: blur(20px); /* Blur reduzido para manter forma de feixe */
-      opacity: 1; /* Opacidade total */
-      mix-blend-mode: color-dodge; /* Efeito Neon intenso sobre o fundo */
-      transform-origin: bottom center; /* Rotaciona a partir da base inferior */
+      mix-blend-mode: screen; /* Brilho máximo das cores */
+      opacity: 0; /* Começa invisível e aparece no fade content */
+      animation: fadeInSpots 1s ease forwards;
+      animation-delay: 2s; /* Aparece junto com o conteúdo central */
     }
 
+    /* AJUSTE: Efeito de feixe de lanterna (conic-gradient) */
     .spot-1 {
-      left: 5%;
-      /* Gradiente linear que forma o feixe da lanterna */
-      background: linear-gradient(to top, transparent 0%, var(--spotlight-cyan) 20%, rgba(0,255,255,0.1) 80%, transparent 100%);
-      animation: spot1Sweep 12s infinite alternate ease-in-out;
+      left: -20%; bottom: -20%;
+      /* Cria um cone de luz fino que abre e perde força no final */
+      background: conic-gradient(from 10deg at 15% 85%, transparent 0deg, var(--spotlight-cyan) 3deg, transparent 15deg);
+      filter: blur(15px); /* Desfoque menor para feixe mais nítido */
+      transform-origin: 15% 85%;
+      animation: spot1Lantern 10s infinite alternate ease-in-out, fadeInSpots 1s ease forwards;
+      animation-delay: 0s, 2s;
     }
 
     .spot-2 {
-      right: 5%;
-      /* Gradiente linear que forma o feixe da lanterna */
-      background: linear-gradient(to top, transparent 0%, var(--spotlight-purple) 20%, rgba(191,0,255,0.1) 80%, transparent 100%);
-      animation: spot2Sweep 10s infinite alternate-reverse ease-in-out;
+      right: -20%; bottom: -20%;
+      /* Cone de luz roxo com ângulo ligeiramente diferente */
+      background: conic-gradient(from -10deg at 85% 85%, transparent 0deg, var(--spotlight-purple) 3deg, transparent 15deg);
+      filter: blur(15px); /* Desfoque menor para feixe mais nítido */
+      transform-origin: 85% 85%;
+      animation: spot2Lantern 9s infinite alternate-reverse ease-in-out, fadeInSpots 1s ease forwards;
+      animation-delay: 0s, 2s;
     }
 
-    /* Animação de varredura cruzando a tela */
-    @keyframes spot1Sweep {
-      0% { transform: rotate(-15deg); }
-      100% { transform: rotate(60deg); } /* Atravessa até o outro lado */
+    @keyframes fadeInSpots { to { opacity: 0.8; } }
+
+    /* Movimento de lanterna varrendo o palco */
+    @keyframes spot1Lantern {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(40deg); } /* Varre para o centro-alto */
     }
 
-    @keyframes spot2Sweep {
-      0% { transform: rotate(15deg); }
-      100% { transform: rotate(-60deg); } /* Atravessa até o outro lado */
+    @keyframes spot2Lantern {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(-40deg); } /* Varre para o centro-alto */
     }
 
     #glass-overlay {
       position: absolute;
       inset: 0;
-      backdrop-filter: blur(6px); /* Blur menor para não dissipar o feixe */
-      -webkit-backdrop-filter: blur(6px);
-      background: rgba(0, 0, 0, 0.3); /* Vidro ligeiramente mais escuro */
+      backdrop-filter: blur(4px); /* Blur mínimo para não esconder os feixes nítidos */
+      -webkit-backdrop-filter: blur(4px);
+      background: rgba(0, 0, 0, 0.3); /* Vidro jateado mas transparente */
       z-index: 3;
     }
 
-    /* --- COREOGRAFIA MANTIDA (Sem sobreposição) --- */
+    /* --- COREOGRAFIA SEM SOBREPOSIÇÃO (Inalterado) --- */
     
     .mesa-container {
       position: absolute;
       left: 50%;
-      top: 44%; /* MANTIDO */
+      top: 44%; 
       transform: translate(-50%, -50%);
       z-index: 10;
       text-align: center;
@@ -150,7 +157,7 @@
     .powered-container {
       position: absolute;
       left: 50%;
-      top: 56%; /* MANTIDO */
+      top: 56%; 
       transform: translate(-50%, -50%);
       z-index: 10;
       text-align: center;
@@ -169,7 +176,7 @@
     .mesa-logo { width: 105px; filter: brightness(0) invert(1); opacity: 0.95; }
     .powered-by { font-size: 0.65rem; opacity: 0.7; letter-spacing: 1px; font-weight: 300; margin-top: 5px; }
 
-    /* --- CONTEÚDO CENTRAL MANTIDO --- */
+    /* --- CONTEÚDO CENTRAL (Inalterado) --- */
     .center-content {
       position: relative;
       z-index: 10;
@@ -203,7 +210,7 @@
       color: rgba(255, 255, 255, 0.95); 
     }
 
-    /* --- BOTÃO GLASSMORPHISM MANTIDO --- */
+    /* --- BOTÃO GLASSMORPHISM (Inalterado) --- */
     .start-container { margin-top: 45px; }
 
     #btn-start {
@@ -289,6 +296,7 @@
   ></iframe>
   
   <script>
+    /* Lógica JS (Inalterada) */
     const splash = document.getElementById('splash');
     const iframe = document.getElementById('app-frame');
     const btnStart = document.getElementById('btn-start');
