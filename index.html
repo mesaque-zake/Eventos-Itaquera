@@ -19,11 +19,10 @@
   <style>
     :root {
       --deep-blue: #762bab;
+      --bg-black: #08020d;
       --glass-light: rgba(255, 255, 255, 0.12);
-
-      /* CORES DOS HOLOFOTES VIBRANTES */
-      --spotlight-cyan: #00ffff;  /* Ciano Neon Puro */
-      --spotlight-purple: #bf00ff; /* Roxo Neon Puro */
+      --spotlight-cyan: #00ffff;
+      --spotlight-purple: #bf00ff;
     }
 
     body, html {
@@ -33,11 +32,11 @@
       width: 100%;
       overflow: hidden;
       font-family: 'Montserrat', sans-serif;
-      background-color: #08020d; /* Fundo quase preto para máximo contraste neon */
+      background-color: var(--bg-black);
       color: #ffffff;
     }
 
-    /* --- OFFLINE TOAST (Inalterado) --- */
+    /* --- OFFLINE TOAST --- */
     #offline-toast {
       position: fixed;
       top: -100px;
@@ -59,122 +58,107 @@
     }
     #offline-toast.show { top: env(safe-area-inset-top, 20px); }
 
-    /* --- IFRAME (Inalterado) --- */
-    iframe {
+    /* --- IFRAME --- */
+    #app-frame {
       width: 100%;
       height: 100%;
       border: none;
       display: block;
+      position: absolute;
+      inset: 0;
       opacity: 0;
       visibility: hidden;
-      transition: opacity 0.8s ease-in;
-      background-color: var(--deep-blue);
+      transition: opacity 0.5s ease;
+      background-color: var(--bg-black); /* Evita flash branco */
     }
-    iframe.loaded { opacity: 1; visibility: visible; }
+    #app-frame.loaded { opacity: 1; visibility: visible; }
 
-    /* --- SPLASH E HOLOFOTES ESTILO LANTERNA --- */
+    /* --- SPLASH --- */
     #splash {
       position: fixed;
       inset: 0;
-      background: var(--deep-blue);
+      background-color: var(--bg-black); /* Começa Preto */
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       z-index: 9000;
-      transition: opacity 0.8s ease-out;
+      transition: opacity 0.6s ease-out;
       overflow: hidden;
+      /* Animação para ficar roxo */
+      animation: bgToPurple 1.2s ease forwards;
+      animation-delay: 1.5s; 
     }
     #splash.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
-    .spotlight {
-      position: absolute;
-      width: 150vw; /* Aumentado para garantir que cruze a tela toda */
-      height: 150vh;
-      pointer-events: none;
-      mix-blend-mode: screen; /* Brilho máximo das cores */
-      opacity: 0; /* Começa invisível e aparece no fade content */
-      animation: fadeInSpots 1s ease forwards;
-      animation-delay: 2s; /* Aparece junto com o conteúdo central */
+    @keyframes bgToPurple {
+      from { background-color: var(--bg-black); }
+      to { background-color: var(--deep-blue); }
     }
 
-    /* AJUSTE: Efeito de feixe de lanterna (conic-gradient) */
+    /* HOLOFOTES MELHORADOS (Sem cortes) */
+    .spotlight {
+      position: absolute;
+      width: 250vw; /* Aumentado drasticamente para evitar cortes */
+      height: 250vh;
+      pointer-events: none;
+      mix-blend-mode: screen;
+      opacity: 0;
+      animation: fadeInSpots 1.5s ease forwards;
+    }
+
     .spot-1 {
-      left: -20%; bottom: -20%;
-      /* Cria um cone de luz fino que abre e perde força no final */
-      background: conic-gradient(from 10deg at 15% 85%, transparent 0deg, var(--spotlight-cyan) 3deg, transparent 15deg);
-      filter: blur(15px); /* Desfoque menor para feixe mais nítido */
-      transform-origin: 15% 85%;
-      animation: spot1Lantern 10s infinite alternate ease-in-out, fadeInSpots 1s ease forwards;
-      animation-delay: 0s, 2s;
+      left: -50%; bottom: -50%;
+      background: conic-gradient(from 15deg at 20% 80%, transparent 0deg, var(--spotlight-cyan) 4deg, transparent 15deg);
+      filter: blur(20px);
+      transform-origin: 20% 80%;
+      animation: spot1Lantern 10s infinite alternate ease-in-out, fadeInSpots 1.5s ease forwards;
     }
 
     .spot-2 {
-      right: -20%; bottom: -20%;
-      /* Cone de luz roxo com ângulo ligeiramente diferente */
-      background: conic-gradient(from -10deg at 85% 85%, transparent 0deg, var(--spotlight-purple) 3deg, transparent 15deg);
-      filter: blur(15px); /* Desfoque menor para feixe mais nítido */
-      transform-origin: 85% 85%;
-      animation: spot2Lantern 9s infinite alternate-reverse ease-in-out, fadeInSpots 1s ease forwards;
-      animation-delay: 0s, 2s;
+      right: -50%; bottom: -50%;
+      background: conic-gradient(from -15deg at 80% 80%, transparent 0deg, var(--spotlight-purple) 4deg, transparent 15deg);
+      filter: blur(20px);
+      transform-origin: 80% 80%;
+      animation: spot2Lantern 9s infinite alternate-reverse ease-in-out, fadeInSpots 1.5s ease forwards;
     }
 
     .spot-3 {
-      left: -20%; top: -20%;
-      background: conic-gradient(from 160deg at 15% 15%, transparent 0deg, var(--spotlight-purple) 5deg, transparent 40deg);
-      filter: blur(45px); /* Luz mais espalhada */
-      transform-origin: 15% 15%;
-      animation: spot3Lantern 18s infinite alternate ease-in-out, fadeInSpots 1s ease forwards;
-      animation-delay: 0.5s, 2s;
+      left: -50%; top: -50%;
+      background: conic-gradient(from 160deg at 20% 20%, transparent 0deg, var(--spotlight-purple) 6deg, transparent 40deg);
+      filter: blur(50px);
+      transform-origin: 20% 20%;
+      animation: spot3Lantern 18s infinite alternate ease-in-out, fadeInSpots 1.5s ease forwards;
     }
 
     .spot-4 {
-      right: -20%; top: -20%;
-      background: conic-gradient(from 180deg at 85% 15%, transparent 0deg, var(--spotlight-cyan) 5deg, transparent 40deg);
-      filter: blur(45px); /* Luz mais espalhada */
-      transform-origin: 85% 15%;
-      animation: spot4Lantern 22s infinite alternate-reverse ease-in-out, fadeInSpots 1s ease forwards;
-      animation-delay: 0.5s, 2s;
+      right: -50%; top: -50%;
+      background: conic-gradient(from 180deg at 80% 20%, transparent 0deg, var(--spotlight-cyan) 6deg, transparent 40deg);
+      filter: blur(50px);
+      transform-origin: 80% 20%;
+      animation: spot4Lantern 22s infinite alternate-reverse ease-in-out, fadeInSpots 1.5s ease forwards;
     }
 
-    @keyframes fadeInSpots { to { opacity: 0.8; } }
-
-    /* Movimento de lanterna varrendo o palco */
-    @keyframes spot1Lantern {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(40deg); } /* Varre para o centro-alto */
-    }
-
-    @keyframes spot2Lantern {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(-40deg); } /* Varre para o centro-alto */
-    }
-
-    @keyframes spot3Lantern {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(-35deg); }
-    }
-
-    @keyframes spot4Lantern {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(35deg); }
-    }
+    @keyframes fadeInSpots { to { opacity: 0.7; } }
+    @keyframes spot1Lantern { 0% { transform: rotate(0deg); } 100% { transform: rotate(35deg); } }
+    @keyframes spot2Lantern { 0% { transform: rotate(0deg); } 100% { transform: rotate(-35deg); } }
+    @keyframes spot3Lantern { 0% { transform: rotate(0deg); } 100% { transform: rotate(-25deg); } }
+    @keyframes spot4Lantern { 0% { transform: rotate(0deg); } 100% { transform: rotate(25deg); } }
 
     #glass-overlay {
       position: absolute;
       inset: 0;
-      backdrop-filter: blur(4px); /* Blur mínimo para não esconder os feixes nítidos */
-      -webkit-backdrop-filter: blur(4px);
-      background: rgba(0, 0, 0, 0.3); /* Vidro jateado mas transparente */
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      background: rgba(0, 0, 0, 0.2);
       z-index: 3;
     }
 
-    /* --- COREOGRAFIA SEM SOBREPOSIÇÃO (Inalterado) --- */
-
+    /* --- LOGOS E TEXTOS --- */
     .mesa-container {
       position: absolute;
       left: 50%;
-      top: 44%; 
+      top: 44%;
       transform: translate(-50%, -50%);
       z-index: 10;
       text-align: center;
@@ -185,7 +169,7 @@
     .powered-container {
       position: absolute;
       left: 50%;
-      top: 56%; 
+      top: 56%;
       transform: translate(-50%, -50%);
       z-index: 10;
       text-align: center;
@@ -194,17 +178,12 @@
     }
 
     @keyframes logoUp { to { top: 60px; transform: translate(-50%, 0); } }
-    @keyframes poweredDown { 
-      to { 
-        top: calc(100% - 60px); 
-        transform: translate(-50%, 0); 
-      } 
-    }
+    @keyframes poweredDown { to { top: calc(100% - 60px); transform: translate(-50%, 0); } }
 
     .mesa-logo { width: 105px; filter: brightness(0) invert(1); opacity: 0.95; }
     .powered-by { font-size: 0.65rem; opacity: 0.7; letter-spacing: 1px; font-weight: 300; margin-top: 5px; }
 
-    /* --- CONTEÚDO CENTRAL (Inalterado) --- */
+    /* --- CONTEÚDO CENTRAL --- */
     .center-content {
       position: relative;
       z-index: 10;
@@ -238,9 +217,8 @@
       color: rgba(255, 255, 255, 0.95); 
     }
 
-    /* --- BOTÃO GLASSMORPHISM (Inalterado) --- */
+    /* --- BOTÃO --- */
     .start-container { margin-top: 45px; }
-
     #btn-start {
       position: relative;
       background: var(--glass-light);
@@ -264,21 +242,14 @@
     #btn-start::after {
       content: '';
       position: absolute;
-      top: -50%;
-      left: -100%;
-      width: 50%;
-      height: 200%;
+      top: -50%; left: -100%;
+      width: 50%; height: 200%;
       background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
       transform: rotate(30deg);
       animation: shine 4s infinite;
     }
 
-    @keyframes shine {
-      0% { left: -100%; }
-      20% { left: 150%; }
-      100% { left: 150%; }
-    }
-
+    @keyframes shine { 0% { left: -100%; } 20% { left: 150%; } 100% { left: 150%; } }
     #btn-start:active { transform: scale(0.96); }
     #btn-start:disabled { opacity: 0.6; cursor: wait; }
 
@@ -294,12 +265,11 @@
   <div id="offline-toast"><span>&#9888;</span> Sem conexão</div>
 
   <div id="splash">
-    <div id="splash">
     <div class="spotlight spot-1"></div>
     <div class="spotlight spot-2"></div>
     <div class="spotlight spot-3"></div>
     <div class="spotlight spot-4"></div> 
-      
+    
     <div id="glass-overlay"></div>
 
     <div class="mesa-container">
@@ -324,11 +294,10 @@
   <iframe 
      id="app-frame" 
      allow="geolocation; microphone; camera; clipboard-write; autoplay; fullscreen"
-     sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation allow-modals allow-downloads allow-storage-access-by-user-activation"
+     sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-top-navigation-by-user-activation allow-modals allow-storage-access-by-user-activation"
   ></iframe>
 
   <script>
-    /* Lógica JS (Inalterada) */
     const splash = document.getElementById('splash');
     const iframe = document.getElementById('app-frame');
     const btnStart = document.getElementById('btn-start');
@@ -338,27 +307,28 @@
 
     let isGasLoaded = false;
     let hasUserClicked = false;
-    let isErrorState = false;
 
     window.addEventListener('offline', () => offlineToast.classList.add('show'));
     window.addEventListener('online', () => offlineToast.classList.remove('show'));
 
+    // Inicia carregamento do iframe imediatamente
     iframe.src = gasUrl;
 
+    // Timeout de segurança
     const watchdogTimer = setTimeout(() => {
       if (!isGasLoaded) {
-        isErrorState = true;
-        btnStart.innerText = "Falha ao carregar. Tentar de novo?";
+        btnStart.innerText = "Tentar carregar novamente";
         btnStart.disabled = false;
       }
     }, 15000);
 
     iframe.onload = () => {
-      if (iframe.src === 'about:blank') return;
       isGasLoaded = true;
       clearTimeout(watchdogTimer);
-      if (hasUserClicked) revealApp();
-      else if (btnStart.disabled) {
+      // Se o usuário já clicou enquanto carregava, revela agora
+      if (hasUserClicked) {
+        revealApp();
+      } else {
         btnStart.innerText = "Iniciar";
         btnStart.disabled = false;
       }
@@ -366,19 +336,23 @@
 
     btnStart.addEventListener('click', () => {
       if (!navigator.onLine) { alert("Sem conexão."); return; }
-      if (isErrorState) { window.location.reload(); return; }
-
+      
       hasUserClicked = true;
-      if (isGasLoaded) revealApp();
-      else {
+      
+      if (isGasLoaded) {
+        revealApp();
+      } else {
         btnStart.innerText = "Conectando...";
         btnStart.disabled = true;
       }
     });
 
     function revealApp() {
-      splash.classList.add('hidden');
-      iframe.classList.add('loaded');
+      // Pequeno delay para garantir que o iframe rendeu antes de sumir o splash
+      setTimeout(() => {
+        iframe.classList.add('loaded');
+        splash.classList.add('hidden');
+      }, 300);
     }
 
     if ('serviceWorker' in navigator) {
