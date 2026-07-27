@@ -103,7 +103,7 @@
       </div>
 
     <!-- Aura Teal-600 Física (Nasce em scale-0 e expande elasticamente) -->
-    <div id="aura-el" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] h-[18vh] max-w-lg rounded-[100%] bg-teal-600 blur-[50px] md:blur-[70px] pointer-events-none opacity-40 scale-0 transition-transform duration-[1200ms] ease-[cubic-bezier(0.25,1,0.5,1)] z-0"></div>
+    <div id="aura-el" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] h-[18vh] max-w-lg rounded-[100%] bg-teal-500 blur-[50px] md:blur-[70px] pointer-events-none opacity-40 scale-0 transition-transform duration-[1200ms] ease-[cubic-bezier(0.25,1,0.5,1)] z-0"></div>
 
   </div>
 
@@ -181,11 +181,11 @@
       poweredContainer.classList.add('opacity-0');
 
       // 2. A Aura realiza a implosão de volta ao ponto zero em alta velocidade (300ms)
-      auraEl.style.transition = 'transform 300ms cubic-bezier(0.25, 1, 0.5, 1)';
+      auraEl.style.transition = 'transform 500ms cubic-bezier(0.25, 1, 0.5, 1)';
       auraEl.classList.remove('scale-[1.35]');
       auraEl.classList.add('scale-0');
 
-      // 3. O título completo segue o encolhimento de forma mais gradual (700ms) em sincronia com o iframe
+      // 3. O título completo segue o encolhimento de forma mais gradual (800ms) em sincronia com o iframe
       centerContent.classList.add('scale-0', 'opacity-0', 'pointer-events-none');
       iframe.classList.remove('invisible');
       iframe.classList.add('opacity-100');
