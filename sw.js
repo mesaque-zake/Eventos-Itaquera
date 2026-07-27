@@ -1,13 +1,14 @@
-const CACHE_NAME = 'v13'; 
+const CACHE_NAME = 'v14'; 
 const assets = [
   './',
   'index.html',
   'manifest.json',
-  'favicon.png',
-  'icone-192.png',
-  'icone-512.png',
-  'apple-touch-icon.png', 
-  'MesaLogo.png'
+  'Favicon.png',
+  'Icon192.png',
+  'Icon512.png',
+  'Icon180.png',
+  'Share.png',
+  'LogoColor.png'
 ];
 
 // 1. INSTALAÇÃO (Baixa os arquivos e força a atualização imediata)
@@ -21,7 +22,7 @@ self.addEventListener('install', (e) => {
   );
 });
 
-// 2. ATIVAÇÃO (O Garbage Collector: Limpa os caches antigos e mortos)
+// 2. ATIVAÇÃO (Limpa os caches antigos e mortos)
 self.addEventListener('activate', (e) => {
   e.waitUntil(
     caches.keys().then((cacheNames) => {
