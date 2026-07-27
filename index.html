@@ -217,27 +217,83 @@
       color: rgba(255, 255, 255, 0.95); 
     }
 
-    /* --- BOTÃO --- */
-    .start-container { margin-top: 45px; }
-    #btn-start {
-      position: relative;
-      background: var(--glass-light);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      color: #ffffff;
-      font-family: 'Montserrat', sans-serif;
-      font-size: 1.1rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      padding: 18px 50px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 40px;
-      cursor: pointer;
-      overflow: hidden;
-      transition: all 0.4s ease;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    }
+    /* --- CONTAINER E ESPAÇAMENTO --- */
+.start-container { 
+  margin-top: 45px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* --- PÍLULA DE STATUS (Antigo Botão) --- */
+#status-manutencao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px; /* Espaço entre a bolinha pulsante e o texto */
+  position: relative;
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  color: #ffffff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding: 16px 42px;
+  border: 1px solid rgba(0, 229, 255, 0.3); /* Borda levemente ciano/tech */
+  border-radius: 40px;
+  cursor: default;
+  user-select: none;
+  box-shadow: 0 0 25px rgba(0, 229, 255, 0.1); /* Brilho futurista sutil no fundo */
+}
+
+/* --- LUZ LED PULSANTE (GERA O EFEITO DE ATIVIDADE) --- */
+.pulse-dot {
+  width: 10px;
+  height: 10px;
+  background-color: #00e5ff; /* Cor ciano tech (pode trocar por verde #00ff88) */
+  border-radius: 50%;
+  box-shadow: 0 0 8px #00e5ff;
+  animation: pulso-intenso 1.5s infinite alternate ease-in-out;
+}
+
+/* Animação que faz a bolinha respirar e brilhar */
+@keyframes pulso-intenso {
+  0% { 
+    transform: scale(0.8); 
+    opacity: 0.4; 
+    box-shadow: 0 0 4px #00e5ff; 
+  }
+  100% { 
+    transform: scale(1.3); 
+    opacity: 1; 
+    box-shadow: 0 0 15px #00e5ff, 0 0 25px #00e5ff; 
+  }
+}
+
+/* --- TEXTO DE HYPE (MENSAGEM ABAIXO) --- */
+.msg-manutencao {
+  margin-top: 22px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: #e0e0e0;
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+  text-align: center;
+  max-width: 380px;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+/* Destaque na última frase para gerar impacto */
+.msg-manutencao strong {
+  color: #00e5ff; /* Puxa a mesma cor do LED */
+  font-weight: 600;
+  display: block;
+  margin-top: 4px;
+}
 
     /* --- ESTILO DO BOTÃO DESATIVADO (MANUTENÇÃO) --- */
 #btn-start:disabled {
@@ -311,9 +367,16 @@
       <h2 class="brand-educativas">Educativas</h2>
 
       <div class="start-container">
-        <!-- Atributo 'disabled' impede o clique e dispara estilos de desativado no CSS -->
-        <div id="status-manutencao">Em manutenção</div>
-        <p class="msg-manutencao">Sistema passando por atualizações e melhorias de sistema, estará disponível em breve, por favor, aguarde!</p>
+        <!-- A pílula agora tem um ícone animado de "processando" -->
+        <div id="status-manutencao">
+          <span class="pulse-dot"></span>
+          Atualizações em andamento!
+        </div>
+  
+        <p class="msg-manutencao">
+          Otimizando cada detalhe e preparando novas funcionalidades exclusivas. 
+          <strong>O que era "bom" está prestes a ficar excelente.</strong> by Zake!
+        </p>
       </div>
     </div>
   </div>
