@@ -6,7 +6,7 @@
   <title>Ações Educativas - Itaquera</title>
 
   <!-- Google Fonts: Plus Jakarta Sans e Dancing Script -->
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght=700&family=Plus+Jakarta+Sans:wght=300;400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Mapeamento de Novos Ícones e Manifesto -->
   <link rel="icon" type="image/png" href="./Favicon.png">
@@ -45,7 +45,7 @@
       text-align: center;
       animation: logoUp 1.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
       animation-delay: 1.5s;
-      transition: opacity 0.5s ease; /* Transição para sumir suavemente no final */
+      transition: opacity 0.5s ease;
     }
 
     .powered-container {
@@ -57,7 +57,7 @@
       text-align: center;
       animation: poweredDown 1.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
       animation-delay: 1.5s;
-      transition: opacity 0.5s ease; /* Transição para sumir suavemente no final */
+      transition: opacity 0.5s ease;
     }
 
     @keyframes logoUp { to { top: 60px; transform: translate(-50%, 0); } }
@@ -65,6 +65,23 @@
 
     #offline-toast.show { 
       top: env(safe-area-inset-top, 20px); 
+    }
+
+    /* ANIMAÇÃO DE PULSAÇÃO DA AURA (Respiração orgânica estilo Gemini) */
+    @keyframes auraOrganicPulse {
+      0%, 100% {
+        transform: translate(-50%, -50%) scale(1.25);
+        opacity: 0.35;
+        filter: blur(60px);
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.4);
+        opacity: 0.5;
+        filter: blur(80px);
+      }
+    }
+    .aura-pulse-active {
+      animation: auraOrganicPulse 3.5s infinite ease-in-out;
     }
 
     @media (max-height: 700px) {
@@ -95,16 +112,15 @@
       </div>
     </div>
 
-    <!-- Conteúdo Central: Título e a Aura "Gemini" -->
-    <div id="center-content" class="relative z-10 text-center opacity-0 scale-100 transition-all duration-[700ms] ease-[cubic-bezier(0.25,1,0.5,1)]">
-      
-      <!-- Aura Teal-600 (Inicia pequena/tímida e ganha saturação ao crescer) -->
-      <div id="aura-el" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] h-[18vh] max-w-lg rounded-[100%] bg-teal-600 blur-[50px] md:blur-[70px] pointer-events-none opacity-0 scale-50 transition-all duration-[1200ms] ease-out"></div>
-      
+    <!-- Conteúdo Central: Título -->
+    <div id="center-content" class="relative z-10 text-center opacity-0 scale-100 transition-all duration-[500ms] ease-[cubic-bezier(0.25,1,0.5,1)]">
       <!-- Título com sombreamento leve no "Ações" -->
       <h1 class="font-dancing text-teal-600 text-[6.5rem] md:text-[11rem] leading-[1.1] drop-shadow-[0_4px_12px_rgba(13,148,136,0.25)] pointer-events-none">Ações</h1>
       <h2 class="font-sans text-slate-600 tracking-[14px] text-[1.2rem] md:text-[1.8rem] font-bold uppercase mt-[-10px] pointer-events-none">Educativas</h2>
     </div>
+
+    <!-- Aura Teal-600 Independente (Z-0, posicionada atrás do título) -->
+    <div id="aura-el" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] h-[18vh] max-w-lg rounded-[100%] bg-teal-600 blur-[50px] md:blur-[70px] pointer-events-none opacity-0 scale-50 transition-all duration-[1200ms] ease-out z-0"></div>
 
   </div>
 
@@ -139,25 +155,25 @@
 
     // --- TIMELINE DE ANIMAÇÕES DO SPLASH ---
 
-    // 1. Após 2.9s (conforme fim do movimento do logo/powered), o título surge
+    // 1. Após 2.7s (conforme o logo se aproxima do lugar), o título surge de forma rápida
     setTimeout(() => {
       centerContent.classList.remove('opacity-0');
       centerContent.classList.add('opacity-100');
-    }, 2900);
+    }, 2700);
 
-    // 2. Após 3.1s, a Aura Teal cresce, ganha opacidade e saturação
+    // 2. Após 2.9s, a Aura Teal cresce, ganha opacidade e ativa a pulsação orgânica
     setTimeout(() => {
       auraEl.classList.remove('opacity-0', 'scale-50');
-      auraEl.classList.add('opacity-40', 'scale-[1.35]');
-    }, 3100);
+      auraEl.classList.add('opacity-40', 'scale-[1.35]', 'aura-pulse-active');
+    }, 2900);
 
-    // 3. Tempo mínimo de exposição (4.0 segundos) para que toda a animação se conclua
+    // 3. Tempo mínimo de exposição (3.8 segundos) para manter as transições fluidas dentro do limite de 4s
     setTimeout(() => {
       minTimeElapsed = true;
       if (isGasLoaded) {
         revealApp();
       }
-    }, 4000);
+    }, 3800);
 
     // Gatilho executado quando o iframe terminar o carregamento
     iframe.onload = () => {
@@ -173,12 +189,20 @@
       logoContainer.classList.add('opacity-0');
       poweredContainer.classList.add('opacity-0');
 
-      // 2. Sincronia perfeita: O título/aura é sugado para o centro enquanto o iframe surge
+      // 2. Desliga a pulsação contínua da aura para permitir o encolhimento liso
+      auraEl.style.animation = 'none';
+
+      // 3. A Aura encolhe primeiro e de forma muito rápida (300ms)
+      auraEl.style.transition = 'all 300ms cubic-bezier(0.25, 1, 0.5, 1)';
+      auraEl.classList.remove('scale-[1.35]', 'opacity-40');
+      auraEl.classList.add('scale-0', 'opacity-0');
+
+      // 4. O título segue o encolhimento de forma mais gradual (700ms) em sincronia com o iframe
       centerContent.classList.add('scale-0', 'opacity-0', 'pointer-events-none');
       iframe.classList.remove('invisible');
       iframe.classList.add('opacity-100');
 
-      // 3. Desliga o splash por completo da árvore DOM após as transições de 700ms
+      // 5. Desliga o splash por completo da árvore DOM após as transições de 700ms
       setTimeout(() => {
         splash.style.display = 'none';
       }, 700);
