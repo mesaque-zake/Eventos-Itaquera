@@ -239,6 +239,31 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
 
+    /* --- ESTILO DO BOTÃO DESATIVADO (MANUTENÇÃO) --- */
+#btn-start:disabled {
+  background: rgba(255, 255, 255, 0.05); /* Deixa o vidro mais opaco/escuro */
+  color: rgba(255, 255, 255, 0.4); /* Texto meio apagado */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: none; /* Remove o brilho/sombra de profundidade */
+  cursor: not-allowed; /* Ícone de "proibido" no mouse */
+  transform: none; /* Garante que não tenha efeito de movimento se houver hover no seu CSS */
+}
+
+/* --- MENSAGEM DE AVISTO ABAIXO DO BOTÃO --- */
+.msg-manutencao {
+  margin-top: 20px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #ffd166; /* Um tom de amarelo/âmbar suave para indicar alerta em fundos escuros */
+  letter-spacing: 0.5px;
+  line-height: 1.4;
+  text-align: center;
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
     #btn-start::after {
       content: '';
       position: absolute;
@@ -286,7 +311,9 @@
       <h2 class="brand-educativas">Educativas</h2>
 
       <div class="start-container">
-        <button id="btn-start">Iniciar</button>
+        <!-- Atributo 'disabled' impede o clique e dispara estilos de desativado no CSS -->
+        <button id="btn-start" disabled>Em manutenção</button>
+        <p class="msg-manutencao">Sistema passando por atualizações, por favor, aguarde!</p>
       </div>
     </div>
   </div>
