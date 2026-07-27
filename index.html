@@ -5,398 +5,134 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Ações Educativas - Itaquera</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Google Fonts: Plus Jakarta Sans e Dancing Script -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-  <link rel="icon" type="image/png" href="./favicon.png">
+  <!-- Mapeamento de Novos Ícones e Manifesto -->
+  <link rel="icon" type="image/png" href="./Favicon.png">
   <link rel="manifest" href="./manifest.json">
-  <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+  <link rel="apple-touch-icon" href="./Icon180.png">
 
-  <meta name="theme-color" content="#762bab">
+  <!-- Metadados de Cor e Suporte iOS atualizados para Slate-50 -->
+  <meta name="theme-color" content="#f8fafc">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Ações Ed">
 
+  <!-- Importação do Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            dancing: ['"Dancing Script"', 'cursive'],
+          }
+        }
+      }
+    }
+  </script>
+
   <style>
-    :root {
-      --deep-blue: #762bab;
-      --bg-black: #08020d;
-      --glass-light: rgba(255, 255, 255, 0.12);
-      --spotlight-cyan: #00ffff;
-      --spotlight-purple: #bf00ff;
-    }
-
-    body, html {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      width: 100%;
-      overflow: hidden;
-      font-family: 'Montserrat', sans-serif;
-      background-color: var(--bg-black);
-      color: #ffffff;
-    }
-
-    /* --- OFFLINE TOAST --- */
-    #offline-toast {
-      position: fixed;
-      top: -100px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(255, 60, 60, 0.2);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 60, 60, 0.4);
-      padding: 12px 24px;
-      border-radius: 30px;
-      z-index: 10000;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: top 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    #offline-toast.show { top: env(safe-area-inset-top, 20px); }
-
-    /* --- IFRAME --- */
-    #app-frame {
-      width: 100%;
-      height: 100%;
-      border: none;
-      display: block;
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.5s ease;
-      background-color: var(--bg-black); /* Evita flash branco */
-    }
-    #app-frame.loaded { opacity: 1; visibility: visible; }
-
-    /* --- SPLASH --- */
-    #splash {
-      position: fixed;
-      inset: 0;
-      background-color: var(--bg-black); /* Começa Preto */
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 9000;
-      transition: opacity 0.6s ease-out;
-      overflow: hidden;
-      /* Animação para ficar roxo */
-      animation: bgToPurple 1.2s ease forwards;
-      animation-delay: 1.5s; 
-    }
-    #splash.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-
-    @keyframes bgToPurple {
-      from { background-color: var(--bg-black); }
-      to { background-color: var(--deep-blue); }
-    }
-
-    /* HOLOFOTES MELHORADOS (Sem cortes) */
-    .spotlight {
-      position: absolute;
-      width: 250vw; /* Aumentado drasticamente para evitar cortes */
-      height: 250vh;
-      pointer-events: none;
-      mix-blend-mode: screen;
-      opacity: 0;
-      animation: fadeInSpots 1.5s ease forwards;
-    }
-
-    .spot-1 {
-      left: -50%; bottom: -50%;
-      background: conic-gradient(from 15deg at 20% 80%, transparent 0deg, var(--spotlight-cyan) 4deg, transparent 15deg);
-      filter: blur(20px);
-      transform-origin: 20% 80%;
-      animation: spot1Lantern 10s infinite alternate ease-in-out, fadeInSpots 1.5s ease forwards;
-    }
-
-    .spot-2 {
-      right: -50%; bottom: -50%;
-      background: conic-gradient(from -15deg at 80% 80%, transparent 0deg, var(--spotlight-purple) 4deg, transparent 15deg);
-      filter: blur(20px);
-      transform-origin: 80% 80%;
-      animation: spot2Lantern 9s infinite alternate-reverse ease-in-out, fadeInSpots 1.5s ease forwards;
-    }
-
-    .spot-3 {
-      left: -50%; top: -50%;
-      background: conic-gradient(from 160deg at 20% 20%, transparent 0deg, var(--spotlight-purple) 6deg, transparent 40deg);
-      filter: blur(50px);
-      transform-origin: 20% 20%;
-      animation: spot3Lantern 18s infinite alternate ease-in-out, fadeInSpots 1.5s ease forwards;
-    }
-
-    .spot-4 {
-      right: -50%; top: -50%;
-      background: conic-gradient(from 180deg at 80% 20%, transparent 0deg, var(--spotlight-cyan) 6deg, transparent 40deg);
-      filter: blur(50px);
-      transform-origin: 80% 20%;
-      animation: spot4Lantern 22s infinite alternate-reverse ease-in-out, fadeInSpots 1.5s ease forwards;
-    }
-
-    @keyframes fadeInSpots { to { opacity: 0.7; } }
-    @keyframes spot1Lantern { 0% { transform: rotate(0deg); } 100% { transform: rotate(35deg); } }
-    @keyframes spot2Lantern { 0% { transform: rotate(0deg); } 100% { transform: rotate(-35deg); } }
-    @keyframes spot3Lantern { 0% { transform: rotate(0deg); } 100% { transform: rotate(-25deg); } }
-    @keyframes spot4Lantern { 0% { transform: rotate(0deg); } 100% { transform: rotate(25deg); } }
-
-    #glass-overlay {
-      position: absolute;
-      inset: 0;
-      backdrop-filter: blur(3px);
-      -webkit-backdrop-filter: blur(3px);
-      background: rgba(0, 0, 0, 0.2);
-      z-index: 3;
-    }
-
-    /* --- LOGOS E TEXTOS --- */
-    .mesa-container {
+    /* Estilos mínimos para transições de posição e suporte de tela */
+    .logo-container {
       position: absolute;
       left: 50%;
-      top: 44%;
+      top: 50%;
       transform: translate(-50%, -50%);
-      z-index: 10;
-      text-align: center;
-      animation: logoUp 1.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
-      animation-delay: 1.5s;
+      transition: all 1.2s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+    .logo-container.shifted {
+      top: 60px;
+      transform: translate(-50%, 0);
     }
 
     .powered-container {
       position: absolute;
       left: 50%;
-      top: 56%;
+      top: 50%;
       transform: translate(-50%, -50%);
-      z-index: 10;
-      text-align: center;
-      animation: poweredDown 1.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
-      animation-delay: 1.5s;
+      transition: all 1.2s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+    .powered-container.shifted {
+      top: calc(100% - 60px);
+      transform: translate(-50%, 0);
     }
 
-    @keyframes logoUp { to { top: 60px; transform: translate(-50%, 0); } }
-    @keyframes poweredDown { to { top: calc(100% - 60px); transform: translate(-50%, 0); } }
-
-    .mesa-logo { width: 105px; filter: brightness(0) invert(1); opacity: 0.95; }
-    .powered-by { font-size: 0.65rem; opacity: 0.7; letter-spacing: 1px; font-weight: 300; margin-top: 5px; }
-
-    /* --- CONTEÚDO CENTRAL --- */
-    .center-content {
-      position: relative;
-      z-index: 10;
-      text-align: center;
-      opacity: 0;
-      animation: fadeInContent 1s ease forwards;
-      animation-delay: 2.3s;
+    #offline-toast.show { 
+      top: env(safe-area-inset-top, 20px); 
     }
-
-    @keyframes fadeInContent { to { opacity: 1; } }
-
-    .welcome-text { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 4px; opacity: 0.7; font-weight: 300; }
-
-    .brand-acoes { 
-      font-family: 'Dancing Script', cursive;
-      font-size: clamp(6.5rem, 22vw, 11rem); 
-      margin: -10px 0; 
-      line-height: 1.1; 
-      background: linear-gradient(to bottom, #ffffff, #f0f0f0); 
-      -webkit-background-clip: text; 
-      -webkit-text-fill-color: transparent; 
-      filter: drop-shadow(0px 10px 20px rgba(0, 0, 0, 0.4)); 
-    }
-
-    .brand-educativas { 
-      font-family: 'Montserrat', sans-serif; 
-      font-size: clamp(1.2rem, 5.5vw, 1.8rem); 
-      letter-spacing: clamp(8px, 2vw, 14px); 
-      text-transform: uppercase; 
-      font-weight: 700; 
-      color: rgba(255, 255, 255, 0.95); 
-    }
-
-    /* --- CONTAINER E ESPAÇAMENTO --- */
-.start-container { 
-  margin-top: 45px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* --- PÍLULA DE STATUS (Antigo Botão) --- */
-#status-manutencao {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px; /* Espaço entre a bolinha pulsante e o texto */
-  position: relative;
-  background: rgba(255, 255, 255, 0.07);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  color: #ffffff;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  padding: 16px 42px;
-  border: 1px solid rgba(0, 229, 255, 0.3); /* Borda levemente ciano/tech */
-  border-radius: 40px;
-  cursor: default;
-  user-select: none;
-  box-shadow: 0 0 25px rgba(0, 229, 255, 0.1); /* Brilho futurista sutil no fundo */
-}
-
-/* --- LUZ LED PULSANTE (GERA O EFEITO DE ATIVIDADE) --- */
-.pulse-dot {
-  width: 10px;
-  height: 10px;
-  background-color: #00e5ff; /* Cor ciano tech (pode trocar por verde #00ff88) */
-  border-radius: 50%;
-  box-shadow: 0 0 8px #00e5ff;
-  animation: pulso-intenso 1.5s infinite alternate ease-in-out;
-}
-
-/* Animação que faz a bolinha respirar e brilhar */
-@keyframes pulso-intenso {
-  0% { 
-    transform: scale(0.8); 
-    opacity: 0.4; 
-    box-shadow: 0 0 4px #00e5ff; 
-  }
-  100% { 
-    transform: scale(1.3); 
-    opacity: 1; 
-    box-shadow: 0 0 15px #00e5ff, 0 0 25px #00e5ff; 
-  }
-}
-
-/* --- TEXTO DE HYPE (MENSAGEM ABAIXO) --- */
-.msg-manutencao {
-  margin-top: 22px;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 0.95rem;
-  font-weight: 400;
-  color: #e0e0e0;
-  letter-spacing: 0.5px;
-  line-height: 1.6;
-  text-align: center;
-  max-width: 380px;
-  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-}
-
-/* Destaque na última frase para gerar impacto */
-.msg-manutencao strong {
-  color: #00e5ff; /* Puxa a mesma cor do LED */
-  font-weight: 600;
-  display: block;
-  margin-top: 4px;
-}
-
-    /* --- ESTILO DO BOTÃO DESATIVADO (MANUTENÇÃO) --- */
-#btn-start:disabled {
-  background: rgba(255, 255, 255, 0.05); /* Deixa o vidro mais opaco/escuro */
-  color: rgba(255, 255, 255, 0.4); /* Texto meio apagado */
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: none; /* Remove o brilho/sombra de profundidade */
-  cursor: not-allowed; /* Ícone de "proibido" no mouse */
-  transform: none; /* Garante que não tenha efeito de movimento se houver hover no seu CSS */
-}
-
-/* --- MENSAGEM DE AVISTO ABAIXO DO BOTÃO --- */
-.msg-manutencao {
-  margin-top: 20px;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #ffd166; /* Um tom de amarelo/âmbar suave para indicar alerta em fundos escuros */
-  letter-spacing: 0.5px;
-  line-height: 1.4;
-  text-align: center;
-  max-width: 320px;
-  margin-left: auto;
-  margin-right: auto;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-    #btn-start::after {
-      content: '';
-      position: absolute;
-      top: -50%; left: -100%;
-      width: 50%; height: 200%;
-      background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
-      transform: rotate(30deg);
-      animation: shine 4s infinite;
-    }
-
-    @keyframes shine { 0% { left: -100%; } 20% { left: 150%; } 100% { left: 150%; } }
-    #btn-start:active { transform: scale(0.96); }
-    #btn-start:disabled { opacity: 0.6; cursor: wait; }
 
     @media (max-height: 700px) {
-      .brand-acoes { font-size: clamp(4rem, 15vw, 6rem); }
-      @keyframes logoUp { to { top: 30px; transform: translate(-50%, 0) scale(0.8); } }
-      @keyframes poweredDown { to { top: calc(100% - 40px); transform: translate(-50%, 0) scale(0.9); } }
+      .logo-container.shifted {
+        top: 30px;
+        transform: translate(-50%, 0) scale(0.8);
+      }
+      .powered-container.shifted {
+        top: calc(100% - 40px);
+        transform: translate(-50%, 0) scale(0.9);
+      }
     }
   </style>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 h-screen w-screen overflow-hidden font-sans m-0 p-0 select-none">
 
-  <div id="offline-toast"><span>&#9888;</span> Sem conexão</div>
-
-  <div id="splash">
-    <div class="spotlight spot-1"></div>
-    <div class="spotlight spot-2"></div>
-    <div class="spotlight spot-3"></div>
-    <div class="spotlight spot-4"></div> 
-    
-    <div id="glass-overlay"></div>
-
-    <div class="mesa-container">
-      <img src="MesaLogo.png" alt="Logo" class="mesa-logo">
-    </div>
-
-    <div class="powered-container">
-      <div class="powered-by">Powered with <span style="color: #FFFFFF;">&#10084;</span> by <strong>Mesaque</strong></div>
-    </div>
-
-    <div class="center-content">
-      <div class="welcome-text">Bem-vindo a</div>
-      <h1 class="brand-acoes">Ações</h1>
-      <h2 class="brand-educativas">Educativas</h2>
-
-      <div class="start-container">
-        <!-- A pílula agora tem um ícone animado de "processando" -->
-        <div id="status-manutencao">
-          <span class="pulse-dot"></span>
-          Atualizações em andamento!
-        </div>
-  
-        <p class="msg-manutencao">
-          Otimizando o sistema e preparando novas funcionalidades exclusivas. 
-          by Zake!
-        </p>
-      </div>
-    </div>
+  <!-- Toast Offline Redesenhado com as novas cores -->
+  <div id="offline-toast" class="fixed -top-24 left-1/2 -translate-x-1/2 bg-red-50 border border-red-200 text-red-800 px-6 py-3 rounded-full z-[10000] font-semibold text-sm flex items-center gap-2 shadow-md transition-all duration-500 ease-out">
+    <span>&#9888;</span> Sem conexão
   </div>
 
+  <!-- Tela Splash principal ajustada para Slate-50 -->
+  <div id="splash" class="fixed inset-0 bg-slate-50 z-[9000] flex flex-col justify-center items-center overflow-hidden transition-all duration-700 ease-out">
+    
+    <!-- Container do Logo (Inicia no centro e sobe) -->
+    <div id="logo-container" class="logo-container z-20">
+      <img src="LogoColor.png" alt="Logo" class="w-[105px]">
+    </div>
+
+    <!-- Container do Rodapé (Inicia no centro e desce) -->
+    <div id="powered-container" class="powered-container z-20">
+      <div class="font-sans text-[0.65rem] text-slate-700 tracking-[1px] font-light mt-[5px]">
+        Powered with <span class="text-rose-500">&#10084;</span> by <strong class="font-semibold text-slate-600">Mesaque</strong>
+      </div>
+    </div>
+
+    <!-- Conteúdo Central: Título e a Aura "Gemini" -->
+    <div id="center-content" class="relative z-10 text-center opacity-0 scale-100 transition-all duration-[700ms] ease-[cubic-bezier(0.25,1,0.5,1)]">
+      
+      <!-- Aura Estilo Gemini (Oval, tons pastéis de Slate, surge de fundo) -->
+      <div id="aura-el" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[15vh] max-w-md rounded-[100%] bg-gradient-to-r from-slate-200/40 via-slate-300/30 to-slate-200/40 blur-[60px] pointer-events-none opacity-0 scale-75 transition-all duration-[1200ms] ease-out"></div>
+      
+      <!-- Título em cores claras e com as novas fontes -->
+      <h1 class="font-dancing text-teal-600 text-[6.5rem] md:text-[11rem] leading-[1.1] drop-shadow-sm pointer-events-none">Ações</h1>
+      <h2 class="font-sans text-slate-600 tracking-[14px] text-[1.2rem] md:text-[1.8rem] font-bold uppercase mt-[-10px] pointer-events-none">Educativas</h2>
+    </div>
+
+  </div>
+
+  <!-- Iframe do Google Apps Script integrado -->
   <iframe 
-     id="app-frame" 
-     allow="geolocation; microphone; camera; clipboard-write; autoplay; fullscreen"
-     sandbox="allow-downloads allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-top-navigation allow-top-navigation-by-user-activation allow-modals allow-storage-access-by-user-activation"
-></iframe>
+    id="app-frame" 
+    allow="geolocation; microphone; camera; clipboard-write; autoplay; fullscreen"
+    sandbox="allow-downloads allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-top-navigation allow-top-navigation-by-user-activation allow-modals allow-storage-access-by-user-activation"
+    class="w-full h-full border-none block absolute inset-0 opacity-0 invisible transition-opacity duration-700 ease-out bg-slate-50"
+  ></iframe>
 
   <script>
     const splash = document.getElementById('splash');
     const iframe = document.getElementById('app-frame');
-    const btnStart = document.getElementById('btn-start');
     const offlineToast = document.getElementById('offline-toast');
+    const logoContainer = document.getElementById('logo-container');
+    const poweredContainer = document.getElementById('powered-container');
+    const centerContent = document.getElementById('center-content');
+    const auraEl = document.getElementById('aura-el');
 
-    const gasUrl = "https://script.google.com/macros/s/AKfycby70vtn4tSVskpCu-JtuZMer6wtgzGeoutc-3xSq_FRspmY72Xomm47pA-E06-SGBInOw/exec";
+    // Novo endpoint do Google Apps Script
+    const gasUrl = "https://script.google.com/macros/s/AKfycbwHCYVHcCjZs1A0PWOmyfOeWgbwtahoz00VzX_G1oJ0XxX4Ht72Non74kisPovUYMa2/exec";
 
     let isGasLoaded = false;
-    let hasUserClicked = false;
+    let minTimeElapsed = false;
 
     window.addEventListener('offline', () => offlineToast.classList.add('show'));
     window.addEventListener('online', () => offlineToast.classList.remove('show'));
@@ -404,50 +140,69 @@
     // Inicia carregamento do iframe imediatamente
     iframe.src = gasUrl;
 
-    // Timeout de segurança
-    const watchdogTimer = setTimeout(() => {
-      if (!isGasLoaded) {
-        btnStart.innerText = "Tentar carregar novamente";
-        btnStart.disabled = false;
-      }
-    }, 15000);
+    // --- TIMELINE DE ANIMAÇÕES DO SPLASH ---
 
+    // 1. Após 500ms, o Logo sobe e o Powered desce
+    setTimeout(() => {
+      logoContainer.classList.add('shifted');
+      poweredContainer.classList.add('shifted');
+    }, 500);
+
+    // 2. Após 1400ms (quando as posições finais estão quase prontas), surge o título
+    setTimeout(() => {
+      centerContent.classList.remove('opacity-0');
+      centerContent.classList.add('opacity-100');
+    }, 1400);
+
+    // 3. Após 1800ms, a Aura Gemini cresce suavemente por trás
+    setTimeout(() => {
+      auraEl.classList.remove('opacity-0', 'scale-75');
+      auraEl.classList.add('opacity-100', 'scale-[1.25]');
+    }, 1800);
+
+    // 4. Tempo mínimo de exposição (3.5 segundos) para manter as transições fluidas
+    setTimeout(() => {
+      minTimeElapsed = true;
+      if (isGasLoaded) {
+        revealApp();
+      }
+    }, 3500);
+
+    // Gatilho executado quando o iframe terminar o carregamento
     iframe.onload = () => {
       isGasLoaded = true;
-      clearTimeout(watchdogTimer);
-      // Se o usuário já clicou enquanto carregava, revela agora
-      if (hasUserClicked) {
+      if (minTimeElapsed) {
         revealApp();
-      } else {
-        btnStart.innerText = "Iniciar";
-        btnStart.disabled = false;
       }
     };
 
-    btnStart.addEventListener('click', () => {
-      if (!navigator.onLine) { alert("Sem conexão."); return; }
-      
-      hasUserClicked = true;
-      
-      if (isGasLoaded) {
-        revealApp();
-      } else {
-        btnStart.innerText = "Conectando...";
-        btnStart.disabled = true;
-      }
-    });
-
+    // Função de saída e revelação limpa do sistema
     function revealApp() {
-      // Pequeno delay para garantir que o iframe rendeu antes de sumir o splash
+      // 1. Logo e Powered desaparecem de forma suave
+      logoContainer.classList.add('opacity-0');
+      poweredContainer.classList.add('opacity-0');
+
+      // 2. O iframe começa a ser revelado em segundo plano
+      iframe.classList.remove('invisible');
+      iframe.classList.add('opacity-100');
+
+      // 3. O título e a aura realizam a "sucção" em direção ao ponto central
+      centerContent.classList.add('scale-0', 'opacity-0', 'pointer-events-none');
+
+      // 4. Desliga o splash por completo da árvore DOM após as transições
       setTimeout(() => {
-        iframe.classList.add('loaded');
-        splash.classList.add('hidden');
-      }, 300);
+        splash.style.display = 'none';
+      }, 800);
     }
 
+    // Registro do Service Worker com checagem de atualizações forçada
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').catch(() => {});
+        navigator.serviceWorker.register('./sw.js')
+          .then((reg) => {
+            reg.update(); // Força o SW a sincronizar os novos ícones imediatamente
+          })
+          .catch(() => {});
       });
     }
   </script>
