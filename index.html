@@ -98,10 +98,9 @@
     <!-- Conteúdo Central: Título com suporte a animações separadas -->
     <div id="center-content" class="relative z-10 text-center scale-100 transition-all duration-[700ms] ease-[cubic-bezier(0.25,1,0.5,1)]">
       <!-- "Ações" nasce com transição individual -->
-      <h1 id="title-acoes" class="font-dancing text-teal-600 text-[6.5rem] md:text-[11rem] leading-[1.1] drop-shadow-[0_4px_12px_rgba(13,148,136,0.25)] pointer-events-none opacity-0 transition-opacity duration-500 ease-out">Ações</h1>
-      <!-- "Educativas" nasce com transição individual -->
-      <h2 id="title-educativas" class="font-sans text-slate-600 tracking-[14px] text-[1.2rem] md:text-[1.8rem] font-bold uppercase mt-[-10px] pointer-events-none opacity-0 transition-opacity duration-500 ease-out">Educativas</h2>
-    </div>
+      <h1 id="title-acoes" class="font-dancing text-teal-600 text-[6.5rem] md:text-[11rem] leading-[1.1] drop-shadow-[0_4px_12px_rgba(13,148,136,0.25)] pointer-events-none opacity-0 translate-y-4 transform transition-all duration-700 ease-out">Ações</h1>
+      <h2 id="title-educativas" class="font-sans text-slate-600 tracking-[14px] text-[1.2rem] md:text-[1.8rem] font-bold uppercase mt-[-10px] pointer-events-none opacity-0 translate-y-2 transform transition-all duration-700 ease-out">Educativas</h2>
+      </div>
 
     <!-- Aura Teal-600 Física (Nasce em scale-0 e expande elasticamente) -->
     <div id="aura-el" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] h-[18vh] max-w-lg rounded-[100%] bg-teal-600 blur-[50px] md:blur-[70px] pointer-events-none opacity-40 scale-0 transition-transform duration-[1200ms] ease-[cubic-bezier(0.25,1,0.5,1)] z-0"></div>
@@ -141,31 +140,31 @@
 
     // --- TIMELINE DE ANIMAÇÕES DO SPLASH ---
 
-    // 1. Após 2.7s (logo quase estabilizado), o "Ações" surge de forma rápida
+    // 1. Após 2.4s, o "Ações" surge subindo suavemente
     setTimeout(() => {
-      titleAcoes.classList.remove('opacity-0');
-      titleAcoes.classList.add('opacity-100');
-    }, 2500);
+      titleAcoes.classList.remove('opacity-0', 'translate-y-4');
+      titleAcoes.classList.add('opacity-100', 'translate-y-0');
+    }, 2400);
 
-    // 2. Simultaneamente aos 2.7s, a Aura Teal inicia seu crescimento elástico partindo do zero
+    // 2. Após 2.7s, o "Educativas" faz sua entrada suave subindo também
+    setTimeout(() => {
+      titleEducativas.classList.remove('opacity-0', 'translate-y-2');
+      titleEducativas.classList.add('opacity-100', 'translate-y-0');
+    }, 2700);
+
+    // 3. Após 3.0s, a Aura Teal inicia seu crescimento elástico partindo do zero absoluto
     setTimeout(() => {
       auraEl.classList.remove('scale-0');
       auraEl.classList.add('scale-[1.35]');
-    }, 2700);
-
-    // 3. Após mais 0.5s (no tempo total de 3.2s), o "Educativas" faz sua entrada suave
-    setTimeout(() => {
-      titleEducativas.classList.remove('opacity-0');
-      titleEducativas.classList.add('opacity-100');
     }, 3000);
 
-    // 4. Tempo mínimo de exposição (4.2 segundos) para que toda a narrativa visual se conclua
+    // 4. Tempo mínimo de exposição (4.0 segundos) solicitado para a revelação do GAS
     setTimeout(() => {
       minTimeElapsed = true;
       if (isGasLoaded) {
         revealApp();
       }
-    }, 4200);
+    }, 4000);
 
     // Gatilho executado quando o iframe terminar o carregamento
     iframe.onload = () => {
