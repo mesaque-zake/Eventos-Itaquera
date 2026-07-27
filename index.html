@@ -13,8 +13,8 @@
   <link rel="manifest" href="./manifest.json">
   <link rel="apple-touch-icon" href="./Icon180.png">
 
-  <!-- Metadados de Cor e Suporte iOS atualizados para Slate-50 -->
-  <meta name="theme-color" content="#f8fafc">
+  <!-- Metadados de Cor e Suporte iOS atualizados para Slate-100 -->
+  <meta name="theme-color" content="#f1f5f9">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Ações Ed">
@@ -35,64 +35,61 @@
   </script>
 
   <style>
-    /* Estilos mínimos para transições de posição e suporte de tela */
-    .logo-container {
+    /* PRESERVAÇÃO INTEGRAL DA ANIMAÇÃO ORIGINAL DO LOGO E POWERED */
+    .mesa-container {
       position: absolute;
       left: 50%;
-      top: 50%;
+      top: 44%;
       transform: translate(-50%, -50%);
-      transition: all 1.2s cubic-bezier(0.65, 0, 0.35, 1);
-    }
-    .logo-container.shifted {
-      top: 60px;
-      transform: translate(-50%, 0);
+      z-index: 10;
+      text-align: center;
+      animation: logoUp 1.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+      animation-delay: 1.5s;
+      transition: opacity 0.5s ease; /* Transição para sumir suavemente no final */
     }
 
     .powered-container {
       position: absolute;
       left: 50%;
-      top: 50%;
+      top: 56%;
       transform: translate(-50%, -50%);
-      transition: all 1.2s cubic-bezier(0.65, 0, 0.35, 1);
+      z-index: 10;
+      text-align: center;
+      animation: poweredDown 1.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+      animation-delay: 1.5s;
+      transition: opacity 0.5s ease; /* Transição para sumir suavemente no final */
     }
-    .powered-container.shifted {
-      top: calc(100% - 60px);
-      transform: translate(-50%, 0);
-    }
+
+    @keyframes logoUp { to { top: 60px; transform: translate(-50%, 0); } }
+    @keyframes poweredDown { to { top: calc(100% - 60px); transform: translate(-50%, 0); } }
 
     #offline-toast.show { 
       top: env(safe-area-inset-top, 20px); 
     }
 
     @media (max-height: 700px) {
-      .logo-container.shifted {
-        top: 30px;
-        transform: translate(-50%, 0) scale(0.8);
-      }
-      .powered-container.shifted {
-        top: calc(100% - 40px);
-        transform: translate(-50%, 0) scale(0.9);
-      }
+      @keyframes logoUp { to { top: 30px; transform: translate(-50%, 0) scale(0.8); } }
+      @keyframes poweredDown { to { top: calc(100% - 40px); transform: translate(-50%, 0) scale(0.9); } }
     }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-800 h-screen w-screen overflow-hidden font-sans m-0 p-0 select-none">
+<body class="bg-slate-100 text-slate-800 h-screen w-screen overflow-hidden font-sans m-0 p-0 select-none">
 
-  <!-- Toast Offline Redesenhado com as novas cores -->
+  <!-- Toast Offline Redesenhado -->
   <div id="offline-toast" class="fixed -top-24 left-1/2 -translate-x-1/2 bg-red-50 border border-red-200 text-red-800 px-6 py-3 rounded-full z-[10000] font-semibold text-sm flex items-center gap-2 shadow-md transition-all duration-500 ease-out">
     <span>&#9888;</span> Sem conexão
   </div>
 
-  <!-- Tela Splash principal ajustada para Slate-50 -->
-  <div id="splash" class="fixed inset-0 bg-slate-50 z-[9000] flex flex-col justify-center items-center overflow-hidden transition-all duration-700 ease-out">
+  <!-- Tela Splash principal ajustada para Slate-100 -->
+  <div id="splash" class="fixed inset-0 bg-slate-100 z-[9000] flex flex-col justify-center items-center overflow-hidden transition-all duration-700 ease-out">
     
-    <!-- Container do Logo (Inicia no centro e sobe) -->
-    <div id="logo-container" class="logo-container z-20">
+    <!-- Container do Logo (Código original preservado) -->
+    <div class="mesa-container">
       <img src="LogoColor.png" alt="Logo" class="w-[105px]">
     </div>
 
-    <!-- Container do Rodapé (Inicia no centro e desce) -->
-    <div id="powered-container" class="powered-container z-20">
+    <!-- Container do Rodapé (Código original preservado) -->
+    <div class="powered-container">
       <div class="font-sans text-[0.65rem] text-slate-700 tracking-[1px] font-light mt-[5px]">
         Powered with <span class="text-rose-500">&#10084;</span> by <strong class="font-semibold text-slate-600">Mesaque</strong>
       </div>
@@ -101,11 +98,11 @@
     <!-- Conteúdo Central: Título e a Aura "Gemini" -->
     <div id="center-content" class="relative z-10 text-center opacity-0 scale-100 transition-all duration-[700ms] ease-[cubic-bezier(0.25,1,0.5,1)]">
       
-      <!-- Aura Estilo Gemini (Oval, tons pastéis de Slate, surge de fundo) -->
-      <div id="aura-el" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[15vh] max-w-md rounded-[100%] bg-gradient-to-r from-slate-200/40 via-slate-300/30 to-slate-200/40 blur-[60px] pointer-events-none opacity-0 scale-75 transition-all duration-[1200ms] ease-out"></div>
+      <!-- Aura Teal-600 (Oval, inicia fraca e ganha intensidade com o tempo) -->
+      <div id="aura-el" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] h-[18vh] max-w-lg rounded-[100%] bg-teal-600/5 blur-[50px] md:blur-[70px] pointer-events-none opacity-0 scale-75 transition-all duration-[1500ms] ease-out"></div>
       
-      <!-- Título em cores claras e com as novas fontes -->
-      <h1 class="font-dancing text-teal-600 text-[6.5rem] md:text-[11rem] leading-[1.1] drop-shadow-sm pointer-events-none">Ações</h1>
+      <!-- Título com sombreamento leve no "Ações" -->
+      <h1 class="font-dancing text-teal-600 text-[6.5rem] md:text-[11rem] leading-[1.1] drop-shadow-[0_4px_12px_rgba(13,148,136,0.25)] pointer-events-none">Ações</h1>
       <h2 class="font-sans text-slate-600 tracking-[14px] text-[1.2rem] md:text-[1.8rem] font-bold uppercase mt-[-10px] pointer-events-none">Educativas</h2>
     </div>
 
@@ -116,15 +113,15 @@
     id="app-frame" 
     allow="geolocation; microphone; camera; clipboard-write; autoplay; fullscreen"
     sandbox="allow-downloads allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-top-navigation allow-top-navigation-by-user-activation allow-modals allow-storage-access-by-user-activation"
-    class="w-full h-full border-none block absolute inset-0 opacity-0 invisible transition-opacity duration-700 ease-out bg-slate-50"
+    class="w-full h-full border-none block absolute inset-0 opacity-0 invisible transition-opacity duration-700 ease-out bg-slate-100"
   ></iframe>
 
   <script>
     const splash = document.getElementById('splash');
     const iframe = document.getElementById('app-frame');
     const offlineToast = document.getElementById('offline-toast');
-    const logoContainer = document.getElementById('logo-container');
-    const poweredContainer = document.getElementById('powered-container');
+    const logoContainer = document.querySelector('.mesa-container');
+    const poweredContainer = document.querySelector('.powered-container');
     const centerContent = document.getElementById('center-content');
     const auraEl = document.getElementById('aura-el');
 
@@ -142,25 +139,19 @@
 
     // --- TIMELINE DE ANIMAÇÕES DO SPLASH ---
 
-    // 1. Após 500ms, o Logo sobe e o Powered desce
-    setTimeout(() => {
-      logoContainer.classList.add('shifted');
-      poweredContainer.classList.add('shifted');
-    }, 500);
-
-    // 2. Após 1400ms (quando as posições finais estão quase prontas), surge o título
+    // 1. Após 1.5s (conforme o delay do CSS original), o título começa a surgir
     setTimeout(() => {
       centerContent.classList.remove('opacity-0');
       centerContent.classList.add('opacity-100');
-    }, 1400);
+    }, 1500);
 
-    // 3. Após 1800ms, a Aura Gemini cresce suavemente por trás
+    // 2. Após 1.8s, a Aura Teal cresce e ganha forte intensidade
     setTimeout(() => {
-      auraEl.classList.remove('opacity-0', 'scale-75');
-      auraEl.classList.add('opacity-100', 'scale-[1.25]');
+      auraEl.classList.remove('opacity-0', 'scale-75', 'bg-teal-600/5');
+      auraEl.classList.add('opacity-100', 'scale-[1.25]', 'bg-teal-600/25');
     }, 1800);
 
-    // 4. Tempo mínimo de exposição (3.5 segundos) para manter as transições fluidas
+    // 3. Tempo mínimo de exposição (3.5 segundos) para manter as transições fluidas
     setTimeout(() => {
       minTimeElapsed = true;
       if (isGasLoaded) {
