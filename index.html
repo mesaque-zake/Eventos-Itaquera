@@ -67,23 +67,6 @@
       top: env(safe-area-inset-top, 20px); 
     }
 
-    /* ANIMAÇÃO DE PULSAÇÃO DA AURA (Respiração orgânica estilo Gemini) */
-    @keyframes auraOrganicPulse {
-      0%, 100% {
-        transform: translate(-50%, -50%) scale(1.25);
-        opacity: 0.35;
-        filter: blur(60px);
-      }
-      50% {
-        transform: translate(-50%, -50%) scale(1.4);
-        opacity: 0.5;
-        filter: blur(80px);
-      }
-    }
-    .aura-pulse-active {
-      animation: auraOrganicPulse 3.5s infinite ease-in-out;
-    }
-
     @media (max-height: 700px) {
       @keyframes logoUp { to { top: 30px; transform: translate(-50%, 0) scale(0.8); } }
       @keyframes poweredDown { to { top: calc(100% - 40px); transform: translate(-50%, 0) scale(0.9); } }
@@ -112,15 +95,16 @@
       </div>
     </div>
 
-    <!-- Conteúdo Central: Título -->
-    <div id="center-content" class="relative z-10 text-center opacity-0 scale-100 transition-all duration-[500ms] ease-[cubic-bezier(0.25,1,0.5,1)]">
-      <!-- Título com sombreamento leve no "Ações" -->
-      <h1 class="font-dancing text-teal-600 text-[6.5rem] md:text-[11rem] leading-[1.1] drop-shadow-[0_4px_12px_rgba(13,148,136,0.25)] pointer-events-none">Ações</h1>
-      <h2 class="font-sans text-slate-600 tracking-[14px] text-[1.2rem] md:text-[1.8rem] font-bold uppercase mt-[-10px] pointer-events-none">Educativas</h2>
+    <!-- Conteúdo Central: Título com suporte a animações separadas -->
+    <div id="center-content" class="relative z-10 text-center scale-100 transition-all duration-[700ms] ease-[cubic-bezier(0.25,1,0.5,1)]">
+      <!-- "Ações" nasce com transição individual -->
+      <h1 id="title-acoes" class="font-dancing text-teal-600 text-[6.5rem] md:text-[11rem] leading-[1.1] drop-shadow-[0_4px_12px_rgba(13,148,136,0.25)] pointer-events-none opacity-0 transition-opacity duration-500 ease-out">Ações</h1>
+      <!-- "Educativas" nasce com transição individual -->
+      <h2 id="title-educativas" class="font-sans text-slate-600 tracking-[14px] text-[1.2rem] md:text-[1.8rem] font-bold uppercase mt-[-10px] pointer-events-none opacity-0 transition-opacity duration-500 ease-out">Educativas</h2>
     </div>
 
-    <!-- Aura Teal-600 Independente (Z-0, posicionada atrás do título) -->
-    <div id="aura-el" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] h-[18vh] max-w-lg rounded-[100%] bg-teal-600 blur-[50px] md:blur-[70px] pointer-events-none opacity-0 scale-50 transition-all duration-[1200ms] ease-out z-0"></div>
+    <!-- Aura Teal-600 Física (Nasce em scale-0 e expande elasticamente) -->
+    <div id="aura-el" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] h-[18vh] max-w-lg rounded-[100%] bg-teal-600 blur-[50px] md:blur-[70px] pointer-events-none opacity-40 scale-0 transition-transform duration-[1200ms] ease-[cubic-bezier(0.25,1,0.5,1)] z-0"></div>
 
   </div>
 
@@ -139,6 +123,8 @@
     const logoContainer = document.querySelector('.mesa-container');
     const poweredContainer = document.querySelector('.powered-container');
     const centerContent = document.getElementById('center-content');
+    const titleAcoes = document.getElementById('title-acoes');
+    const titleEducativas = document.getElementById('title-educativas');
     const auraEl = document.getElementById('aura-el');
 
     // Novo endpoint do Google Apps Script
@@ -155,25 +141,31 @@
 
     // --- TIMELINE DE ANIMAÇÕES DO SPLASH ---
 
-    // 1. Após 2.7s (conforme o logo se aproxima do lugar), o título surge de forma rápida
+    // 1. Após 2.7s (logo quase estabilizado), o "Ações" surge de forma rápida
     setTimeout(() => {
-      centerContent.classList.remove('opacity-0');
-      centerContent.classList.add('opacity-100');
+      titleAcoes.classList.remove('opacity-0');
+      titleAcoes.classList.add('opacity-100');
+    }, 2500);
+
+    // 2. Simultaneamente aos 2.7s, a Aura Teal inicia seu crescimento elástico partindo do zero
+    setTimeout(() => {
+      auraEl.classList.remove('scale-0');
+      auraEl.classList.add('scale-[1.35]');
     }, 2700);
 
-    // 2. Após 2.9s, a Aura Teal cresce, ganha opacidade e ativa a pulsação orgânica
+    // 3. Após mais 0.5s (no tempo total de 3.2s), o "Educativas" faz sua entrada suave
     setTimeout(() => {
-      auraEl.classList.remove('opacity-0', 'scale-50');
-      auraEl.classList.add('opacity-40', 'scale-[1.35]', 'aura-pulse-active');
-    }, 2900);
+      titleEducativas.classList.remove('opacity-0');
+      titleEducativas.classList.add('opacity-100');
+    }, 3000);
 
-    // 3. Tempo mínimo de exposição (3.8 segundos) para manter as transições fluidas dentro do limite de 4s
+    // 4. Tempo mínimo de exposição (4.2 segundos) para que toda a narrativa visual se conclua
     setTimeout(() => {
       minTimeElapsed = true;
       if (isGasLoaded) {
         revealApp();
       }
-    }, 3800);
+    }, 4200);
 
     // Gatilho executado quando o iframe terminar o carregamento
     iframe.onload = () => {
@@ -189,20 +181,17 @@
       logoContainer.classList.add('opacity-0');
       poweredContainer.classList.add('opacity-0');
 
-      // 2. Desliga a pulsação contínua da aura para permitir o encolhimento liso
-      auraEl.style.animation = 'none';
+      // 2. A Aura realiza a implosão de volta ao ponto zero em alta velocidade (300ms)
+      auraEl.style.transition = 'transform 300ms cubic-bezier(0.25, 1, 0.5, 1)';
+      auraEl.classList.remove('scale-[1.35]');
+      auraEl.classList.add('scale-0');
 
-      // 3. A Aura encolhe primeiro e de forma muito rápida (300ms)
-      auraEl.style.transition = 'all 300ms cubic-bezier(0.25, 1, 0.5, 1)';
-      auraEl.classList.remove('scale-[1.35]', 'opacity-40');
-      auraEl.classList.add('scale-0', 'opacity-0');
-
-      // 4. O título segue o encolhimento de forma mais gradual (700ms) em sincronia com o iframe
+      // 3. O título completo segue o encolhimento de forma mais gradual (700ms) em sincronia com o iframe
       centerContent.classList.add('scale-0', 'opacity-0', 'pointer-events-none');
       iframe.classList.remove('invisible');
       iframe.classList.add('opacity-100');
 
-      // 5. Desliga o splash por completo da árvore DOM após as transições de 700ms
+      // 4. Desliga o splash por completo da árvore DOM após as transições de 700ms
       setTimeout(() => {
         splash.style.display = 'none';
       }, 700);
