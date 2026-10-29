@@ -3,23 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Ações Educativas - Itaquera</title>
+  <title>Ações Educativas - Sesc Mesa Brasil</title>
 
-  <!-- Google Fonts: Plus Jakarta Sans e Dancing Script -->
+  <!-- Fontes -->
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Mapeamento de Novos Ícones e Manifesto -->
-  <link rel="icon" type="image/png" href="./Favicon.png">
+  <!-- Ícones e manifesto (pasta Icones) -->
+  <link rel="icon" type="image/png" href="./Icones/Favicon.png">
   <link rel="manifest" href="./manifest.json">
-  <link rel="apple-touch-icon" href="./Icon180.png">
+  <link rel="apple-touch-icon" href="./Icones/Icon180.png">
 
-  <!-- Metadados de Cor e Suporte iOS atualizados para Slate-100 -->
-  <meta name="theme-color" content="#f1f5f9">
+  <!-- Compartilhamento (WhatsApp, Teams etc.). Fica fixo no HTML: em dezembro, troque og:title e og:description à mão. Ao trocar a imagem, mude ?v=1 para ?v=2 -->
+  <meta name="description" content="Gestão das Ações Educativas do Sesc Mesa Brasil - Itaquera.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Sesc Mesa Brasil - Itaquera">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Ações Educativas - Sesc Mesa Brasil">
+  <meta property="og:description" content="Acesse agora o app das Ações Educativas do Sesc Mesa Brasil - Itaquera, direto no seu celular.">
+  <meta property="og:image" content="https://raw.githubusercontent.com/mesaque-zake/Eventos-Itaquera/refs/heads/main/Icones/Share.png?v=1">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://raw.githubusercontent.com/mesaque-zake/Eventos-Itaquera/refs/heads/main/Icones/Share.png?v=1">
+
+  <!-- Pré-carregamento das imagens da abertura -->
+  <link rel="preload" as="image" href="Mesa/A.png">
+  <link rel="preload" as="image" href="Mesa/B.png">
+  <link rel="preload" as="image" href="Mesa/C.png">
+  <link rel="preload" as="image" href="Mesa/D.png">
+  <link rel="preload" as="image" href="Mesa/E.png">
+  <link rel="preload" as="image" href="Mesa/F.png">
+
+  <!-- Cor da barra: começa azul-noite e o JS troca para Slate-100 na revelação -->
+  <meta id="meta-theme" name="theme-color" content="#163984">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Ações Ed">
 
-  <!-- Importação do Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -35,174 +53,1056 @@
   </script>
 
   <style>
-    /* PRESERVAÇÃO INTEGRAL DA ANIMAÇÃO ORIGINAL DO LOGO E POWERED */
-    .mesa-container {
+    @property --ang {
+      syntax: '<angle>';
+      inherits: false;
+      initial-value: 0deg;
+    }
+
+    /* AJUSTES RÁPIDOS da abertura */
+    :root {
+      --azul-noite: #163984;
+      --azul-peca: #9cc2ff;
+      --mw: min(68vw, 340px, 46vh);  /* tamanho do mosaico */
+      --centro-y: 41%;               /* altura do mosaico + título */
+      --botao-y: 77%;                /* altura do botão Iniciar (e da aura) */
+      --esc: 1;                      /* escala das luzes do fundo */
+      --laranja: 34px;               /* tamanho da laranja que escreve o título */
+    }
+
+    html { background: var(--azul-noite); }
+
+    /* SPLASH */
+    #splash {
+      position: fixed;
+      inset: 0;
+      z-index: 9000;
+      overflow: hidden;
+      background-color: var(--azul-noite);
+      transition: background-color 1000ms ease-in-out;
+    }
+    #splash.dia {
+      background-color: rgba(22, 57, 132, 0);
+      pointer-events: none;
+    }
+
+    #palco {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    #powered {
       position: absolute;
       left: 50%;
-      top: 44%;
-      transform: translate(-50%, -50%);
-      z-index: 10;
-      text-align: center;
-      animation: logoUp 1.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
-      animation-delay: 1.5s;
-      transition: opacity 0.5s ease;
+      bottom: calc(env(safe-area-inset-bottom, 0px) + 36px);
+      transform: translateX(-50%);
+      z-index: 30;
+      white-space: nowrap;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 300;
+      letter-spacing: 1px;
+      color: #cbd5e1;
+      animation: poweredEntra 900ms ease-out backwards;
+      transition: opacity 500ms ease;
     }
+    #powered strong { font-weight: 600; color: #f1f5f9; }
+    #powered .coracao { color: #fb7185; }
+    #splash.dia #powered { opacity: 0; }
+    @keyframes poweredEntra { from { opacity: 0; } to { opacity: 1; } }
 
-    .powered-container {
+    /* 16 LUZES DESFOCADAS AO FUNDO */
+    #fundo-fx {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      transition: opacity 600ms ease;
+    }
+    .fx {
+      position: absolute;
+      left: var(--l);
+      top: var(--t);
+      width: calc(var(--w) * var(--esc));
+      opacity: 0;
+      animation: flutua var(--dur) ease-in-out var(--del) infinite paused;
+      will-change: transform, opacity;
+    }
+    #fundo-fx.on .fx { animation-play-state: running; }
+    .fx img {
+      width: 100%;
+      display: block;
+      filter: brightness(0) invert(1) blur(var(--b));
+    }
+    @keyframes flutua {
+      0%   { opacity: 0;          transform: translate(0, 0) rotate(0deg); }
+      20%  { opacity: var(--op); }
+      75%  { opacity: var(--op); }
+      100% { opacity: 0;          transform: translate(calc(var(--dx) * 1.6), calc(var(--dy) * 1.6)) rotate(calc(var(--rot) * 1.6)); }
+    }
+    #splash.formando #fundo-fx { opacity: 0; }
+
+    /* MOSAICO 5x5 (grade de 20 sub-linhas: 1 linha = 4 sub-linhas) */
+    #mosaico {
       position: absolute;
       left: 50%;
-      top: 56%;
+      top: var(--centro-y);
       transform: translate(-50%, -50%);
-      z-index: 10;
+      width: var(--mw);
+      aspect-ratio: 1 / 1;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(20, 1fr);
+      z-index: 5;
+    }
+    #mosaico.impacto { animation: impacto 700ms ease-out; }
+
+    @keyframes impacto {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      40%      { transform: translate(-50%, -50%) scale(1.05); }
+    }
+
+    #mosaico img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .peca {
+      position: relative;
+      opacity: 0;
+      transform: translateY(var(--ty, 0px));
+      filter: drop-shadow(0 0 12px rgba(143, 184, 255, 0.8));
+      transition: filter 1000ms ease-in-out;
+      will-change: transform, opacity;
+    }
+    #mosaico.cor .peca {
+      filter: drop-shadow(0 8px 14px rgba(6, 20, 60, 0.5));
+    }
+
+    .peca img { transform: rotate(var(--rimg, 0deg)); }
+
+    /* Silhueta azul-clara que some quando a peça ganha cor */
+    .peca::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--azul-peca);
+      -webkit-mask: var(--img) center / contain no-repeat;
+      mask: var(--img) center / contain no-repeat;
+      transform: rotate(var(--rimg, 0deg));
+      opacity: 1;
+      transition: opacity 1000ms ease-in-out;
+      pointer-events: none;
+    }
+    #mosaico.cor .peca::after { opacity: 0; }
+
+    .m-feijao1, .m-feijao2, .m-feijao3, .m-feijao4 { --img: url("Mesa/E.png"); }
+    .m-arco    { --img: url("Mesa/F.png"); }
+    .m-coracao { --img: url("Mesa/D.png"); }
+    .m-folha1, .m-folha2 { --img: url("Mesa/B.png"); }
+    .m-laranja { --img: url("Mesa/A.png"); }
+    .m-sol     { --img: url("Mesa/C.png"); }
+
+    /* --sx/--sy/--sr/--sd = destino, giro e atraso na saída para os cantos */
+    .m-feijao1 { grid-column: 1 / 2; grid-row: 1 / 6;   --rimg:   0deg; --sx: -85vw; --sy: -60vh; --sr: -270deg; --sd:   0ms; }
+    .m-feijao2 { grid-column: 1 / 2; grid-row: 6 / 11;  --rimg:  90deg; --sx: -90vw; --sy: -50vh; --sr:  300deg; --sd:  80ms; }
+    .m-feijao3 { grid-column: 1 / 2; grid-row: 11 / 16; --rimg: 125deg; --sx: -90vw; --sy:  65vh; --sr: -300deg; --sd: 120ms; }
+    .m-feijao4 { grid-column: 1 / 2; grid-row: 16 / 21; --rimg:  55deg; --sx: -85vw; --sy:  75vh; --sr:  270deg; --sd: 160ms; }
+
+    .m-arco    { grid-column: 2 / 4; grid-row: 1 / 5;   --ty: 20%; --sx: -80vw; --sy: -60vh; --sr: -200deg; --sd:  40ms; }
+    .m-coracao { grid-column: 2 / 4; grid-row: 5 / 13;  --ty: 10%; --sx:  70vw; --sy:  65vh; --sr:  240deg; --sd: 200ms; }
+    .m-folha1  { grid-column: 2 / 3; grid-row: 13 / 21; --sx: -60vw; --sy:  70vh; --sr: -180deg; --sd: 140ms; }
+    .m-folha2  { grid-column: 3 / 4; grid-row: 13 / 21; --sx:  60vw; --sy:  75vh; --sr:  180deg; --sd: 180ms; }
+
+    .m-laranja { grid-column: 4 / 6; grid-row: 1 / 11;  --sx:  85vw; --sy: -65vh; --sr:  220deg; --sd: 100ms; }
+    .m-sol     { grid-column: 4 / 6; grid-row: 11 / 21; --sx:  85vw; --sy:  70vh; --sr:  360deg; --sd: 180ms; }
+
+    /* Coração branco (só CSS) que volta à cor original na revelação */
+    .m-coracao img {
+      filter: brightness(0) invert(1);
+      transition: filter 900ms ease-in-out;
+    }
+    #splash.dia .m-coracao img { filter: brightness(1) invert(0); }
+
+    /* DANÇA DE ENTRADA: as peças nascem na aura e voam até o encaixe */
+    .danca .peca {
+      animation: chega var(--t, 1800ms) cubic-bezier(0.34, 1.45, 0.64, 1) var(--d, 0ms) both;
+    }
+
+    @keyframes chega {
+      from {
+        opacity: 0;
+        transform: translate(var(--fx, 0px), var(--fy, 0px)) rotate(var(--fr, 0deg)) scale(var(--fs, 1));
+      }
+      20% { opacity: 1; }
+      to {
+        opacity: 1;
+        transform: translate(0px, var(--ty, 0px)) rotate(0deg) scale(1);
+      }
+    }
+
+    .danca .m-feijao1 { --fr:  360deg; --fs: 0.25; --d:   0ms; --t: 1700ms; }
+    .danca .m-feijao2 { --fr: -360deg; --fs: 0.25; --d: 120ms; --t: 1700ms; }
+    .danca .m-feijao3 { --fr:  360deg; --fs: 0.25; --d: 240ms; --t: 1700ms; }
+    .danca .m-feijao4 { --fr: -360deg; --fs: 0.25; --d: 360ms; --t: 1700ms; }
+    .danca .m-sol     { --fr: 360deg; --fs: 0.2; --d: 0ms; --t: 2300ms; }
+    .danca .m-laranja { --fr: -180deg; --fs: 0.3; --d: 150ms; --t: 1900ms; }
+    .danca .m-arco    { --fr: -180deg; --fs: 0.3; --d: 300ms; --t: 1800ms; }
+    .danca .m-coracao { --fr: 0deg; --fs: 0.15; --d: 700ms; --t: 1700ms; }
+
+    .danca .m-folha1,
+    .danca .m-folha2 {
+      --d: 400ms;
+      --t: 1900ms;
+      animation: folha var(--t) ease-out var(--d) both;
+    }
+    .danca .m-folha1 { --osc:  9deg; }
+    .danca .m-folha2 { --osc: -9deg; }
+
+    @keyframes folha {
+      0%   { opacity: 0; transform: translate(var(--fx, 0px), var(--fy, 0px)) rotate(0deg) scale(0.3); }
+      15%  { opacity: 1; }
+      55%  { transform: translate(0px, -3%) rotate(calc(var(--osc) * -1)) scale(1.05); }
+      75%  { transform: translate(0px, 1%) rotate(calc(var(--osc) * 0.5)) scale(1); }
+      90%  { transform: translate(0px, 0px) rotate(calc(var(--osc) * -0.2)) scale(1); }
+      100% { opacity: 1; transform: translate(0px, 0px) rotate(0deg) scale(1); }
+    }
+
+    .danca .m-coracao img { animation: pulso 800ms ease-in-out 2300ms both; }
+    @keyframes pulso {
+      0%   { transform: scale(1); }
+      40%  { transform: scale(1.12); }
+      70%  { transform: scale(0.97); }
+      100% { transform: scale(1); }
+    }
+
+    /* DANÇA DE SAÍDA: as peças voam para os cantos na revelação */
+    #mosaico.sai .peca {
+      animation: vai 1200ms cubic-bezier(0.6, -0.28, 0.735, 0.045) var(--sd, 0ms) both;
+    }
+    @keyframes vai {
+      from {
+        opacity: 1;
+        transform: translate(0px, var(--ty, 0px)) rotate(0deg) scale(1);
+      }
+      to {
+        opacity: 1;
+        transform: translate(var(--sx), var(--sy)) rotate(var(--sr)) scale(1.15);
+      }
+    }
+
+    /* LUZES DA FORMAÇÃO (brilho, ondas, raios e faíscas) */
+    #luzes-mosaico,
+    #faiscas {
+      position: absolute;
+      left: 50%;
+      top: var(--centro-y);
+      transform: translate(-50%, -50%);
+      width: var(--mw);
+      aspect-ratio: 1 / 1;
+      pointer-events: none;
+      transition: opacity 600ms ease;
+    }
+    #luzes-mosaico { z-index: 4; }
+    #faiscas       { z-index: 8; }
+    #splash.dia #luzes-mosaico,
+    #splash.dia #faiscas { opacity: 0; }
+
+    .brilho-mosaico {
+      position: absolute;
+      inset: -35%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(96, 165, 250, 0.32) 34%, rgba(96, 165, 250, 0) 68%);
+      opacity: 0;
+      transform: scale(0.3);
+    }
+    #splash.formado .brilho-mosaico {
+      animation:
+        explode 1100ms ease-out both,
+        respiraBrilho 3.6s ease-in-out 1100ms infinite;
+    }
+    @keyframes explode {
+      0%   { opacity: 0;   transform: scale(0.3); }
+      35%  { opacity: 1;   transform: scale(1.15); }
+      100% { opacity: 0.4; transform: scale(1); }
+    }
+    @keyframes respiraBrilho {
+      0%, 100% { opacity: 0.4;  transform: scale(1); }
+      50%      { opacity: 0.65; transform: scale(1.06); }
+    }
+
+    .onda-mosaico {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.75);
+      box-shadow: 0 0 24px rgba(96, 165, 250, 0.6), inset 0 0 24px rgba(96, 165, 250, 0.4);
+      opacity: 0;
+    }
+    #splash.formado .onda-mosaico   { animation: onda 1100ms ease-out both; }
+    #splash.formado .onda-mosaico.b { animation-delay: 220ms; }
+    @keyframes onda {
+      0%   { opacity: 0.9; transform: scale(0.6); }
+      100% { opacity: 0;   transform: scale(2.1); }
+    }
+
+    .raios {
+      position: absolute;
+      inset: -60%;
+      border-radius: 50%;
+      background: repeating-conic-gradient(rgba(255, 255, 255, 0.16) 0deg 5deg, rgba(255, 255, 255, 0) 5deg 15deg);
+      -webkit-mask: radial-gradient(circle, #000 12%, transparent 60%);
+      mask: radial-gradient(circle, #000 12%, transparent 60%);
+      opacity: 0;
+      will-change: transform;
+    }
+    #splash.formado .raios {
+      animation:
+        raiosEntra 1400ms ease-out both,
+        raiosGira 40s linear infinite;
+    }
+    @keyframes raiosEntra { from { opacity: 0; } to { opacity: 0.8; } }
+    @keyframes raiosGira  { to { transform: rotate(360deg); } }
+
+    .spark {
+      position: absolute;
+      left: var(--x);
+      top: var(--y);
+      width: var(--s);
+      height: var(--s);
+      margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
+      opacity: 0;
+      filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 12px rgba(96, 165, 250, 0.8));
+    }
+    .spark::before,
+    .spark::after {
+      content: '';
+      position: absolute;
+    }
+    .spark::before {
+      left: 0; top: 50%;
+      width: 100%; height: 2px;
+      transform: translateY(-50%);
+      background: linear-gradient(90deg, transparent, #ffffff, transparent);
+    }
+    .spark::after {
+      left: 50%; top: 0;
+      width: 2px; height: 100%;
+      transform: translateX(-50%);
+      background: linear-gradient(180deg, transparent, #ffffff, transparent);
+    }
+    #splash.formado .spark {
+      animation: brilha 2400ms ease-out var(--d, 0ms) infinite;
+    }
+    @keyframes brilha {
+      0%   { opacity: 0; transform: scale(0) rotate(0deg); }
+      30%  { opacity: 1; transform: scale(1) rotate(45deg); }
+      60%  { opacity: 0; transform: scale(0.3) rotate(90deg); }
+      100% { opacity: 0; transform: scale(0) rotate(90deg); }
+    }
+
+    /* TÍTULO (os textos vêm do JS, conforme o modo "acoes" ou "encontro") */
+    #titulo {
+      position: absolute;
+      left: 50%;
+      top: var(--centro-y);
+      transform: translate(-50%, -50%);
+      z-index: 20;
       text-align: center;
-      animation: poweredDown 1.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
-      animation-delay: 1.5s;
-      transition: opacity 0.5s ease;
+      white-space: nowrap;
+      transition: opacity 400ms ease, filter 400ms ease, transform 400ms ease;
+    }
+    #splash.formando #titulo {
+      opacity: 0;
+      filter: blur(10px);
+      transform: translate(-50%, -50%) translateY(-12px);
     }
 
-    @keyframes logoUp { to { top: 60px; transform: translate(-50%, 0); } }
-    @keyframes poweredDown { to { top: calc(100% - 60px); transform: translate(-50%, 0); } }
-
-    #offline-toast.show { 
-      top: env(safe-area-inset-top, 20px); 
+    #encontro-wrap {
+      position: relative;
+      display: block;
+      width: fit-content;
+      margin: 0 auto;
     }
 
-    @media (max-height: 700px) {
-      @keyframes logoUp { to { top: 30px; transform: translate(-50%, 0) scale(0.8); } }
-      @keyframes poweredDown { to { top: calc(100% - 40px); transform: translate(-50%, 0) scale(0.9); } }
+    #t-encontro {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      padding: 0.05em 0.3em;
+      font-family: 'Dancing Script', cursive;
+      font-weight: 700;
+      font-size: clamp(3.6rem, 19vw, 6.6rem);
+      line-height: 1.05;
+      color: #ffffff;
+      text-shadow: 0 2px 12px rgba(10, 28, 80, 0.6);
+      -webkit-mask-image: linear-gradient(90deg, #000 45.5%, transparent 54.5%);
+      mask-image: linear-gradient(90deg, #000 45.5%, transparent 54.5%);
+      -webkit-mask-size: 220% 100%;
+      mask-size: 220% 100%;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-position: 100% 0;
+      mask-position: 100% 0;
+    }
+    #encontro-wrap.show #t-encontro {
+      -webkit-mask-position: 0% 0;
+      mask-position: 0% 0;
+      animation: escreve 1900ms cubic-bezier(0.5, 0, 0.3, 1) both;
+    }
+    @keyframes escreve {
+      from { -webkit-mask-position: 100% 0; mask-position: 100% 0; }
+      to   { -webkit-mask-position: 0% 0;   mask-position: 0% 0; }
+    }
+
+    .luz-escrita {
+      position: absolute;
+      top: 58%;
+      left: -10%;
+      width: 0;
+      height: 0;
+      z-index: 2;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .caneta {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: var(--laranja);
+      transform: translate(-50%, -50%);
+    }
+    .caneta img {
+      display: block;
+      width: 100%;
+      height: auto;
+      filter: brightness(0) invert(1) drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 16px rgba(96, 165, 250, 0.8));
+      animation: luzBalanca 1900ms ease-in-out both paused;
+    }
+    #encontro-wrap.show .luz-escrita {
+      animation: luzPassa 1900ms cubic-bezier(0.5, 0, 0.3, 1) both;
+    }
+    #encontro-wrap.show .caneta img { animation-play-state: running; }
+
+    @keyframes luzPassa {
+      0%   { left: -10%; opacity: 0; transform: scale(0.6); }
+      8%   { opacity: 1; transform: scale(1); }
+      92%  { opacity: 1; transform: scale(1); }
+      100% { left: 110%; opacity: 0; transform: scale(0.4); }
+    }
+    @keyframes luzBalanca {
+      0%   { transform: translateY(-14px) rotate(-18deg); }
+      30%  { transform: translateY(10px)  rotate(8deg); }
+      55%  { transform: translateY(-8px)  rotate(-14deg); }
+      80%  { transform: translateY(12px)  rotate(6deg); }
+      100% { transform: translateY(0px)   rotate(-10deg); }
+    }
+
+    .halo {
+      position: absolute;
+      inset: -35% -20%;
+      z-index: 0;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.30) 0%, rgba(96, 165, 250, 0.16) 40%, rgba(96, 165, 250, 0) 70%);
+      filter: blur(8px);
+      opacity: 0;
+      pointer-events: none;
+    }
+    #encontro-wrap.show .halo {
+      opacity: 0.75;
+      animation:
+        haloEntra 1200ms ease-out 1500ms both,
+        haloRespira 4s ease-in-out 2700ms infinite;
+    }
+    @keyframes haloEntra {
+      from { opacity: 0;    transform: scale(0.85); }
+      to   { opacity: 0.75; transform: scale(1); }
+    }
+    @keyframes haloRespira {
+      0%, 100% { opacity: 0.75; transform: scale(1); }
+      50%      { opacity: 1;    transform: scale(1.07); }
+    }
+
+    /* Segunda linha (EDUCATIVAS / ANUAL): as letras acendem em sequência */
+    #t-anual {
+      margin: -0.2rem 0 0;
+      padding-left: 0.5em;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.05rem, 5vw, 1.7rem);
+      letter-spacing: 0.9em;
+      text-transform: uppercase;
+      color: #f1f5f9;
+      opacity: 0;
+      transition: opacity 1200ms ease-out, letter-spacing 1400ms cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    #t-anual .l {
+      display: inline-block;
+      text-shadow: 0 1px 14px rgba(10, 28, 80, 0.7);
+    }
+    #t-anual.show { opacity: 1; letter-spacing: 0.5em; }
+    #t-anual.show .l {
+      animation: acende 1000ms ease-in-out calc(var(--i) * 170ms + 500ms) both;
+    }
+    @keyframes acende {
+      0%, 100% {
+        color: #f1f5f9;
+        text-shadow: 0 1px 14px rgba(10, 28, 80, 0.7);
+      }
+      40% {
+        color: #ffffff;
+        text-shadow: 0 0 8px #ffffff, 0 0 20px rgba(96, 165, 250, 0.95), 0 0 38px rgba(96, 165, 250, 0.6);
+      }
+    }
+
+    #t-marca {
+      margin: 1.1rem 0 0;
+      padding-left: 0.22em;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 500;
+      font-size: clamp(0.72rem, 3.1vw, 0.95rem);
+      letter-spacing: 0.22em;
+      color: #e2e8f0;
+      text-shadow: 0 1px 12px rgba(10, 28, 80, 0.7);
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 1000ms ease-out, transform 1000ms cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    #t-marca.show { opacity: 1; transform: translateY(0); }
+
+    /* AURA (a fonte das peças) + BOTÃO "Iniciar" */
+    .aura-botao {
+      position: absolute;
+      left: 50%;
+      top: var(--botao-y);
+      border-radius: 100%;
+      pointer-events: none;
+      z-index: 6;
+      transform: translate(-50%, -50%) scale(0);
+      transition: transform 1500ms cubic-bezier(0.25, 1, 0.5, 1), opacity 700ms ease;
+    }
+    #aura-teal {
+      width: min(80vw, 380px);
+      height: 110px;
+      background: #3b82f6;
+      filter: blur(46px);
+      opacity: 0.4;
+    }
+    #aura-azul {
+      width: min(55vw, 260px);
+      height: 90px;
+      background: #60a5fa;
+      filter: blur(42px);
+      opacity: 0.35;
+      margin-left: 18%;
+      margin-top: 14px;
+    }
+    .aura-botao.show { transform: translate(-50%, -50%) scale(1); }
+
+    #splash.formando #aura-teal,
+    #splash.formando #aura-azul {
+      transform: translate(-50%, -50%) scale(1.45);
+      opacity: 0.75;
+      transition: transform 800ms cubic-bezier(0.25, 1, 0.5, 1), opacity 800ms ease;
+    }
+    #splash.dia #aura-teal,
+    #splash.dia #aura-azul {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0);
+      transition: opacity 500ms ease, transform 600ms ease-in;
+    }
+
+    #btn-iniciar {
+      position: absolute;
+      left: 50%;
+      top: var(--botao-y);
+      z-index: 25;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 46px 16px calc(46px + 0.06em);
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.05));
+      -webkit-backdrop-filter: blur(14px) saturate(160%);
+      backdrop-filter: blur(14px) saturate(160%);
+      box-shadow:
+        0 10px 34px rgba(8, 22, 64, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.35);
+      color: #ffffff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transform: translate(-50%, calc(-50% + 14px));
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 900ms ease-out, transform 900ms cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    #btn-iniciar::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      padding: 1.5px;
+      background: conic-gradient(
+        from var(--ang),
+        rgba(255, 255, 255, 0) 0deg,
+        rgba(255, 255, 255, 0) 200deg,
+        rgba(96, 165, 250, 0.9) 300deg,
+        #ffffff 345deg,
+        rgba(255, 255, 255, 0) 360deg
+      );
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    #btn-iniciar.show {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, -50%);
+      animation: respira 3.6s ease-in-out 1s infinite;
+    }
+    #btn-iniciar.show::before { animation: gira 3.6s linear infinite; }
+
+    #btn-iniciar:active { animation: none; transform: translate(-50%, -50%) scale(0.96); transition-duration: 120ms; }
+    #btn-iniciar:focus-visible { outline: 2px solid #93c5fd; outline-offset: 4px; }
+
+    #splash.formando #btn-iniciar {
+      opacity: 0;
+      pointer-events: none;
+      animation: none;
+      transform: translate(-50%, calc(-50% + 10px));
+      transition-duration: 400ms;
+    }
+
+    @keyframes gira { to { --ang: 360deg; } }
+    @keyframes respira {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50%      { transform: translate(-50%, -50%) scale(1.025); }
+    }
+
+    /* ABERTURA RÁPIDA (reabertura em até 10 min): título + 3 bolinhas */
+    #carregando {
+      position: absolute;
+      left: 50%;
+      top: var(--botao-y);
+      transform: translate(-50%, -50%);
+      z-index: 25;
+      display: flex;
+      gap: 10px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 300ms ease;
+    }
+    #carregando i {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #bfdbfe;
+      box-shadow: 0 0 10px rgba(96, 165, 250, 0.8);
+      animation: quica 1s ease-in-out infinite;
+    }
+    #carregando i:nth-child(2) { animation-delay: 0.15s; }
+    #carregando i:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes quica {
+      0%, 80%, 100% { transform: translateY(0);    opacity: 0.4; }
+      40%           { transform: translateY(-8px); opacity: 1; }
+    }
+    @keyframes rapidoEntra { from { opacity: 0; } to { opacity: 1; } }
+
+    #splash.rapido { transition: background-color 450ms ease-in-out; }
+    #splash.rapido #titulo { animation: rapidoEntra 350ms ease-out backwards; }
+    #splash.rapido #t-encontro { -webkit-mask-image: none; mask-image: none; }
+    #splash.rapido #t-anual { opacity: 1; letter-spacing: 0.5em; transition: none; }
+    #splash.rapido #t-marca { opacity: 1; transform: none; transition: none; }
+    #splash.rapido #carregando { opacity: 1; }
+    #splash.rapido.dia #titulo,
+    #splash.rapido.dia #carregando { opacity: 0; }
+    #splash.rapido ~ #app-frame { transition-duration: 450ms; }
+
+    /* IFRAME DO GAS: nasce desfocado e fica nítido na revelação */
+    #app-frame {
+      transition: filter 1100ms ease-out, transform 1100ms ease-out;
+    }
+    #app-frame.gas-oculto {
+      filter: blur(14px);
+      transform: scale(1.04);
+    }
+
+    #offline-toast.show {
+      top: env(safe-area-inset-top, 20px);
+    }
+
+    @media (max-height: 600px) {
+      #t-encontro { font-size: clamp(3rem, 14vh, 5rem); }
+      #btn-iniciar { padding: 12px 36px 12px calc(36px + 0.06em); font-size: 0.9rem; }
+    }
+
+    @media (min-width: 768px) {
+      :root { --esc: 1.8; --laranja: 52px; --mw: min(34vw, 440px, 52vh); }
+      #t-encontro { font-size: clamp(5rem, 11vw, 8.5rem); }
+      #t-anual { font-size: clamp(1.4rem, 2.2vw, 2.1rem); }
+      #t-marca { font-size: clamp(0.9rem, 1.3vw, 1.2rem); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition-duration: 1ms !important;
+        transition-delay: 0ms !important;
+      }
     }
   </style>
 </head>
 <body class="bg-slate-100 text-slate-800 h-screen w-screen overflow-hidden font-sans m-0 p-0 select-none">
 
-  <!-- Toast Offline Redesenhado -->
+  <!-- Aviso offline -->
   <div id="offline-toast" class="fixed -top-24 left-1/2 -translate-x-1/2 bg-red-50 border border-red-200 text-red-800 px-6 py-3 rounded-full z-[10000] font-semibold text-sm flex items-center gap-2 shadow-md transition-all duration-500 ease-out">
     <span>&#9888;</span> Sem conexão
   </div>
 
-  <!-- Tela Splash principal ajustada para Slate-100 -->
-  <div id="splash" class="fixed inset-0 bg-slate-100 z-[9000] flex flex-col justify-center items-center overflow-hidden transition-all duration-700 ease-out">
-    
-    <!-- Container do Logo (Código original preservado) -->
-    <div class="mesa-container">
-      <img src="LogoColor.png" alt="Logo" class="w-[105px]">
+  <!-- Splash -->
+  <div id="splash">
+
+    <!-- 16 luzes desfocadas ao fundo -->
+    <div id="fundo-fx" aria-hidden="true">
+      <div class="fx" style="--l:6%;  --t:10%; --w:90px;  --b:6px; --op:.18; --dx:30px;  --dy:60px;  --rot:40deg;  --dur:12s; --del:0s"><img src="Mesa/C.png" alt=""></div>
+      <div class="fx" style="--l:78%; --t:8%;  --w:70px;  --b:4px; --op:.20; --dx:-40px; --dy:50px;  --rot:-35deg; --dur:10s; --del:.2s"><img src="Mesa/A.png" alt=""></div>
+      <div class="fx" style="--l:88%; --t:40%; --w:48px;  --b:3px; --op:.22; --dx:-30px; --dy:-50px; --rot:70deg;  --dur:9s;  --del:.4s"><img src="Mesa/E.png" alt=""></div>
+      <div class="fx" style="--l:12%; --t:70%; --w:100px; --b:7px; --op:.16; --dx:50px;  --dy:-40px; --rot:-30deg; --dur:13s; --del:.1s"><img src="Mesa/F.png" alt=""></div>
+      <div class="fx" style="--l:70%; --t:78%; --w:60px;  --b:5px; --op:.20; --dx:-50px; --dy:-60px; --rot:50deg;  --dur:11s; --del:.6s"><img src="Mesa/B.png" alt=""></div>
+      <div class="fx" style="--l:40%; --t:86%; --w:56px;  --b:4px; --op:.20; --dx:40px;  --dy:-70px; --rot:-45deg; --dur:10s; --del:.8s"><img src="Mesa/D.png" alt=""></div>
+      <div class="fx" style="--l:4%;  --t:38%; --w:40px;  --b:3px; --op:.20; --dx:40px;  --dy:40px;  --rot:90deg;  --dur:9s;  --del:.3s"><img src="Mesa/E.png" alt=""></div>
+      <div class="fx" style="--l:62%; --t:4%;  --w:44px;  --b:3px; --op:.22; --dx:-30px; --dy:60px;  --rot:-60deg; --dur:8s;  --del:1s"><img src="Mesa/C.png" alt=""></div>
+      <div class="fx" style="--l:24%; --t:22%; --w:26px;  --b:2px; --op:.26; --dx:20px;  --dy:30px;  --rot:30deg;  --dur:7s;  --del:.5s"><img src="Mesa/E.png" alt=""></div>
+      <div class="fx" style="--l:52%; --t:14%; --w:34px;  --b:3px; --op:.22; --dx:-20px; --dy:40px;  --rot:-50deg; --dur:9s;  --del:1.2s"><img src="Mesa/B.png" alt=""></div>
+      <div class="fx" style="--l:92%; --t:64%; --w:70px;  --b:6px; --op:.15; --dx:-40px; --dy:-30px; --rot:60deg;  --dur:12s; --del:.7s"><img src="Mesa/C.png" alt=""></div>
+      <div class="fx" style="--l:30%; --t:56%; --w:28px;  --b:2px; --op:.25; --dx:30px;  --dy:-30px; --rot:-70deg; --dur:8s;  --del:1.4s"><img src="Mesa/A.png" alt=""></div>
+      <div class="fx" style="--l:82%; --t:90%; --w:38px;  --b:3px; --op:.20; --dx:-30px; --dy:-50px; --rot:45deg;  --dur:10s; --del:.9s"><img src="Mesa/E.png" alt=""></div>
+      <div class="fx" style="--l:2%;  --t:88%; --w:64px;  --b:6px; --op:.16; --dx:40px;  --dy:-40px; --rot:-40deg; --dur:11s; --del:1.1s"><img src="Mesa/D.png" alt=""></div>
+      <div class="fx" style="--l:66%; --t:26%; --w:84px;  --b:8px; --op:.14; --dx:-50px; --dy:40px;  --rot:-25deg; --dur:13s; --del:1.5s"><img src="Mesa/F.png" alt=""></div>
+      <div class="fx" style="--l:16%; --t:46%; --w:52px;  --b:4px; --op:.19; --dx:35px;  --dy:-35px; --rot:55deg;  --dur:9s;  --del:.15s"><img src="Mesa/A.png" alt=""></div>
     </div>
 
-    <!-- Container do Rodapé (Código original preservado) -->
-    <div class="powered-container">
-      <div class="font-sans text-[0.65rem] text-slate-700 tracking-[1px] font-light mt-[5px]">
-        Powered with <span class="text-rose-500">&#10084;</span> by <strong class="font-semibold text-slate-600">Mesaque</strong>
+    <div id="palco">
+
+      <!-- Auras -->
+      <div id="aura-teal" class="aura-botao"></div>
+      <div id="aura-azul" class="aura-botao"></div>
+
+      <!-- Luzes da formação do mosaico -->
+      <div id="luzes-mosaico" aria-hidden="true">
+        <div class="raios"></div>
+        <div class="brilho-mosaico"></div>
+        <div class="onda-mosaico"></div>
+        <div class="onda-mosaico b"></div>
       </div>
+
+      <!-- Mosaico 5x5 -->
+      <div id="mosaico">
+        <div class="peca m-feijao1"><img src="Mesa/E.png" alt=""></div>
+        <div class="peca m-feijao2"><img src="Mesa/E.png" alt=""></div>
+        <div class="peca m-feijao3"><img src="Mesa/E.png" alt=""></div>
+        <div class="peca m-feijao4"><img src="Mesa/E.png" alt=""></div>
+        <div class="peca m-arco"><img src="Mesa/F.png" alt=""></div>
+        <div class="peca m-coracao"><img src="Mesa/D.png" alt=""></div>
+        <div class="peca m-folha1"><img src="Mesa/B.png" alt=""></div>
+        <div class="peca m-folha2"><img src="Mesa/B.png" alt=""></div>
+        <div class="peca m-laranja"><img src="Mesa/A.png" alt=""></div>
+        <div class="peca m-sol"><img src="Mesa/C.png" alt=""></div>
+      </div>
+
+      <!-- Faíscas -->
+      <div id="faiscas" aria-hidden="true">
+        <i class="spark" style="--x:-8%;  --y:10%;  --s:16px; --d:0ms"></i>
+        <i class="spark" style="--x:104%; --y:6%;   --s:20px; --d:300ms"></i>
+        <i class="spark" style="--x:112%; --y:48%;  --s:12px; --d:900ms"></i>
+        <i class="spark" style="--x:-10%; --y:55%;  --s:22px; --d:600ms"></i>
+        <i class="spark" style="--x:98%;  --y:98%;  --s:16px; --d:1200ms"></i>
+        <i class="spark" style="--x:6%;   --y:108%; --s:14px; --d:450ms"></i>
+        <i class="spark" style="--x:50%;  --y:-10%; --s:18px; --d:1500ms"></i>
+        <i class="spark" style="--x:82%;  --y:-6%;  --s:12px; --d:750ms"></i>
+        <i class="spark" style="--x:30%;  --y:106%; --s:20px; --d:1050ms"></i>
+        <i class="spark" style="--x:-4%;  --y:30%;  --s:12px; --d:1800ms"></i>
+      </div>
+
+      <!-- Título: "Ações / EDUCATIVAS" ou "Encontro / ANUAL" (definido no JS, em MODO) -->
+      <div id="titulo">
+        <div id="encontro-wrap">
+          <div class="halo"></div>
+          <h1 id="t-encontro">Ações</h1>
+          <span class="luz-escrita"><span class="caneta"><img src="Mesa/A.png" alt=""></span></span>
+        </div>
+        <h2 id="t-anual"></h2>
+        <p id="t-marca">Sesc Mesa Brasil</p>
+      </div>
+
+      <!-- Botão Iniciar -->
+      <button id="btn-iniciar" type="button">
+        <span>Iniciar</span>
+      </button>
+
+      <!-- 3 bolinhas da abertura rápida -->
+      <div id="carregando" aria-hidden="true"><i></i><i></i><i></i></div>
+
     </div>
 
-    <!-- Conteúdo Central: Título com suporte a animações separadas -->
-    <div id="center-content" class="relative z-10 text-center scale-100 transition-all duration-[700ms] ease-[cubic-bezier(0.25,1,0.5,1)]">
-      <!-- "Ações" nasce com transição individual -->
-      <h1 id="title-acoes" class="font-dancing text-teal-600 text-[6.5rem] md:text-[11rem] leading-[1.1] drop-shadow-[0_4px_12px_rgba(13,148,136,0.25)] pointer-events-none opacity-0 translate-y-4 transform transition-all duration-700 ease-out">Ações</h1>
-      <h2 id="title-educativas" class="font-sans text-slate-600 tracking-[14px] text-[1.2rem] md:text-[1.8rem] font-bold uppercase mt-[-10px] pointer-events-none opacity-0 translate-y-2 transform transition-all duration-700 ease-out">Educativas</h2>
-      </div>
-
-    <!-- Aura Teal-600 Física (Nasce em scale-0 e expande elasticamente) -->
-    <div id="aura-el" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] h-[18vh] max-w-lg rounded-[100%] bg-teal-500 blur-[50px] md:blur-[70px] pointer-events-none opacity-40 scale-0 transition-transform duration-[1500ms] ease-[cubic-bezier(0.25,1,0.5,1)] z-0"></div>
+    <div id="powered">
+      Powered with <span class="coracao">&#10084;</span> by <strong>Mesaque</strong>
+    </div>
 
   </div>
 
-  <!-- Iframe do Google Apps Script integrado -->
-  <iframe 
-    id="app-frame" 
-    allow="geolocation; microphone; camera; clipboard-write; autoplay; fullscreen"
+  <!-- Iframe do Google Apps Script (começa desfocado) -->
+  <iframe
+    id="app-frame"
+    allow="geolocation *; microphone *; camera *; clipboard-read *; clipboard-write *; web-share *; autoplay *; fullscreen *"
     sandbox="allow-downloads allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-top-navigation allow-top-navigation-by-user-activation allow-modals allow-storage-access-by-user-activation"
-    class="w-full h-full border-none block absolute inset-0 bg-slate-100 z-0"
+    class="gas-oculto w-full h-full border-none block absolute inset-0 bg-slate-100 z-0"
   ></iframe>
 
   <script>
     const splash = document.getElementById('splash');
     const iframe = document.getElementById('app-frame');
     const offlineToast = document.getElementById('offline-toast');
-    const logoContainer = document.querySelector('.mesa-container');
-    const poweredContainer = document.querySelector('.powered-container');
-    const centerContent = document.getElementById('center-content');
-    const titleAcoes = document.getElementById('title-acoes');
-    const titleEducativas = document.getElementById('title-educativas');
-    const auraEl = document.getElementById('aura-el');
+    const fundoFx = document.getElementById('fundo-fx');
+    const mosaico = document.getElementById('mosaico');
+    const auraTeal = document.getElementById('aura-teal');
+    const auras = document.querySelectorAll('.aura-botao');
+    const encontroWrap = document.getElementById('encontro-wrap');
+    const tAnual = document.getElementById('t-anual');
+    const tMarca = document.getElementById('t-marca');
+    const btnIniciar = document.getElementById('btn-iniciar');
+    const metaTheme = document.getElementById('meta-theme');
 
-    // Novo endpoint do Google Apps Script
-    const gasUrl = "https://script.google.com/macros/s/AKfycbydxbd55ABg2GafITA1aoa7gHQs9XNlNlzFH90GgNZWZmxzqiAVYSGDp19K_DjtVKFw/exec";
+    // =====================================================
+    // MODO DO APP: troque aqui em dezembro
+    //   'acoes'    = padrão do ano todo (Ações Educativas)
+    //   'encontro' = só durante o Encontro Anual
+    // Para testar sem mexer no código, abra:  ...index.html?modo=encontro
+    // =====================================================
+    const MODO = 'acoes';
 
-    let isGasLoaded = false;
-    let minTimeElapsed = false;
+    const TEXTOS = {
+      acoes:    { linha1: 'Ações',    linha2: 'EDUCATIVAS', aba: 'Ações Educativas - Sesc Mesa Brasil' },
+      encontro: { linha1: 'Encontro', linha2: 'ANUAL',      aba: 'Encontro Anual - Sesc Mesa Brasil' }
+    };
+    const paramModo = new URLSearchParams(location.search).get('modo');
+    const modoAtual = TEXTOS[paramModo] ? paramModo : MODO;
+
+    (function aplicarTextos() {
+      const t = TEXTOS[modoAtual];
+      document.title = t.aba;
+      document.getElementById('t-encontro').textContent = t.linha1;
+      tAnual.setAttribute('aria-label', t.linha2);
+      tAnual.innerHTML = [...t.linha2]
+        .map((c, i) => '<span class="l" style="--i:' + i + '" aria-hidden="true">' + c + '</span>')
+        .join('');
+    })();
+
+    // Endpoint do Google Apps Script (nova URL)
+    const gasUrl = "https://script.google.com/macros/s/AKfycbyJNOxf_fNnz5KhSt4ihlyPGMmF_CT4r9W2Clm3uweZdEdoRZtN_RDy0xnIeUe-X7Gx/exec";
 
     window.addEventListener('offline', () => offlineToast.classList.add('show'));
     window.addEventListener('online', () => offlineToast.classList.remove('show'));
 
-    // Inicia carregamento do iframe imediatamente
+    // --- UTILITÁRIOS ---
+    const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    const reduzMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // O GAS carrega por trás da abertura
+    const gasPronto = new Promise((resolve) => { iframe.onload = () => resolve(); });
     iframe.src = gasUrl;
 
-    // --- TIMELINE DE ANIMAÇÕES DO SPLASH ---
+    // Espera a fonte do título (máx. 1,8s)
+    const fontePronta = Promise.race([
+      document.fonts && document.fonts.load
+        ? document.fonts.load('700 64px "Dancing Script"').catch(() => {})
+        : Promise.resolve(),
+      wait(1800)
+    ]);
 
-    // 1. Após 2.4s, o "Ações" surge subindo suavemente
-    setTimeout(() => {
-      titleAcoes.classList.remove('opacity-0', 'translate-y-4');
-      titleAcoes.classList.add('opacity-100', 'translate-y-0');
-    }, 2200);
+    mosaico.querySelectorAll('img').forEach((img) => {
+      if (img.decode) img.decode().catch(() => {});
+    });
 
-    // 2. Após 2.7s, o "Educativas" faz sua entrada suave subindo também
-    setTimeout(() => {
-      titleEducativas.classList.remove('opacity-0', 'translate-y-2');
-      titleEducativas.classList.add('opacity-100', 'translate-y-0');
-    }, 2600);
+    // --- REABERTURA RÁPIDA ---
+    // Se o app foi aberto ou usado há menos de 10 minutos (ex.: F5), pula a animação:
+    // mostra só o título com 3 bolinhas por 1,5s e abre o app.
+    const CHAVE_ABERTURA = 'acoesEdUltimaAbertura';
+    const JANELA_RAPIDA = 10 * 60 * 1000; // 10 minutos
+    const TEMPO_RAPIDO = 1500;            // tempo mínimo das bolinhas (ms)
 
-    // 3. Após 3.0s, a Aura Teal inicia seu crescimento elástico partindo do zero absoluto
-    setTimeout(() => {
-      auraEl.classList.remove('scale-0');
-      auraEl.classList.add('scale-[1.35]');
-    }, 3000);
-
-    // 4. Tempo mínimo de exposição (4.0 segundos) solicitado para a revelação do GAS
-    setTimeout(() => {
-      minTimeElapsed = true;
-      if (isGasLoaded) {
-        revealApp();
-      }
-    }, 4000);
-
-    // Gatilho executado quando o iframe terminar o carregamento
-    iframe.onload = () => {
-      isGasLoaded = true;
-      if (minTimeElapsed) {
-        revealApp();
-      }
-    };
-
-    // Função de saída e revelação limpa do sistema
-    function revealApp() {
-      // 1. Logo e Powered desaparecem de forma suave
-      logoContainer.classList.add('opacity-0');
-      poweredContainer.classList.add('opacity-0');
-
-      // 2. A Aura realiza a implosão de volta ao ponto zero em alta velocidade (300ms)
-      auraEl.style.transition = 'transform 600ms cubic-bezier(0.25, 1, 0.5, 1)';
-      auraEl.classList.remove('scale-[1.35]');
-      auraEl.classList.add('scale-0');
-
-      // 3. O título completo realiza o encolhimento gradual (700ms)
-      centerContent.classList.add('scale-0', 'opacity-0', 'pointer-events-none');
-
-      // 4. Simultaneamente, o container do Splash inteiro desvanece (700ms), revelando o iframe já ativo atrás dele
-      splash.classList.add('opacity-0', 'pointer-events-none');
-
-      // 5. Desliga o splash por completo da árvore DOM após as transições de 700ms
-      setTimeout(() => {
-        splash.style.display = 'none';
-      }, 800);
+    function lerAbertura() {
+      try { return Number(localStorage.getItem(CHAVE_ABERTURA)) || 0; } catch (e) { return 0; }
+    }
+    function salvarAbertura() {
+      try { localStorage.setItem(CHAVE_ABERTURA, String(Date.now())); } catch (e) {}
     }
 
-    // Registro do Service Worker com checagem de atualizações forçada
+    const ultimaAbertura = lerAbertura();
+    const passou = Date.now() - ultimaAbertura;
+    const modoRapido = ultimaAbertura > 0 && passou >= 0 && passou < JANELA_RAPIDA;
+
+    // Só conta como "aberto" depois que o app foi revelado (não vale só abrir a página)
+    let appAberto = false;
+    function registrarAbertura() { appAberto = true; salvarAbertura(); }
+    document.addEventListener('visibilitychange', () => {
+      if (appAberto && document.visibilityState === 'hidden') salvarAbertura();
+    });
+    window.addEventListener('pagehide', () => { if (appAberto) salvarAbertura(); });
+
+    async function aberturaRapida() {
+      await fontePronta;
+      splash.classList.add('rapido');
+      await Promise.all([wait(TEMPO_RAPIDO), Promise.race([gasPronto, wait(12000)])]);
+
+      splash.classList.add('dia');
+      metaTheme.setAttribute('content', '#f1f5f9');
+      iframe.classList.remove('gas-oculto');
+      registrarAbertura();
+      setTimeout(() => { splash.style.display = 'none'; }, 600);
+    }
+
+    // --- PERMISSÕES (localização e notificações) ---
+    // Pedidas uma única vez, no clique em Iniciar. Depois ficam salvas para o app.
+    async function estadoPermissao(nome) {
+      try { return (await navigator.permissions.query({ name: nome })).state; }
+      catch (e) { return 'prompt'; }
+    }
+
+    async function pedirPermissoes() {
+      try {
+        if ('geolocation' in navigator && (await estadoPermissao('geolocation')) === 'prompt') {
+          await new Promise((ok) => navigator.geolocation.getCurrentPosition(ok, ok, { timeout: 15000 }));
+        }
+      } catch (e) {}
+      try {
+        if ('Notification' in window && Notification.permission === 'default') {
+          await Notification.requestPermission();
+        }
+      } catch (e) {}
+    }
+
+    function mostrarTitulo() {
+      encontroWrap.classList.add('show');
+      tAnual.classList.add('show');
+      tMarca.classList.add('show');
+    }
+
+    function mostrarBotao() {
+      auras.forEach((a) => a.classList.add('show'));
+      btnIniciar.classList.add('show');
+    }
+
+    // --- ANTES DO CLIQUE (aprox. 3s até o botão) ---
+    async function abertura() {
+      await wait(700);
+      fundoFx.classList.add('on');
+      await Promise.all([wait(300), fontePronta]);
+
+      encontroWrap.classList.add('show');
+      await wait(1100);
+
+      tAnual.classList.add('show');
+      await wait(400);
+      tMarca.classList.add('show');
+
+      await wait(500);
+      mostrarBotao();
+    }
+
+    function aberturaReduzida() {
+      mostrarTitulo();
+      mostrarBotao();
+    }
+
+    // --- CLIQUE NO BOTÃO ---
+    btnIniciar.addEventListener('click', () => {
+      if (btnIniciar.dataset.clicou) return;
+      btnIniciar.dataset.clicou = '1';
+      pedirPermissoes();
+      iniciarSequencia();
+    });
+
+    // Mede onde está a aura e de onde cada peça deve nascer
+    function prepararOrigens() {
+      const a = auraTeal.getBoundingClientRect();
+      const ax = a.left + a.width / 2;
+      const ay = a.top + a.height / 2;
+      mosaico.querySelectorAll('.peca').forEach((p) => {
+        const r = p.getBoundingClientRect();
+        p.style.setProperty('--fx', (ax - (r.left + r.width / 2)) + 'px');
+        p.style.setProperty('--fy', (ay - (r.top + r.height / 2)) + 'px');
+      });
+    }
+
+    // --- DEPOIS DO CLIQUE (aprox. 5s) ---
+    async function iniciarSequencia() {
+      if (reduzMovimento) {
+        await Promise.race([gasPronto, wait(12000)]);
+        iframe.classList.remove('gas-oculto');
+        registrarAbertura();
+        splash.style.display = 'none';
+        return;
+      }
+
+      prepararOrigens();
+
+      splash.classList.add('formando');
+      await wait(150);
+
+      mosaico.classList.add('danca');
+      await wait(1750);
+
+      mosaico.classList.add('cor');
+      await wait(750);
+
+      mosaico.classList.add('impacto');
+      splash.classList.add('formado');
+      await wait(700);
+
+      await Promise.race([gasPronto, wait(12000)]);
+      revealApp();
+    }
+
+    // --- REVELAÇÃO ---
+    function revealApp() {
+      splash.classList.add('dia');
+      metaTheme.setAttribute('content', '#f1f5f9');
+      iframe.classList.remove('gas-oculto');
+      registrarAbertura();
+
+      setTimeout(() => {
+        mosaico.classList.remove('impacto');
+        mosaico.classList.add('sai');
+      }, 100);
+
+      setTimeout(() => {
+        splash.style.display = 'none';
+      }, 1900);
+    }
+
+    if (modoRapido) aberturaRapida();
+    else if (reduzMovimento) aberturaReduzida();
+    else abertura();
+
+    // Service Worker com checagem de atualização a cada abertura
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js')
           .then((reg) => {
-            reg.update(); // Força o SW a sincronizar os novos ícones imediatamente
+            reg.update();
           })
           .catch(() => {});
       });
